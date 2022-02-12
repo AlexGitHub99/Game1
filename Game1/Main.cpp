@@ -17,13 +17,13 @@
 
 float* relativePosition(float primaryX, float primaryY, float secondaryX, float secondaryY);
 
-int PLAYER_SPEED = 800;//pixels per second
+int PLAYER_SPEED = 400; //coord per second
 
 int main() {
 
 	int screenWidth = 1000;
 	int screenHeight = 1000;
-	int FOV = 2000;
+	int FOV = 1500;
 
 	sf::RenderWindow mainWindow(sf::VideoMode(screenWidth, screenHeight), "Game");
 
@@ -42,23 +42,21 @@ int main() {
 		return -1;
 	}
 
-	sf::Vector2u playerTextureSize = playerTexture->getSize();
 
 	
 	Player player;
 	player.setPosition(500, 500);
 	player.setTexture(playerTexture);
 	player.setBoundBox(100, 100);
-	player.setScreenPosition((float)(screenWidth - playerTextureSize.x)/2 , (float)(screenHeight - playerTextureSize.y)/2);
 	GameObject* myObj = new GameObject();
 	myObj->setTexture(myTexture);
 	myObj->setPosition(250, 250);
-	myObj->setBoundBox(350, 350);
+	myObj->setBoundBox(330, 289);
 
 	GameObject* myObj2 = new GameObject();
 	myObj2->setTexture(myTexture);
-	myObj2->setPosition(150, -400);
-	myObj2->setBoundBox(350, 350);
+	myObj2->setPosition(350, 750);
+	myObj2->setBoundBox(330, 289);
 
 	Area area;
 	area.setBackground(backgroundTexture);
@@ -191,10 +189,12 @@ int main() {
 		sf::Vector2u backgroundSize = background->getTexture()->getSize();
 		float playerPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
 
-		background->setTextureRect(sf::IntRect((playerPos[0] - (float)FOV/2)/area.getWidth()* (float)backgroundSize.x, (playerPos[1] - (float)FOV/2)/area.getHeight() * (float)backgroundSize.y, (float)FOV / area.getWidth() * (float)backgroundSize.x, (float)FOV / area.getHeight() * (float)backgroundSize.y));
-		background->setScale((float)screenWidth/(float)background->getTextureRect().width, (float)screenHeight/(float)background->getTextureRect().height);
+		float errorX = (playerPos[0] - (float)FOV / 2) / area.getWidth() * (float)backgroundSize.x - (int)((playerPos[0] - (float)FOV / 2) / area.getWidth() * (float)backgroundSize.x);
+		float errorY = (playerPos[1] - (float)FOV / 2) / area.getHeight() * (float)backgroundSize.y - (int)((playerPos[1] - (float)FOV / 2) / area.getHeight() * (float)backgroundSize.y);
+		background->setTextureRect(sf::IntRect((playerPos[0] - (float)FOV/2)/area.getWidth()* (float)backgroundSize.x, (playerPos[1] - (float)FOV/2)/area.getHeight() * (float)backgroundSize.y, (float)FOV / area.getWidth() * (float)backgroundSize.x + 2, (float)FOV / area.getHeight() * (float)backgroundSize.y + 2));
+		background->setScale((float)screenWidth/((float)background->getTextureRect().width - 2), (float)screenHeight/((float)background->getTextureRect().height - 2));
 
-		background->setPosition(0, 0);
+		background->setPosition(( -errorX - 1)* ((float)screenWidth / (float)background->getTextureRect().width), ( -errorY - 1)* ((float)screenHeight / (float)background->getTextureRect().height));
 		mainWindow.draw(*area.getBackground());
 
 		
@@ -210,6 +210,7 @@ int main() {
 			mainWindow.draw(currentSprite);
 		}
 		
+		player.setScreenPosition((float)screenWidth/2 - (player.getWidth()/(float)FOV*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getHeight() / (float)FOV * (float)screenHeight) / 2);
 		sf::Sprite playerSprite = *player.getSprite();
 		playerSprite.setScale((float)screenWidth / (float)FOV, (float)screenHeight / (float)FOV);
 		mainWindow.draw(playerSprite);

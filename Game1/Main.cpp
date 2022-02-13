@@ -42,12 +42,19 @@ int main() {
 		return -1;
 	}
 
+	sf::Texture lightTexture;
+	if (!lightTexture.loadFromFile("resources/light.png")) {
+		return -1;
+	}
+
 
 	
 	Player player;
 	player.setPosition(250, 250);
 	player.setTexture(playerTexture);
 	player.setBoundBox(100, 100);
+	player.setLightLevel(400); //level that light reaches
+
 	GameObject* myObj = new GameObject();
 	myObj->setTexture(myTexture);
 	myObj->setPosition(250, 250);
@@ -57,6 +64,9 @@ int main() {
 	myObj2->setTexture(myTexture);
 	myObj2->setPosition(680, 250);
 	myObj2->setBoundBox(330, 289);
+
+	sf::Sprite lightSprite(lightTexture);
+	lightSprite.setPosition(screenWidth / 2, screenHeight / 2);
 
 	Area area;
 	area.setBackground(backgroundTexture);
@@ -76,7 +86,6 @@ int main() {
 
 			if (event.type == sf::Event::MouseWheelMoved) {
 				FOV += -(float)FOV*(float)event.mouseWheel.delta/20;
-				std::cout << event.mouseWheel.delta << std::endl;
 			}
 			if (event.type == sf::Event::Closed) {
 				mainWindow.close();
@@ -259,9 +268,39 @@ int main() {
 		}
 		
 		player.setScreenPosition((float)screenWidth/2 - (player.getWidth()/(float)FOV*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getHeight() / (float)FOV * (float)screenHeight) / 2);
-		sf::Sprite playerSprite = *player.getSprite();
-		playerSprite.setScale((float)screenWidth / (float)FOV, (float)screenHeight / (float)FOV);
-		mainWindow.draw(playerSprite);
+		player.getSprite()->setScale((float)screenWidth / (float)FOV, (float)screenHeight / (float)FOV);
+		mainWindow.draw(*player.getSprite());
+
+
+		sf::FloatRect lightBox((float)screenWidth / 2 - (player.getAdjustedLightLevel() * 2 / (float)FOV * (float)screenWidth) / 2, 
+								(float)screenHeight / 2 - (player.getAdjustedLightLevel() * 2 / (float)FOV * (float)screenHeight) / 2, 
+								player.getAdjustedLightLevel() * 2 / (float)FOV * (float)screenWidth, 
+								player.getAdjustedLightLevel() * 2 / (float)FOV * (float)screenHeight);
+
+		sf::RectangleShape blackRect;
+		blackRect.setFillColor(sf::Color(0, 0, 0, 200));
+		blackRect.setSize(sf::Vector2f(screenWidth, lightBox.top));
+		blackRect.setPosition(0, 0);
+		mainWindow.draw(blackRect);
+
+		blackRect.setSize(sf::Vector2f(screenWidth, screenHeight - (lightBox.top + lightBox.height)));
+		blackRect.setPosition(0, lightBox.top + lightBox.height);
+		mainWindow.draw(blackRect);
+
+		blackRect.setSize(sf::Vector2f(lightBox.left, lightBox.height));
+		blackRect.setPosition(0, lightBox.top);
+		mainWindow.draw(blackRect);
+
+		blackRect.setSize(sf::Vector2f(screenWidth - (lightBox.left + lightBox.width), lightBox.height));
+		blackRect.setPosition((lightBox.left + lightBox.width), lightBox.top);
+		mainWindow.draw(blackRect);
+
+		sf::Vector2u lightSpriteSize = lightSprite.getTexture()->getSize();
+		lightSprite.setPosition(lightBox.left, lightBox.top);
+		lightSprite.setScale( lightBox.width / lightSpriteSize.x,  lightBox.height / lightSpriteSize.y);
+
+		lightSprite.setColor(sf::Color(255, 255, 255, 200));
+		mainWindow.draw(lightSprite);
 
 		sf::Font courier;
 		if (!courier.loadFromFile("resources/fonts/CourierPrime-Regular.ttf")) {

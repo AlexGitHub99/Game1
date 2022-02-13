@@ -22,6 +22,11 @@ void Player::setScreenPosition(float x, float y)
 	sprite->setPosition(x, y);
 }
 
+void Player::setLightLevel(float newLightLevel)
+{
+	lightLevel = newLightLevel;
+}
+
 void Player::setBoundBox(float newWidth, float newHeight) {
 	width = newWidth;
 	height = newHeight;
@@ -61,4 +66,14 @@ float Player::getX() {
 
 float Player::getY() {
 	return position[1];
+}
+
+float Player::getLightLevel()
+{
+	return lightLevel;
+}
+
+float Player::getAdjustedLightLevel()
+{
+	return lightLevel + 300;
 }

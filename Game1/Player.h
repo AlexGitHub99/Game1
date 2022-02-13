@@ -11,6 +11,7 @@ public:
 	void setBoundBox(float newWidth, float newHeight);
 	void movePosition(float x, float y);
 	void setScreenPosition(float x, float y);
+	void setLightLevel(float newLightLevel);
 	float* getPosition();
 	sf::Texture* getTexture();
 	sf::Sprite* getSprite();
@@ -18,11 +19,15 @@ public:
 	float getHeight();
 	float getX();
 	float getY();
+	float getLightLevel();
+	float getAdjustedLightLevel();
 
 private:
 	float position[2];
 	float width;
 	float height;
+	float lightLevel;
+
 	sf::Texture* texture;
 	sf::Sprite* sprite;
 };

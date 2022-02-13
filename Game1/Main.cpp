@@ -17,7 +17,7 @@
 
 float* relativePosition(float primaryX, float primaryY, float secondaryX, float secondaryY);
 
-int PLAYER_SPEED = 400; //coord per second
+int PLAYER_SPEED = 1000; //coord per second
 
 int main() {
 
@@ -45,7 +45,7 @@ int main() {
 
 	
 	Player player;
-	player.setPosition(500, 500);
+	player.setPosition(250, 250);
 	player.setTexture(playerTexture);
 	player.setBoundBox(100, 100);
 	GameObject* myObj = new GameObject();
@@ -55,14 +55,14 @@ int main() {
 
 	GameObject* myObj2 = new GameObject();
 	myObj2->setTexture(myTexture);
-	myObj2->setPosition(350, 750);
+	myObj2->setPosition(680, 250);
 	myObj2->setBoundBox(330, 289);
 
 	Area area;
 	area.setBackground(backgroundTexture);
 	area.addObject(myObj);
 	area.addObject(myObj2);
-	area.setSize(10000, 10000);
+	area.setSize(5000, 5000);
 
 	clock_t t = clock();
 
@@ -74,6 +74,10 @@ int main() {
 		
 		while (mainWindow.pollEvent(event)) {
 
+			if (event.type == sf::Event::MouseWheelMoved) {
+				FOV += -(float)FOV*(float)event.mouseWheel.delta/20;
+				std::cout << event.mouseWheel.delta << std::endl;
+			}
 			if (event.type == sf::Event::Closed) {
 				mainWindow.close();
 			}
@@ -181,6 +185,20 @@ int main() {
 					}
 				}
 			}
+
+			if (player.getX() - player.getWidth() / 2 < 0) {
+				player.movePosition(0 - (player.getX() - player.getWidth() / 2), 0.0);
+			}
+			if (player.getX() + player.getWidth() / 2 > area.getWidth()) {
+				player.movePosition(area.getWidth() - (player.getX() + player.getWidth() / 2), 0.0);
+			}
+			if (player.getY() - player.getHeight() / 2 < 0) {
+				player.movePosition(0.0, 0 - (player.getY() - player.getHeight() / 2));
+			}
+			if (player.getY() + player.getHeight() / 2 > area.getHeight()) {
+				player.movePosition(0.0, area.getHeight() - (player.getY() + player.getHeight() / 2));
+			}
+
 		}
 
 		mainWindow.clear();
@@ -189,14 +207,44 @@ int main() {
 		sf::Vector2u backgroundSize = background->getTexture()->getSize();
 		float playerPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
 
-		float errorX = (playerPos[0] - (float)FOV / 2) / area.getWidth() * (float)backgroundSize.x - (int)((playerPos[0] - (float)FOV / 2) / area.getWidth() * (float)backgroundSize.x);
-		float errorY = (playerPos[1] - (float)FOV / 2) / area.getHeight() * (float)backgroundSize.y - (int)((playerPos[1] - (float)FOV / 2) / area.getHeight() * (float)backgroundSize.y);
-		background->setTextureRect(sf::IntRect((playerPos[0] - (float)FOV/2)/area.getWidth()* (float)backgroundSize.x, (playerPos[1] - (float)FOV/2)/area.getHeight() * (float)backgroundSize.y, (float)FOV / area.getWidth() * (float)backgroundSize.x + 2, (float)FOV / area.getHeight() * (float)backgroundSize.y + 2));
+		float errorX = (playerPos[0] - (float)FOV / 2) / area.getWidth() * (float)backgroundSize.x - 1 - (int)((playerPos[0] - (float)FOV / 2) / area.getWidth() * (float)backgroundSize.x - 1);
+		float errorY = (playerPos[1] - (float)FOV / 2) / area.getHeight() * (float)backgroundSize.y - 1 - (int)((playerPos[1] - (float)FOV / 2) / area.getHeight() * (float)backgroundSize.y - 1);
+		background->setTextureRect(sf::IntRect((playerPos[0] - (float)FOV/2)/area.getWidth()* (float)backgroundSize.x - 1, (playerPos[1] - (float)FOV/2)/area.getHeight() * (float)backgroundSize.y - 1, (float)FOV / area.getWidth() * (float)backgroundSize.x + 2, (float)FOV / area.getHeight() * (float)backgroundSize.y + 2));
 		background->setScale((float)screenWidth/((float)background->getTextureRect().width - 2), (float)screenHeight/((float)background->getTextureRect().height - 2));
 
-		background->setPosition(( -errorX - 1)* ((float)screenWidth / (float)background->getTextureRect().width), ( -errorY - 1)* ((float)screenHeight / (float)background->getTextureRect().height));
+		float backgroundX = (-errorX - 1) * ((float)screenWidth / (float)background->getTextureRect().width);
+		float backgroundY = (-errorY - 1) * ((float)screenHeight / (float)background->getTextureRect().height);
+		background->setPosition(backgroundX, backgroundY);
 		mainWindow.draw(*area.getBackground());
+		float backgroundScreenEdgeLeft = -playerPos[0] / (float)FOV * (float)screenWidth + (float)screenWidth / 2;
+		float backgroundScreenEdgeRight = (area.getWidth() - playerPos[0]) / (float)FOV * (float)screenWidth + (float)screenWidth / 2;
+		float backgroundScreenEdgeTop = -playerPos[1] / (float)FOV * (float)screenHeight + (float)screenHeight / 2;
+		float backgroundScreenEdgeBottom = (area.getHeight() - playerPos[1]) / (float)FOV * (float)screenHeight + (float)screenHeight / 2;
 
+		if (backgroundScreenEdgeLeft > 0) {
+			sf::RectangleShape blackRect(sf::Vector2f(backgroundScreenEdgeLeft, screenHeight));
+			blackRect.setPosition(0, 0);
+			blackRect.setFillColor(sf::Color(0, 0, 0, 255));
+			mainWindow.draw(blackRect);
+		}
+		if (backgroundScreenEdgeRight < screenWidth) {
+			sf::RectangleShape blackRect(sf::Vector2f(backgroundScreenEdgeRight, screenHeight));
+			blackRect.setPosition(backgroundScreenEdgeRight, 0);
+			blackRect.setFillColor(sf::Color(0, 0, 0, 255));
+			mainWindow.draw(blackRect);
+		}
+		if (backgroundScreenEdgeTop > 0) {
+			sf::RectangleShape blackRect(sf::Vector2f(screenWidth, backgroundScreenEdgeTop));
+			blackRect.setPosition(0, 0);
+			blackRect.setFillColor(sf::Color(0, 0, 0, 255));
+			mainWindow.draw(blackRect);
+		}
+		if (backgroundScreenEdgeBottom < screenHeight) {
+			sf::RectangleShape blackRect(sf::Vector2f(screenWidth, backgroundScreenEdgeBottom));
+			blackRect.setPosition(0, backgroundScreenEdgeBottom);
+			blackRect.setFillColor(sf::Color(0, 0, 0, 255));
+			mainWindow.draw(blackRect);
+		}
 		
 
 		for (int i = 0; i < objects->size(); i++) {

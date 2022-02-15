@@ -72,8 +72,3 @@ float Player::getLightLevel()
 {
 	return lightLevel;
 }
-
-float Player::getAdjustedLightLevel()
-{
-	return lightLevel + 300;
-}

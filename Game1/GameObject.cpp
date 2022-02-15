@@ -29,6 +29,24 @@ void GameObject::setBoundBox(float newWidth, float newHeight)
 	height = newHeight;
 }
 
+void GameObject::setBoundBox(float newWidth)
+{
+	width = newWidth;
+	height = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+}
+
+void GameObject::setTextureSize(float newWidth, float newHeight)
+{
+	textureWidth = newWidth;
+	textureHeight = newHeight;
+}
+
+void GameObject::setTextureSize(float newWidth)
+{
+	textureWidth = newWidth;
+	textureHeight = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+}
+
 sf::Texture* GameObject::getTexture()
 {
 	return texture;
@@ -41,6 +59,16 @@ sf::Sprite* GameObject::getSprite()
 
 float* GameObject::getPosition() {
 	return position;
+}
+
+float GameObject::getTextureHeight()
+{
+	return textureHeight;
+}
+
+float GameObject::getTextureWidth()
+{
+	return textureWidth;
 }
 
 float GameObject::getWidth()
@@ -61,4 +89,9 @@ float GameObject::getX()
 float GameObject::getY()
 {
 	return position[1];
+}
+
+std::string GameObject::getType()
+{
+	return "object";
 }

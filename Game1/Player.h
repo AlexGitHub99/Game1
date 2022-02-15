@@ -20,7 +20,6 @@ public:
 	float getX();
 	float getY();
 	float getLightLevel();
-	float getAdjustedLightLevel();
 
 private:
 	float position[2];

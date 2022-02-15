@@ -14,6 +14,7 @@
 #include "GameObject.h"
 #include "Area.h"
 #include "Player.h"
+#include "LightSource.h"
 
 float* relativePosition(float primaryX, float primaryY, float secondaryX, float secondaryY);
 
@@ -47,7 +48,10 @@ int main() {
 		return -1;
 	}
 
-
+	sf::Texture* lampTexture = new sf::Texture();
+	if (!lampTexture->loadFromFile("resources/lamp.png")) {
+		return -1;
+	}
 	
 	Player player;
 	player.setPosition(250, 250);
@@ -58,12 +62,21 @@ int main() {
 	GameObject* myObj = new GameObject();
 	myObj->setTexture(myTexture);
 	myObj->setPosition(250, 250);
-	myObj->setBoundBox(330, 289);
+	myObj->setTextureSize(100, 50);
+	myObj->setBoundBox(100, 100);
 
 	GameObject* myObj2 = new GameObject();
 	myObj2->setTexture(myTexture);
-	myObj2->setPosition(680, 250);
-	myObj2->setBoundBox(330, 289);
+	myObj2->setPosition(1000, 400);
+	myObj2->setTextureSize(600);
+	myObj2->setBoundBox(600);
+
+	LightSource* lamp = new LightSource();
+	lamp->setTexture(lampTexture);
+	lamp->setPosition(200, 800);
+	lamp->setTextureSize(50);
+	lamp->setBoundBox(50);
+
 
 	sf::Sprite lightSprite(lightTexture);
 	lightSprite.setPosition(screenWidth / 2, screenHeight / 2);
@@ -72,6 +85,8 @@ int main() {
 	area.setBackground(backgroundTexture);
 	area.addObject(myObj);
 	area.addObject(myObj2);
+	area.addObject(lamp);
+
 	area.setSize(5000, 5000);
 
 	clock_t t = clock();
@@ -255,16 +270,19 @@ int main() {
 			mainWindow.draw(blackRect);
 		}
 		
-
+		//draw objects
 		for (int i = 0; i < objects->size(); i++) {
 			GameObject currentObj = *objects->at(i);
 			float objectPos[2] = { *currentObj.getPosition(), *(currentObj.getPosition() + 1) };
 			float* temp = relativePosition(playerPos[0], playerPos[1], objectPos[0], objectPos[1]);
 			float relativePosition[2] = { *temp, *(temp + 1) };
-			currentObj.setScreenPosition((relativePosition[0] - currentObj.getWidth()/2)/(float)FOV* (float)screenWidth + (float)screenWidth / 2, (relativePosition[1] - currentObj.getHeight() / 2)/(float)FOV* (float)screenHeight + (float)screenHeight / 2);
+			currentObj.setScreenPosition((relativePosition[0] - currentObj.getTextureWidth()/2)/(float)FOV* (float)screenWidth + (float)screenWidth / 2, (relativePosition[1] - currentObj.getTextureHeight() / 2)/(float)FOV* (float)screenHeight + (float)screenHeight / 2);
 			sf::Sprite currentSprite = *(currentObj.getSprite());
-			currentSprite.setScale((float)screenWidth / (float)FOV, (float)screenHeight / (float)FOV);
+			currentSprite.setScale(currentObj.getTextureWidth() / (float)FOV * (float)screenWidth / currentObj.getTexture()->getSize().x, currentObj.getTextureHeight() / (float)FOV * (float)screenHeight / currentObj.getTexture()->getSize().y);
 			mainWindow.draw(currentSprite);
+			if (currentObj.getType().compare("lightSource")) {
+				
+			}
 		}
 		
 		player.setScreenPosition((float)screenWidth/2 - (player.getWidth()/(float)FOV*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getHeight() / (float)FOV * (float)screenHeight) / 2);
@@ -272,13 +290,13 @@ int main() {
 		mainWindow.draw(*player.getSprite());
 
 
-		sf::FloatRect lightBox((float)screenWidth / 2 - (player.getAdjustedLightLevel() * 2 / (float)FOV * (float)screenWidth) / 2, 
-								(float)screenHeight / 2 - (player.getAdjustedLightLevel() * 2 / (float)FOV * (float)screenHeight) / 2, 
-								player.getAdjustedLightLevel() * 2 / (float)FOV * (float)screenWidth, 
-								player.getAdjustedLightLevel() * 2 / (float)FOV * (float)screenHeight);
+		sf::FloatRect lightBox((float)screenWidth / 2 - (player.getLightLevel() * 2 / (float)FOV * (float)screenWidth) / 2, 
+								(float)screenHeight / 2 - (player.getLightLevel() * 2 / (float)FOV * (float)screenHeight) / 2, 
+								player.getLightLevel() * 2 / (float)FOV * (float)screenWidth, 
+								player.getLightLevel() * 2 / (float)FOV * (float)screenHeight);
 
 		sf::RectangleShape blackRect;
-		blackRect.setFillColor(sf::Color(0, 0, 0, 200));
+		blackRect.setFillColor(sf::Color(0, 0, 0, 220));
 		blackRect.setSize(sf::Vector2f(screenWidth, lightBox.top));
 		blackRect.setPosition(0, 0);
 		mainWindow.draw(blackRect);
@@ -299,7 +317,7 @@ int main() {
 		lightSprite.setPosition(lightBox.left, lightBox.top);
 		lightSprite.setScale( lightBox.width / lightSpriteSize.x,  lightBox.height / lightSpriteSize.y);
 
-		lightSprite.setColor(sf::Color(255, 255, 255, 200));
+		lightSprite.setColor(sf::Color(255, 255, 255, 220));
 		mainWindow.draw(lightSprite);
 
 		sf::Font courier;

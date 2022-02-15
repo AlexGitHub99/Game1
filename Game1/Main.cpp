@@ -16,9 +16,16 @@
 #include "Player.h"
 #include "LightSource.h"
 
-float* relativePosition(float primaryX, float primaryY, float secondaryX, float secondaryY);
-
 int PLAYER_SPEED = 1000; //coord per second
+
+const int lightMapWidth = 10;
+const int lightMapHeight = 10;
+
+float* relativePosition(float primaryX, float primaryY, float secondaryX, float secondaryY);
+void setSquare(sf::VertexArray* lightPoints, int x, int y, int alpha, int lightMapWidth, int lightMapHeight);
+void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1]);
+
+
 
 int main() {
 
@@ -57,7 +64,7 @@ int main() {
 	player.setPosition(250, 250);
 	player.setTexture(playerTexture);
 	player.setBoundBox(100, 100);
-	player.setLightLevel(400); //level that light reaches
+	player.setLightLevel(800); //level that light reaches
 
 	GameObject* myObj = new GameObject();
 	myObj->setTexture(myTexture);
@@ -90,6 +97,24 @@ int main() {
 	area.setSize(5000, 5000);
 
 	clock_t t = clock();
+
+	int lightMap[lightMapWidth + 1][lightMapHeight + 1]; //extra width because of edge points
+
+	sf::VertexArray* lightPoints = new sf::VertexArray(sf::Quads, lightMapWidth* lightMapHeight * 4);
+
+	float squareWidth = (float)screenWidth / (float)lightMapWidth;
+	float squareHeight = (float)screenHeight / (float)lightMapHeight;
+
+	//fill vertex array with points
+	for (int x = 0; x < lightMapWidth; x++) {
+		for (int y = 0; y < lightMapHeight; y++) {
+
+			(*lightPoints)[y * lightMapWidth * 4 + x * 4].position = sf::Vector2f((float)x * squareWidth, (float)y * squareHeight);
+			(*lightPoints)[y * lightMapWidth * 4 + x * 4 + 1].position = sf::Vector2f((float)(x + 1) * squareWidth, (float)y * squareHeight);
+			(*lightPoints)[y * lightMapWidth * 4 + x * 4 + 2].position = sf::Vector2f((float)(x + 1) * squareWidth, (float)(y + 1) * squareHeight);
+			(*lightPoints)[y * lightMapWidth * 4 + x * 4 + 3].position = sf::Vector2f((float)x * squareWidth, (float)(y + 1) * squareHeight);
+		}
+	}
 
 	//main loop
 	while (mainWindow.isOpen()) {
@@ -289,36 +314,39 @@ int main() {
 		player.getSprite()->setScale((float)screenWidth / (float)FOV, (float)screenHeight / (float)FOV);
 		mainWindow.draw(*player.getSprite());
 
+		/*for (int x = 0; x < lightMapWidth; x++) {
+			for (int y = 0; y < lightMapHeight; y++) {
+				float xPos = (float)screenWidth / (float)lightMapWidth * (float)x + (float)screenWidth / (float)lightMapWidth / 2;
+				float yPos = (float)screenHeight / (float)lightMapHeight * (float)y + (float)screenHeight / (float)lightMapHeight / 2;
+				float distance = sqrt(pow((float)screenWidth / 2 - xPos, 2) + pow((float)screenHeight / 2 - yPos, 2));
+				float playerLightDistX = player.getLightLevel() / (float)FOV * (float)screenWidth;
+				float playerLightDistY = player.getLightLevel() / (float)FOV * (float)screenHeight;
+				int alpha = round(distance / playerLightDistX * 255);
+				if (alpha > 255) {
+					alpha = 255;
+				}
+				setSquare(lightPoints, x, y, alpha, lightMapWidth, lightMapHeight);
+			}
+		}*/
 
-		sf::FloatRect lightBox((float)screenWidth / 2 - (player.getLightLevel() * 2 / (float)FOV * (float)screenWidth) / 2, 
-								(float)screenHeight / 2 - (player.getLightLevel() * 2 / (float)FOV * (float)screenHeight) / 2, 
-								player.getLightLevel() * 2 / (float)FOV * (float)screenWidth, 
-								player.getLightLevel() * 2 / (float)FOV * (float)screenHeight);
+		for (int x = 0; x <= lightMapWidth; x++) {
+			for (int y = 0; y <= lightMapHeight; y++) {
+				float xPos = (float)screenWidth / (float)lightMapWidth * (float)x;
+				float yPos = (float)screenHeight / (float)lightMapHeight * (float)y;
+				float distance = sqrt(pow((float)screenWidth / 2 - xPos, 2) + pow((float)screenHeight / 2 - yPos, 2));
+				float playerLightDistX = player.getLightLevel() / (float)FOV * (float)screenWidth;
+				float playerLightDistY = player.getLightLevel() / (float)FOV * (float)screenHeight;
+				int alpha = round(distance / playerLightDistX * 255);
+				if (alpha > 255) {
+					alpha = 255;
+				}
+				lightMap[x][y] = alpha;
+			}
+		}
 
-		sf::RectangleShape blackRect;
-		blackRect.setFillColor(sf::Color(0, 0, 0, 220));
-		blackRect.setSize(sf::Vector2f(screenWidth, lightBox.top));
-		blackRect.setPosition(0, 0);
-		mainWindow.draw(blackRect);
+		setPoints(lightPoints, lightMap);
+		mainWindow.draw(*lightPoints);
 
-		blackRect.setSize(sf::Vector2f(screenWidth, screenHeight - (lightBox.top + lightBox.height)));
-		blackRect.setPosition(0, lightBox.top + lightBox.height);
-		mainWindow.draw(blackRect);
-
-		blackRect.setSize(sf::Vector2f(lightBox.left, lightBox.height));
-		blackRect.setPosition(0, lightBox.top);
-		mainWindow.draw(blackRect);
-
-		blackRect.setSize(sf::Vector2f(screenWidth - (lightBox.left + lightBox.width), lightBox.height));
-		blackRect.setPosition((lightBox.left + lightBox.width), lightBox.top);
-		mainWindow.draw(blackRect);
-
-		sf::Vector2u lightSpriteSize = lightSprite.getTexture()->getSize();
-		lightSprite.setPosition(lightBox.left, lightBox.top);
-		lightSprite.setScale( lightBox.width / lightSpriteSize.x,  lightBox.height / lightSpriteSize.y);
-
-		lightSprite.setColor(sf::Color(255, 255, 255, 220));
-		mainWindow.draw(lightSprite);
 
 		sf::Font courier;
 		if (!courier.loadFromFile("resources/fonts/CourierPrime-Regular.ttf")) {
@@ -328,7 +356,6 @@ int main() {
 		coords.setFont(courier);
 		coords.setString("X: " + std::to_string(playerPos[0]) + " Y: " + std::to_string(playerPos[1]));
 		mainWindow.draw(coords);
-		
 
 		//mainWindow.setActive();
 
@@ -341,4 +368,37 @@ int main() {
 float* relativePosition(float primaryX, float primaryY, float secondaryX, float secondaryY) {
 	float relPos[2] = { secondaryX - primaryX, secondaryY - primaryY };
 	return relPos;
+}
+
+void setSquare(sf::VertexArray* lightPoints, int x, int y, int alpha, int lightMapWidth, int lightMapHeight) { //x and y < lightMapWidth and LightMapHeight
+	(*lightPoints)[y * lightMapWidth * 4 + x * 4].color = sf::Color(0, 0, 0, alpha);
+	(*lightPoints)[y * lightMapWidth * 4 + x * 4 + 1].color = sf::Color(0, 0, 0, alpha);
+	(*lightPoints)[y * lightMapWidth * 4 + x * 4 + 2].color = sf::Color(0, 0, 0, alpha);
+	(*lightPoints)[y * lightMapWidth * 4 + x * 4 + 3].color = sf::Color(0, 0, 0, alpha);
+}
+
+
+//This method is WAYYY better (like 100-1000 times more efficient for same result)
+void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1]) { //x and y <= lightMapWidth and LightMapHeight
+	for (int x = 0; x <= lightMapWidth; x++) {
+		for (int y = 0; y <= lightMapHeight; y++) {
+			int alpha = lightMap[x][y];
+			if (y * lightMapWidth * 4 + x * 4 < (*lightPoints).getVertexCount()) { //check under array size
+				//top left
+				(*lightPoints)[y * lightMapWidth * 4 + x * 4].color = sf::Color(0, 0, 0, alpha);
+			}
+			if (y * lightMapWidth * 4 + (x - 1) * 4 + 1 < (*lightPoints).getVertexCount() and y * lightMapWidth * 4 + (x - 1) * 4 + 1 >= 0) { //check under array size, check above -1
+				//top right
+				(*lightPoints)[y * lightMapWidth * 4 + (x - 1) * 4 + 1].color = sf::Color(0, 0, 0, alpha);
+			}
+			if ((y - 1) * lightMapWidth * 4 + x * 4 + 3 < (*lightPoints).getVertexCount() and (y - 1) * lightMapWidth * 4 + x * 4 + 3 >= 0) { //check under array size, check above -1
+				//bottom left
+				(*lightPoints)[(y - 1) * lightMapWidth * 4 + x * 4 + 3].color = sf::Color(0, 0, 0, alpha);
+			}
+			if ((y - 1) * lightMapWidth * 4 + (x - 1) * 4 + 2 >= 0) { // check above -1
+				//bottom right
+				(*lightPoints)[(y - 1) * lightMapWidth * 4 + (x - 1) * 4 + 2].color = sf::Color(0, 0, 0, alpha);
+			}
+		}
+	}
 }

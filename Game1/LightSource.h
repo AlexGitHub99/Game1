@@ -5,8 +5,12 @@ class LightSource :
     public GameObject
 {
 public:
-    void setLightLevel(float newLightLevel);
-    float getLightLevel();
+    LightSource() {
+        type = "lightSource";
+    }
+
+    void setLightLevel(float newLightLevel) override;
+    float getLightLevel() override;
 private:
     float lightLevel;
 };

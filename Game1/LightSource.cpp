@@ -9,8 +9,3 @@ float LightSource::getLightLevel()
 {
 	return lightLevel;
 }
-
-std::string getType()
-{
-	return "lightSource";
-}

@@ -18,8 +18,8 @@
 
 int PLAYER_SPEED = 1000; //coord per second
 
-const int lightMapWidth = 10;
-const int lightMapHeight = 10;
+const int lightMapWidth = 50;
+const int lightMapHeight = 50;
 
 float* relativePosition(float primaryX, float primaryY, float secondaryX, float secondaryY);
 void setSquare(sf::VertexArray* lightPoints, int x, int y, int alpha, int lightMapWidth, int lightMapHeight);
@@ -31,6 +31,7 @@ int main() {
 
 	int screenWidth = 1000;
 	int screenHeight = 1000;
+	int baseLightLevel = 10;
 	int FOV = 1500;
 
 	sf::RenderWindow mainWindow(sf::VideoMode(screenWidth, screenHeight), "Game");
@@ -64,7 +65,7 @@ int main() {
 	player.setPosition(250, 250);
 	player.setTexture(playerTexture);
 	player.setBoundBox(100, 100);
-	player.setLightLevel(800); //level that light reaches
+	player.setLightLevel(600); //level that light reaches
 
 	GameObject* myObj = new GameObject();
 	myObj->setTexture(myTexture);
@@ -83,7 +84,14 @@ int main() {
 	lamp->setPosition(200, 800);
 	lamp->setTextureSize(50);
 	lamp->setBoundBox(50);
+	lamp->setLightLevel(500);
 
+	LightSource* lamp2 = new LightSource();
+	lamp2->setTexture(lampTexture);
+	lamp2->setPosition(900, 800);
+	lamp2->setTextureSize(60);
+	lamp2->setBoundBox(50);
+	lamp2->setLightLevel(600);
 
 	sf::Sprite lightSprite(lightTexture);
 	lightSprite.setPosition(screenWidth / 2, screenHeight / 2);
@@ -93,6 +101,7 @@ int main() {
 	area.addObject(myObj);
 	area.addObject(myObj2);
 	area.addObject(lamp);
+	area.addObject(lamp2);
 
 	area.setSize(5000, 5000);
 
@@ -295,40 +304,7 @@ int main() {
 			mainWindow.draw(blackRect);
 		}
 		
-		//draw objects
-		for (int i = 0; i < objects->size(); i++) {
-			GameObject currentObj = *objects->at(i);
-			float objectPos[2] = { *currentObj.getPosition(), *(currentObj.getPosition() + 1) };
-			float* temp = relativePosition(playerPos[0], playerPos[1], objectPos[0], objectPos[1]);
-			float relativePosition[2] = { *temp, *(temp + 1) };
-			currentObj.setScreenPosition((relativePosition[0] - currentObj.getTextureWidth()/2)/(float)FOV* (float)screenWidth + (float)screenWidth / 2, (relativePosition[1] - currentObj.getTextureHeight() / 2)/(float)FOV* (float)screenHeight + (float)screenHeight / 2);
-			sf::Sprite currentSprite = *(currentObj.getSprite());
-			currentSprite.setScale(currentObj.getTextureWidth() / (float)FOV * (float)screenWidth / currentObj.getTexture()->getSize().x, currentObj.getTextureHeight() / (float)FOV * (float)screenHeight / currentObj.getTexture()->getSize().y);
-			mainWindow.draw(currentSprite);
-			if (currentObj.getType().compare("lightSource")) {
-				
-			}
-		}
-		
-		player.setScreenPosition((float)screenWidth/2 - (player.getWidth()/(float)FOV*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getHeight() / (float)FOV * (float)screenHeight) / 2);
-		player.getSprite()->setScale((float)screenWidth / (float)FOV, (float)screenHeight / (float)FOV);
-		mainWindow.draw(*player.getSprite());
-
-		/*for (int x = 0; x < lightMapWidth; x++) {
-			for (int y = 0; y < lightMapHeight; y++) {
-				float xPos = (float)screenWidth / (float)lightMapWidth * (float)x + (float)screenWidth / (float)lightMapWidth / 2;
-				float yPos = (float)screenHeight / (float)lightMapHeight * (float)y + (float)screenHeight / (float)lightMapHeight / 2;
-				float distance = sqrt(pow((float)screenWidth / 2 - xPos, 2) + pow((float)screenHeight / 2 - yPos, 2));
-				float playerLightDistX = player.getLightLevel() / (float)FOV * (float)screenWidth;
-				float playerLightDistY = player.getLightLevel() / (float)FOV * (float)screenHeight;
-				int alpha = round(distance / playerLightDistX * 255);
-				if (alpha > 255) {
-					alpha = 255;
-				}
-				setSquare(lightPoints, x, y, alpha, lightMapWidth, lightMapHeight);
-			}
-		}*/
-
+		//draw player lightmap
 		for (int x = 0; x <= lightMapWidth; x++) {
 			for (int y = 0; y <= lightMapHeight; y++) {
 				float xPos = (float)screenWidth / (float)lightMapWidth * (float)x;
@@ -343,6 +319,44 @@ int main() {
 				lightMap[x][y] = alpha;
 			}
 		}
+
+		//draw objects
+		for (int i = 0; i < objects->size(); i++) {
+			GameObject* currentObj = objects->at(i);
+			float objectPos[2] = { *currentObj->getPosition(), *(currentObj->getPosition() + 1) };
+			float* temp = relativePosition(playerPos[0], playerPos[1], objectPos[0], objectPos[1]);
+			float relativePosition[2] = { *temp, *(temp + 1) };
+			currentObj->setScreenPosition((relativePosition[0] - currentObj->getTextureWidth()/2)/(float)FOV* (float)screenWidth + (float)screenWidth / 2, (relativePosition[1] - currentObj->getTextureHeight() / 2)/(float)FOV* (float)screenHeight + (float)screenHeight / 2);
+			sf::Sprite* currentSprite = currentObj->getSprite();
+			currentSprite->setScale(currentObj->getTextureWidth() / (float)FOV * (float)screenWidth / currentObj->getTexture()->getSize().x, currentObj->getTextureHeight() / (float)FOV * (float)screenHeight / currentObj->getTexture()->getSize().y);
+			mainWindow.draw(*currentSprite);
+			
+			if (currentObj->getType().compare("lightSource") == 0) {
+				for (int x = 0; x <= lightMapWidth; x++) {
+					for (int y = 0; y <= lightMapHeight; y++) {
+						float xPos = (float)screenWidth / (float)lightMapWidth * (float)x;
+						float yPos = (float)screenHeight / (float)lightMapHeight * (float)y;
+						float distance = sqrt(pow(currentSprite->getPosition().x - xPos, 2) + pow(currentSprite->getPosition().y - yPos, 2));
+						float playerLightDistX = currentObj->getLightLevel() / (float)FOV * (float)screenWidth;
+						float playerLightDistY = currentObj->getLightLevel() / (float)FOV * (float)screenHeight;
+						int alpha = round(distance / playerLightDistX * 255);
+						if (alpha > 255) {
+							alpha = 255;
+						}
+						alpha = sqrt(pow(255 - lightMap[x][y], 2) + pow(255 - alpha, 2));
+						if (alpha > 255) {
+							alpha = 255;
+						}
+						alpha = 255 - alpha;
+						lightMap[x][y] = alpha - baseLightLevel >= 0 ? alpha - baseLightLevel : 0;
+					}
+				}
+			}
+		}
+		
+		player.setScreenPosition((float)screenWidth/2 - (player.getWidth()/(float)FOV*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getHeight() / (float)FOV * (float)screenHeight) / 2);
+		player.getSprite()->setScale((float)screenWidth / (float)FOV, (float)screenHeight / (float)FOV);
+		mainWindow.draw(*player.getSprite());
 
 		setPoints(lightPoints, lightMap);
 		mainWindow.draw(*lightPoints);

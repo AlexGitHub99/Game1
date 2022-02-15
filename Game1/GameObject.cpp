@@ -93,5 +93,15 @@ float GameObject::getY()
 
 std::string GameObject::getType()
 {
-	return "object";
+	return type;
+}
+
+
+void GameObject::setLightLevel(float newLightLevel)
+{
+}
+
+float GameObject::getLightLevel()
+{
+	return -1;
 }

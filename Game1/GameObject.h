@@ -4,6 +4,10 @@
 class GameObject
 {
 public:
+	GameObject() {
+		type = "object";
+	}
+
 	void setTexture(sf::Texture* newTexture);
 	void setSprite(sf::Sprite* newSprite);
 	void setPosition(float x, float y);
@@ -23,6 +27,9 @@ public:
 	float getY();
 	std::string getType();
 
+	virtual void setLightLevel(float newLightLevel);
+	virtual float getLightLevel();
+
 private:
 	float position[2];
 	float width;
@@ -31,6 +38,9 @@ private:
 	float textureHeight;
 	sf::Texture* texture;
 	sf::Sprite* sprite;
+	
+protected:
+	std::string type;
 
 };
 

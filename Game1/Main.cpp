@@ -29,10 +29,22 @@ void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1],
 
 int main() {
 
-	int screenWidth = 1000;
+	int screenWidth = 1600;
 	int screenHeight = 1000;
 	int baseLightLevel = 10;
-	int FOV = 1500;
+	float FOVRatio = 16 / 10;
+	int FOVW = 1600;
+	int FOVH = (float)FOVW / FOVRatio;
+
+	if ((float)screenWidth / (float)screenHeight > (float)FOVW / (float)FOVH) {
+		FOVRatio = (float)screenWidth / (float)screenHeight;
+		FOVH = (float)FOVW / FOVRatio;
+	}
+	else if ((float)screenWidth / (float)screenHeight < (float)FOVW / (float)FOVH) {
+		FOVRatio = ((float)screenWidth / (float)screenHeight);
+		FOVW = (float)FOVH * FOVRatio;
+	}
+
 
 	sf::RenderWindow mainWindow(sf::VideoMode(screenWidth, screenHeight), "Game");
 
@@ -157,7 +169,8 @@ int main() {
 		while (mainWindow.pollEvent(event)) {
 
 			if (event.type == sf::Event::MouseWheelMoved) {
-				FOV += -(float)FOV*(float)event.mouseWheel.delta/20;
+				FOVW += -(float)FOVW*(float)event.mouseWheel.delta/20;
+				FOVH = (float)FOVW / FOVRatio;
 			}
 			if (event.type == sf::Event::Closed) {
 				mainWindow.close();
@@ -295,9 +308,9 @@ int main() {
 		sf::Vector2u backgroundSize = background->getTexture()->getSize();
 		float playerPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
 
-		float errorX = (playerPos[0] - (float)FOV / 2) / area.getWidth() * (float)backgroundSize.x - 1 - (int)((playerPos[0] - (float)FOV / 2) / area.getWidth() * (float)backgroundSize.x - 1);
-		float errorY = (playerPos[1] - (float)FOV / 2) / area.getHeight() * (float)backgroundSize.y - 1 - (int)((playerPos[1] - (float)FOV / 2) / area.getHeight() * (float)backgroundSize.y - 1);
-		background->setTextureRect(sf::IntRect((playerPos[0] - (float)FOV/2)/area.getWidth()* (float)backgroundSize.x - 1, (playerPos[1] - (float)FOV/2)/area.getHeight() * (float)backgroundSize.y - 1, (float)FOV / area.getWidth() * (float)backgroundSize.x + 2, (float)FOV / area.getHeight() * (float)backgroundSize.y + 2));
+		float errorX = (playerPos[0] - (float)FOVW / 2) / area.getWidth() * (float)backgroundSize.x - 1 - (int)((playerPos[0] - (float)FOVW / 2) / area.getWidth() * (float)backgroundSize.x - 1);
+		float errorY = (playerPos[1] - (float)FOVH / 2) / area.getHeight() * (float)backgroundSize.y - 1 - (int)((playerPos[1] - (float)FOVH / 2) / area.getHeight() * (float)backgroundSize.y - 1);
+		background->setTextureRect(sf::IntRect((playerPos[0] - (float)FOVW/2)/area.getWidth()* (float)backgroundSize.x - 1, (playerPos[1] - (float)FOVH/2)/area.getHeight() * (float)backgroundSize.y - 1, (float)FOVW / area.getWidth() * (float)backgroundSize.x + 2, (float)FOVH / area.getHeight() * (float)backgroundSize.y + 2));
 		background->setScale((float)screenWidth/((float)background->getTextureRect().width - 2), (float)screenHeight/((float)background->getTextureRect().height - 2));
 
 		float backgroundX = (-errorX - 1) * ((float)screenWidth / (float)background->getTextureRect().width);
@@ -306,10 +319,10 @@ int main() {
 		mainWindow.draw(*area.getBackground());
 
 		//draw black area outside of background border
-		float backgroundScreenEdgeLeft = -playerPos[0] / (float)FOV * (float)screenWidth + (float)screenWidth / 2;
-		float backgroundScreenEdgeRight = (area.getWidth() - playerPos[0]) / (float)FOV * (float)screenWidth + (float)screenWidth / 2;
-		float backgroundScreenEdgeTop = -playerPos[1] / (float)FOV * (float)screenHeight + (float)screenHeight / 2;
-		float backgroundScreenEdgeBottom = (area.getHeight() - playerPos[1]) / (float)FOV * (float)screenHeight + (float)screenHeight / 2;
+		float backgroundScreenEdgeLeft = -playerPos[0] / (float)FOVW * (float)screenWidth + (float)screenWidth / 2;
+		float backgroundScreenEdgeRight = (area.getWidth() - playerPos[0]) / (float)FOVW * (float)screenWidth + (float)screenWidth / 2;
+		float backgroundScreenEdgeTop = -playerPos[1] / (float)FOVH * (float)screenHeight + (float)screenHeight / 2;
+		float backgroundScreenEdgeBottom = (area.getHeight() - playerPos[1]) / (float)FOVH * (float)screenHeight + (float)screenHeight / 2;
 
 		if (backgroundScreenEdgeLeft > 0) {
 			sf::RectangleShape blackRect(sf::Vector2f(backgroundScreenEdgeLeft, screenHeight));
@@ -337,7 +350,7 @@ int main() {
 		}
 		
 		//Add player to light source list
-		float playerLightDistX = player.getLightLevel() / (float)FOV * (float)screenWidth;
+		float playerLightDistX = player.getLightLevel() / (float)FOVW * (float)screenWidth;
 
 		std::vector<std::pair<sf::Vector2f, float>> sourcePositions;
 		sourcePositions.push_back(std::pair<sf::Vector2f, float>(sf::Vector2f((float)screenWidth / 2, (float)screenHeight / 2), playerLightDistX));
@@ -348,13 +361,13 @@ int main() {
 			float objectPos[2] = { *currentObj->getPosition(), *(currentObj->getPosition() + 1) };
 			float* temp = relativePosition(playerPos[0], playerPos[1], objectPos[0], objectPos[1]);
 			float relativePosition[2] = { *temp, *(temp + 1) };
-			currentObj->setScreenPosition((relativePosition[0] - currentObj->getTextureWidth()/2)/(float)FOV* (float)screenWidth + (float)screenWidth / 2, (relativePosition[1] - currentObj->getTextureHeight() / 2)/(float)FOV* (float)screenHeight + (float)screenHeight / 2);
+			currentObj->setScreenPosition((relativePosition[0] - currentObj->getTextureWidth()/2)/(float)FOVW* (float)screenWidth + (float)screenWidth / 2, (relativePosition[1] - currentObj->getTextureHeight() / 2)/(float)FOVH* (float)screenHeight + (float)screenHeight / 2);
 			sf::Sprite* currentSprite = currentObj->getSprite();
-			currentSprite->setScale(currentObj->getTextureWidth() / (float)FOV * (float)screenWidth / currentObj->getTexture()->getSize().x, currentObj->getTextureHeight() / (float)FOV * (float)screenHeight / currentObj->getTexture()->getSize().y);
+			currentSprite->setScale(currentObj->getTextureWidth() / (float)FOVW * (float)screenWidth / currentObj->getTexture()->getSize().x, currentObj->getTextureHeight() / (float)FOVH * (float)screenHeight / currentObj->getTexture()->getSize().y);
 			mainWindow.draw(*currentSprite);
 			
 			if (currentObj->getType().compare("lightSource") == 0) {
-				float objectLightDistX = currentObj->getLightLevel() / (float)FOV * (float)screenWidth;
+				float objectLightDistX = currentObj->getLightLevel() / (float)FOVW * (float)screenWidth;
 				sourcePositions.push_back(std::pair<sf::Vector2f, float>(currentSprite->getPosition(), objectLightDistX));
 			}
 		}
@@ -386,8 +399,8 @@ int main() {
 		}
 		
 		//draw player
-		player.setScreenPosition((float)screenWidth/2 - (player.getWidth()/(float)FOV*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getHeight() / (float)FOV * (float)screenHeight) / 2);
-		player.getSprite()->setScale((float)screenWidth / (float)FOV, (float)screenHeight / (float)FOV);
+		player.setScreenPosition((float)screenWidth/2 - (player.getWidth()/(float)FOVW*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getHeight() / (float)FOVH * (float)screenHeight) / 2);
+		player.getSprite()->setScale((float)screenWidth / (float)FOVW, (float)screenHeight / (float)FOVH);
 		mainWindow.draw(*player.getSprite());
 
 		//draw lightMap

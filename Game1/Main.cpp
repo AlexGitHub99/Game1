@@ -18,6 +18,7 @@
 #include "LightSource.h"
 
 int PLAYER_SPEED = 1000; //coord per second
+int CAMERA_SPEED = 3;
 
 const int lightMapWidth = 40;
 const int lightMapHeight = 40;
@@ -76,11 +77,11 @@ int main() {
 	}
 	
 	Player player;
-	player.setPosition(250, 250);
+	player.setPosition(1000, 1000);
 	player.setTexture(playerTexture);
-	player.setBoundBox(50);
+	player.setBoundBox(70);
 	player.setLightLevel(600); //level that light reaches
-	player.setTextureSize(50);
+	player.setTextureSize(70);
 
 	//temporary stuff-----------------------------------------------------------
 	GameObject* myObj = new GameObject();
@@ -106,7 +107,7 @@ int main() {
 	lamp2->setTexture(lampTexture);
 	lamp2->setPosition(900, 800);
 	lamp2->setTextureSize(60);
-	lamp2->setBoundBox(50);
+	lamp2->setBoundBox(60);
 	lamp2->setLightLevel(600);
 
 	sf::Sprite lightSprite(lightTexture);
@@ -162,6 +163,9 @@ int main() {
 			(*lightPoints)[y * lightMapWidth * 4 + x * 4 + 3].position = sf::Vector2f((float)x * squareWidth, (float)(y + 1) * squareHeight);
 		}
 	}
+
+	float cameraSpeed = 0;
+	float cameraPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
 
 	//main loop
 	while (mainWindow.isOpen()) {
@@ -239,7 +243,12 @@ int main() {
 				angle = M_PI;
 			}
 
-			
+			if (cos(angle) * magnitude < 0) {
+				player.setFaceLeft(true);
+			}
+			else {
+				player.setFaceLeft(false);
+			}
 			player.movePosition(cos(angle) * magnitude, sin(angle) * -magnitude);
 
 			//collissions
@@ -372,16 +381,38 @@ int main() {
 
 		}
 
+		float playerPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
+
+		
+		float* cameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
+		float cameraGap[2] = { *cameraGapTemp, *(cameraGapTemp + 1) };
+		cameraSpeed = sqrt(pow(cameraGap[0], 2) + pow(cameraGap[1], 2)) * CAMERA_SPEED + CAMERA_SPEED * 15;
+
+		if (abs(cameraGap[0]) < 0.5) {
+			cameraPos[0] = playerPos[0];
+		}
+		else {
+			cameraPos[0] += cameraGap[0] * cameraSpeed / 5000;
+		}
+		if (abs(cameraGap[1]) < 0.5) {
+			cameraPos[1] = playerPos[1];
+		}
+		else {
+			cameraPos[1] += cameraGap[1] * cameraSpeed / 5000;
+		}
+
+		//------------------------------------------------------
+		//DRAWING
+		//------------------------------------------------------
 		mainWindow.clear();
 
 		//draw background
 		sf::Sprite* background = area.getBackground();
 		sf::Vector2u backgroundSize = background->getTexture()->getSize();
-		float playerPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
-
-		float errorX = (playerPos[0] - (float)FOVW / 2) / area.getWidth() * (float)backgroundSize.x - 1 - (int)((playerPos[0] - (float)FOVW / 2) / area.getWidth() * (float)backgroundSize.x - 1);
-		float errorY = (playerPos[1] - (float)FOVH / 2) / area.getHeight() * (float)backgroundSize.y - 1 - (int)((playerPos[1] - (float)FOVH / 2) / area.getHeight() * (float)backgroundSize.y - 1);
-		background->setTextureRect(sf::IntRect((playerPos[0] - (float)FOVW/2)/area.getWidth()* (float)backgroundSize.x - 1, (playerPos[1] - (float)FOVH/2)/area.getHeight() * (float)backgroundSize.y - 1, (float)FOVW / area.getWidth() * (float)backgroundSize.x + 2, (float)FOVH / area.getHeight() * (float)backgroundSize.y + 2));
+		
+		float errorX = (cameraPos[0] - (float)FOVW / 2) / area.getWidth() * (float)backgroundSize.x - 1 - (int)((cameraPos[0] - (float)FOVW / 2) / area.getWidth() * (float)backgroundSize.x - 1);
+		float errorY = (cameraPos[1] - (float)FOVH / 2) / area.getHeight() * (float)backgroundSize.y - 1 - (int)((cameraPos[1] - (float)FOVH / 2) / area.getHeight() * (float)backgroundSize.y - 1);
+		background->setTextureRect(sf::IntRect((cameraPos[0] - (float)FOVW/2)/area.getWidth()* (float)backgroundSize.x - 1, (cameraPos[1] - (float)FOVH/2)/area.getHeight() * (float)backgroundSize.y - 1, (float)FOVW / area.getWidth() * (float)backgroundSize.x + 2, (float)FOVH / area.getHeight() * (float)backgroundSize.y + 2));
 		background->setScale((float)screenWidth/((float)background->getTextureRect().width - 2), (float)screenHeight/((float)background->getTextureRect().height - 2));
 
 		float backgroundX = (-errorX - 1) * ((float)screenWidth / (float)background->getTextureRect().width);
@@ -390,10 +421,10 @@ int main() {
 		mainWindow.draw(*area.getBackground());
 
 		//draw black area outside of background border
-		float backgroundScreenEdgeLeft = -playerPos[0] / (float)FOVW * (float)screenWidth + (float)screenWidth / 2;
-		float backgroundScreenEdgeRight = (area.getWidth() - playerPos[0]) / (float)FOVW * (float)screenWidth + (float)screenWidth / 2;
-		float backgroundScreenEdgeTop = -playerPos[1] / (float)FOVH * (float)screenHeight + (float)screenHeight / 2;
-		float backgroundScreenEdgeBottom = (area.getHeight() - playerPos[1]) / (float)FOVH * (float)screenHeight + (float)screenHeight / 2;
+		float backgroundScreenEdgeLeft = -cameraPos[0] / (float)FOVW * (float)screenWidth + (float)screenWidth / 2;
+		float backgroundScreenEdgeRight = (area.getWidth() - cameraPos[0]) / (float)FOVW * (float)screenWidth + (float)screenWidth / 2;
+		float backgroundScreenEdgeTop = -cameraPos[1] / (float)FOVH * (float)screenHeight + (float)screenHeight / 2;
+		float backgroundScreenEdgeBottom = (area.getHeight() - cameraPos[1]) / (float)FOVH * (float)screenHeight + (float)screenHeight / 2;
 
 		if (backgroundScreenEdgeLeft > 0) {
 			sf::RectangleShape blackRect(sf::Vector2f(backgroundScreenEdgeLeft, screenHeight));
@@ -430,7 +461,7 @@ int main() {
 		for (int i = 0; i < objects->size(); i++) {
 			GameObject* currentObj = objects->at(i);
 			float objectPos[2] = { *currentObj->getPosition(), *(currentObj->getPosition() + 1) };
-			float* temp = relativePosition(playerPos[0], playerPos[1], objectPos[0], objectPos[1]);
+			float* temp = relativePosition(cameraPos[0], cameraPos[1], objectPos[0], objectPos[1]);
 			float relativePosition[2] = { *temp, *(temp + 1) };
 			currentObj->setScreenPosition((relativePosition[0] - currentObj->getTextureWidth()/2)/(float)FOVW* (float)screenWidth + (float)screenWidth / 2, (relativePosition[1] - currentObj->getTextureHeight() / 2)/(float)FOVH* (float)screenHeight + (float)screenHeight / 2);
 			sf::Sprite* currentSprite = currentObj->getSprite();
@@ -461,17 +492,27 @@ int main() {
 					}
 				}
 				float alpha = sqrt(alphaSquared);
-				if(alpha > 255) {
+				if (alpha > 255) {
 					alpha = 255;
 				}
 				alpha = 255 - alpha;
 				lightMap[x][y] = alpha;
 			}
 		}
-		
+
 		//draw player
-		player.setScreenPosition((float)screenWidth/2 - (player.getTextureWidth()/(float)FOVW*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getTextureHeight() / (float)FOVH * (float)screenHeight) / 2);
+		float* newCameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
+		float newCameraGap[2] = { *newCameraGapTemp, *(newCameraGapTemp + 1) };
+		player.setScreenPosition((float)screenWidth / 2 + (newCameraGap[0] - player.getTextureWidth() / 2) / (float)FOVW * (float)screenWidth, (float)screenHeight / 2 + (newCameraGap[1] - player.getTextureHeight() / 2) / (float)FOVH * (float)screenHeight);
 		player.getSprite()->setScale(player.getTextureWidth() * (float)screenWidth / (float)FOVW / player.getSprite()->getTexture()->getSize().x, player.getTextureHeight() * (float)screenHeight / (float)FOVH / player.getSprite()->getTexture()->getSize().y);
+
+		if (player.isFacingLeft()) {
+			//player.getSprite()->setOrigin(player.getSprite()->getTexture()->getSize().x / 2, player.getSprite()->getTexture()->getSize().y / 2); //set origin to center for transformation
+			player.getSprite()->scale(-1.f, 1.f); //flip horizontally
+			//player.getSprite()->setOrigin(0.f, 0.f);//set origin back to top left
+			player.moveScreenPosition(player.getTextureWidth() * (float)screenWidth / (float)FOVW, 0.f);
+		}
+
 		mainWindow.draw(*player.getSprite());
 
 		//draw lightMap
@@ -483,14 +524,24 @@ int main() {
 		if (!courier.loadFromFile("resources/fonts/CourierPrime-Regular.ttf")) {
 			return -1;
 		}
-		sf::Text coords;
-		coords.setFont(courier);
-		coords.setString("X: " + std::to_string(playerPos[0]) + " Y: " + std::to_string(playerPos[1]));
-		mainWindow.draw(coords);
+		sf::Text playerCoords;
+		sf::Text cameraCoords;
+		playerCoords.setFont(courier);
+		cameraCoords.setFont(courier);
+		playerCoords.setString("Player X: " + std::to_string(playerPos[0]) + " Y: " + std::to_string(playerPos[1]));
+		cameraCoords.setString("Camera X: " + std::to_string(cameraPos[0]) + " Y : " + std::to_string(cameraPos[1]));
+		
+		playerCoords.setPosition(0, 0);
+		cameraCoords.setPosition(0, 40);
 
-		//mainWindow.setActive();
+		mainWindow.draw(playerCoords);
+		mainWindow.draw(cameraCoords);
 
 		mainWindow.display();
+
+		//------------------------------------------------------
+		//END OF DRAWING
+		//------------------------------------------------------
 	}
 
 	return 0;

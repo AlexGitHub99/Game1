@@ -22,6 +22,11 @@ void Player::setScreenPosition(float x, float y)
 	sprite->setPosition(x, y);
 }
 
+void Player::moveScreenPosition(float x, float y)
+{
+	sprite->setPosition(sprite->getPosition().x + x, sprite->getPosition().y + y);
+}
+
 void Player::setLightLevel(float newLightLevel)
 {
 	lightLevel = newLightLevel;
@@ -37,6 +42,11 @@ void Player::setTextureSize(float newWidth)
 {
 	textureWidth = newWidth;
 	textureHeight = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+}
+
+void Player::setFaceLeft(bool isTrue)
+{
+	facingLeft = isTrue;
 }
 
 void Player::setBoundBox(float newWidth, float newHeight) {
@@ -99,4 +109,9 @@ float Player::getTextureHeight()
 float Player::getTextureWidth()
 {
 	return textureWidth;
+}
+
+bool Player::isFacingLeft()
+{
+	return facingLeft;
 }

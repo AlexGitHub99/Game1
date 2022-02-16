@@ -12,9 +12,11 @@ public:
 	void setBoundBox(float newWidth);
 	void movePosition(float x, float y);
 	void setScreenPosition(float x, float y);
+	void moveScreenPosition(float x, float y);
 	void setLightLevel(float newLightLevel);
 	void setTextureSize(float newWidth, float newHeight);
 	void setTextureSize(float newWidth);
+	void setFaceLeft(bool isTrue);
 	float* getPosition();
 	sf::Texture* getTexture();
 	sf::Sprite* getSprite();
@@ -25,6 +27,7 @@ public:
 	float getLightLevel();
 	float getTextureHeight();
 	float getTextureWidth();
+	bool isFacingLeft();
 
 private:
 	float position[2];
@@ -33,6 +36,7 @@ private:
 	float lightLevel;
 	float textureWidth;
 	float textureHeight;
+	bool facingLeft;
 
 	sf::Texture* texture;
 	sf::Sprite* sprite;

@@ -27,9 +27,27 @@ void Player::setLightLevel(float newLightLevel)
 	lightLevel = newLightLevel;
 }
 
+void Player::setTextureSize(float newWidth, float newHeight)
+{
+	textureWidth = newWidth;
+	textureHeight = newHeight;
+}
+
+void Player::setTextureSize(float newWidth)
+{
+	textureWidth = newWidth;
+	textureHeight = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+}
+
 void Player::setBoundBox(float newWidth, float newHeight) {
 	width = newWidth;
 	height = newHeight;
+}
+
+void Player::setBoundBox(float newWidth)
+{
+	width = newWidth;
+	height = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 }
 
 void Player::movePosition(float x, float y) {
@@ -71,4 +89,14 @@ float Player::getY() {
 float Player::getLightLevel()
 {
 	return lightLevel;
+}
+
+float Player::getTextureHeight()
+{
+	return textureHeight;
+}
+
+float Player::getTextureWidth()
+{
+	return textureWidth;
 }

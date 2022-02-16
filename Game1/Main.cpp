@@ -11,6 +11,7 @@
 #include <thread>
 #include <fstream>
 #include <time.h>
+#include "wtypes.h"
 #include "GameObject.h"
 #include "Area.h"
 #include "Player.h"
@@ -24,16 +25,17 @@ const int lightMapHeight = 40;
 float* relativePosition(float primaryX, float primaryY, float secondaryX, float secondaryY);
 void setSquare(sf::VertexArray* lightPoints, int x, int y, int alpha, int lightMapWidth, int lightMapHeight);
 void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1], float baseLevel);
-
+void getDesktopResolution(int& horizontal, int& vertical);
 
 
 int main() {
 
-	int screenWidth = 1600;
-	int screenHeight = 1000;
+	int screenWidth;
+	int screenHeight;
+	getDesktopResolution(screenWidth, screenHeight);
 	int baseLightLevel = 10;
 	float FOVRatio = 16 / 10;
-	int FOVW = 1600;
+	int FOVW = 2000;
 	int FOVH = (float)FOVW / FOVRatio;
 
 	if ((float)screenWidth / (float)screenHeight > (float)FOVW / (float)FOVH) {
@@ -46,7 +48,7 @@ int main() {
 	}
 
 
-	sf::RenderWindow mainWindow(sf::VideoMode(screenWidth, screenHeight), "Game");
+	sf::RenderWindow mainWindow(sf::VideoMode(screenWidth, screenHeight), "Game", sf::Style::Fullscreen);
 
 	sf::Texture *myTexture = new sf::Texture();
 	if (!myTexture->loadFromFile("resources/temprock.png")) {
@@ -76,8 +78,9 @@ int main() {
 	Player player;
 	player.setPosition(250, 250);
 	player.setTexture(playerTexture);
-	player.setBoundBox(100, 100);
+	player.setBoundBox(50);
 	player.setLightLevel(600); //level that light reaches
+	player.setTextureSize(50);
 
 	//temporary stuff-----------------------------------------------------------
 	GameObject* myObj = new GameObject();
@@ -95,8 +98,8 @@ int main() {
 	LightSource* lamp = new LightSource();
 	lamp->setTexture(lampTexture);
 	lamp->setPosition(200, 800);
-	lamp->setTextureSize(50);
-	lamp->setBoundBox(50);
+	lamp->setTextureSize(10, 50);
+	lamp->setBoundBox(10, 50);
 	lamp->setLightLevel(500);
 
 	LightSource* lamp2 = new LightSource();
@@ -116,7 +119,7 @@ int main() {
 	area.addObject(lamp);
 	area.addObject(lamp2);
 
-	for (int i = 0; i < 20; i++) {
+	/*for (int i = 0; i < 20; i++) {
 		LightSource* lamp3 = new LightSource();
 		lamp3->setTexture(lampTexture);
 		lamp3->setPosition(100 + i*100, 700);
@@ -124,7 +127,7 @@ int main() {
 		lamp3->setBoundBox(50);
 		lamp3->setLightLevel(500);
 		area.addObject(lamp3);
-	}
+	}*/
 
 	/*for (int i = 0; i < 80; i++) {
 		GameObject* myObj3 = new GameObject();
@@ -171,6 +174,12 @@ int main() {
 			if (event.type == sf::Event::MouseWheelMoved) {
 				FOVW += -(float)FOVW*(float)event.mouseWheel.delta/20;
 				FOVH = (float)FOVW / FOVRatio;
+			}
+
+			if (event.type == sf::Event::KeyReleased) {
+				if (event.key.code == sf::Keyboard::Escape) {
+					mainWindow.close();
+				}
 			}
 			if (event.type == sf::Event::Closed) {
 				mainWindow.close();
@@ -242,38 +251,100 @@ int main() {
 				float xDisplacement = 0;
 				float yDisplacement = 0;
 
-				if (player.getX() - player.getWidth() / 2 < currentObj.getX() + currentObj.getWidth() / 2 and // player left is left of object right             left bottom
-					player.getX() - player.getWidth() / 2 > currentObj.getX() - currentObj.getWidth() / 2 and // player left is right of object left      
-					player.getY() - player.getHeight() / 2 < currentObj.getY() + currentObj.getHeight() / 2 and // player bottom is under object top
-					player.getY() - player.getHeight() / 2 > currentObj.getY() - currentObj.getHeight() / 2) { // player bottom is above object bottom 
+				float playerLeft = player.getX() - player.getWidth() / 2;
+				float playerRight = player.getX() + player.getWidth() / 2;
+				float playerBottom = player.getY() - player.getHeight() / 2;
+				float playerTop = player.getY() + player.getHeight() / 2;
 
-					xDisplacement = (currentObj.getX() + currentObj.getWidth() / 2) - (player.getX() - player.getWidth() / 2);
-					yDisplacement = (currentObj.getY() + currentObj.getHeight() / 2) - (player.getY() - player.getHeight() / 2);
-				}
-				else if (player.getX() + player.getWidth() / 2 > currentObj.getX() - currentObj.getWidth() / 2 and // player right is right of object left       right bottom
-					player.getX() + player.getWidth() / 2 < currentObj.getX() + currentObj.getWidth() / 2 and // player right is left of object right     
-					player.getY() - player.getHeight() / 2 < currentObj.getY() + currentObj.getHeight() / 2 and // player bottom is under object top      
-					player.getY() - player.getHeight() / 2 > currentObj.getY() - currentObj.getHeight() / 2) {  // player bottom is above object bottom  
+				float objectLeft = currentObj.getX() - currentObj.getWidth() / 2;
+				float objectRight = currentObj.getX() + currentObj.getWidth() / 2;
+				float objectBottom = currentObj.getY() - currentObj.getHeight() / 2;
+				float objectTop = currentObj.getY() + currentObj.getHeight() / 2;
 
-					xDisplacement = (currentObj.getX() - currentObj.getWidth() / 2) - (player.getX() + player.getWidth() / 2);
-					yDisplacement = (currentObj.getY() + currentObj.getHeight() / 2) - (player.getY() - player.getHeight() / 2);
+				if (
+					playerLeft < objectRight and // player left is left of object right             left bottom corner
+					playerLeft > objectLeft and // player left is right of object left      
+					playerBottom < objectTop and // player bottom is under object top
+					playerBottom > objectBottom // player bottom is above object bottom 
+					) 
+				{ 
+					xDisplacement = (objectRight) - (playerLeft);
+					yDisplacement = (objectTop) - (playerBottom);
 				}
-				else if (player.getX() - player.getWidth() / 2 < currentObj.getX() + currentObj.getWidth() / 2 and // player left is left of object right        left top
-					player.getX() - player.getWidth() / 2 > currentObj.getX() - currentObj.getWidth() / 2 and // player left is right of object left      
-					player.getY() + player.getHeight() / 2 > currentObj.getY() - currentObj.getHeight() / 2 and // player top is above object bottom      
-					player.getY() + player.getHeight() / 2 < currentObj.getY() + currentObj.getHeight() / 2) { // player top is under object top        
+				else if (
+					playerRight > objectLeft and // player right is right of object left			right bottom corner
+					playerRight < objectRight and // player right is left of object right     
+					playerBottom < objectTop and // player bottom is under object top      
+					playerBottom > objectBottom // player bottom is above object bottom  
+					) 
+				{
 
-					xDisplacement = (currentObj.getX() + currentObj.getWidth() / 2) - (player.getX() - player.getWidth() / 2);
-					yDisplacement = (currentObj.getY() - currentObj.getHeight() / 2) - (player.getY() + player.getHeight() / 2);
+					xDisplacement = (objectLeft) - (playerRight);
+					yDisplacement = (objectTop) - (playerBottom);
 				}
-				else if (player.getX() + player.getWidth() / 2 > currentObj.getX() - currentObj.getWidth() / 2 and // player right is right of object left       right top
-					player.getX() + player.getWidth() / 2 < currentObj.getX() + currentObj.getWidth() / 2 and // player right is left of object right     
-					player.getY() + player.getHeight() / 2 > currentObj.getY() - currentObj.getHeight() / 2 and // player top is above object bottom      
-					player.getY() + player.getHeight() / 2 < currentObj.getY() + currentObj.getHeight() / 2) { // player top is under object top       
+				else if (
+					playerLeft < objectRight and // player left is left of object right				left top corner
+					playerLeft > objectLeft and // player left is right of object left      
+					playerTop > objectBottom and // player top is above object bottom      
+					playerTop < objectTop // player top is under object top        
+					) 
+				{ 
 
-					xDisplacement = (currentObj.getX() - currentObj.getWidth() / 2) - (player.getX() + player.getWidth() / 2);
-					yDisplacement = (currentObj.getY() - currentObj.getHeight() / 2) - (player.getY() + player.getHeight() / 2);
+					xDisplacement = (objectRight) - (playerLeft);
+					yDisplacement = (objectBottom) - (playerTop);
 				}
+				else if (
+					playerRight > objectLeft and // player right is right of object left			right top corner
+					playerRight < objectRight and // player right is left of object right     
+					playerTop > objectBottom and // player top is above object bottom      
+					playerTop < objectTop // player top is under object top  
+					) 
+				{      
+
+					xDisplacement = (objectLeft) - (playerRight);
+					yDisplacement = (objectBottom) - (playerTop);
+				} 
+				else if (																																		
+					playerLeft < objectRight and // player left is left of object right				entire left
+					playerLeft > objectLeft and // player left is right of object left 
+					playerBottom < objectBottom and // player bottom is below object bottom
+					playerTop > objectTop // player top is above object top
+					)
+				{
+					xDisplacement = (objectRight) - (playerLeft);
+					yDisplacement = 999; //arbitrary
+				} 
+				else if (
+					playerRight > objectLeft and // player right is right of object left			entire right
+					playerRight < objectRight and // player right is left of object right
+					playerBottom < objectBottom and // player bottom is below object bottom
+					playerTop > objectTop // player top is above object top
+					)
+				{
+					xDisplacement = (objectLeft) - (playerRight);
+					yDisplacement = 999; //arbitrary
+				} 
+				else if (
+					playerRight > objectRight and // player right is right of object right			entire bottom
+					playerLeft < objectLeft and // player left is left of object left
+					playerBottom < objectTop and // player bottom is below object top
+					playerBottom > objectBottom // player bottom is above object bottom
+					)
+				{
+					xDisplacement = 999; //arbitrary
+					yDisplacement = (objectTop) - (playerBottom);
+				}
+				else if (
+					playerRight > objectRight and // player right is right of object right			entire top
+					playerLeft < objectLeft and // player left is left of object left
+					playerTop > objectBottom and // player top is above object bottom
+					playerTop < objectTop // player top is below object top
+					)
+				{
+					xDisplacement = 999; //arbitrary
+					yDisplacement = (objectBottom) - (playerTop);
+				}
+
 
 				if (xDisplacement != 0 and yDisplacement != 0) {
 					if (abs(xDisplacement) < abs(yDisplacement)) {
@@ -399,8 +470,8 @@ int main() {
 		}
 		
 		//draw player
-		player.setScreenPosition((float)screenWidth/2 - (player.getWidth()/(float)FOVW*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getHeight() / (float)FOVH * (float)screenHeight) / 2);
-		player.getSprite()->setScale((float)screenWidth / (float)FOVW, (float)screenHeight / (float)FOVH);
+		player.setScreenPosition((float)screenWidth/2 - (player.getTextureWidth()/(float)FOVW*(float)screenWidth)/2, (float)screenHeight / 2 - (player.getTextureHeight() / (float)FOVH * (float)screenHeight) / 2);
+		player.getSprite()->setScale(player.getTextureWidth() * (float)screenWidth / (float)FOVW / player.getSprite()->getTexture()->getSize().x, player.getTextureHeight() * (float)screenHeight / (float)FOVH / player.getSprite()->getTexture()->getSize().y);
 		mainWindow.draw(*player.getSprite());
 
 		//draw lightMap
@@ -462,4 +533,19 @@ void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1],
 			}
 		}
 	}
+}
+
+//source: https://cppkid.wordpress.com/2009/01/07/how-to-get-the-screen-resolution-in-pixels/
+void getDesktopResolution(int& horizontal, int& vertical)
+{
+	RECT desktop;
+	// Get a handle to the desktop window
+	const HWND hDesktop = GetDesktopWindow();
+	// Get the size of screen to the variable desktop
+	GetWindowRect(hDesktop, &desktop);
+	// The top left corner will have coordinates (0,0)
+	// and the bottom right corner will have coordinates
+	// (horizontal, vertical)
+	horizontal = desktop.right;
+	vertical = desktop.bottom;
 }

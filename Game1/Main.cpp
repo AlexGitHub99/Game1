@@ -51,8 +51,13 @@ int main() {
 
 	sf::RenderWindow mainWindow(sf::VideoMode(screenWidth, screenHeight), "Game", sf::Style::Fullscreen);
 
-	sf::Texture *myTexture = new sf::Texture();
-	if (!myTexture->loadFromFile("resources/temprock.png")) {
+	sf::Texture *rockTexture = new sf::Texture();
+	if (!rockTexture->loadFromFile("resources/rock_1.png")) {
+		return -1;
+	}
+
+	sf::Texture* wallTexture = new sf::Texture();
+	if (!wallTexture->loadFromFile("resources/wall.png")) {
 		return -1;
 	}
 
@@ -85,22 +90,28 @@ int main() {
 
 	//temporary stuff-----------------------------------------------------------
 	GameObject* myObj = new GameObject();
-	myObj->setTexture(myTexture);
+	myObj->setTexture(rockTexture);
 	myObj->setPosition(250, 250);
-	myObj->setTextureSize(100, 50);
-	myObj->setBoundBox(100, 100);
+	myObj->setTextureSize(100);
+	myObj->setBoundBox(100);
 
 	GameObject* myObj2 = new GameObject();
-	myObj2->setTexture(myTexture);
+	myObj2->setTexture(rockTexture);
 	myObj2->setPosition(1000, 400);
-	myObj2->setTextureSize(600);
-	myObj2->setBoundBox(600);
+	myObj2->setTextureSize(300);
+	myObj2->setBoundBox(300);
+
+	GameObject* wall = new GameObject();
+	wall->setTexture(wallTexture);
+	wall->setPosition(500, 400);
+	wall->setTextureSize(100);
+	wall->setBoundBox(100);
 
 	LightSource* lamp = new LightSource();
 	lamp->setTexture(lampTexture);
 	lamp->setPosition(200, 800);
-	lamp->setTextureSize(10, 50);
-	lamp->setBoundBox(10, 50);
+	lamp->setTextureSize(50);
+	lamp->setBoundBox(50);
 	lamp->setLightLevel(500);
 
 	LightSource* lamp2 = new LightSource();
@@ -119,6 +130,7 @@ int main() {
 	area.addObject(myObj2);
 	area.addObject(lamp);
 	area.addObject(lamp2);
+	area.addObject(wall);
 
 	/*for (int i = 0; i < 20; i++) {
 		LightSource* lamp3 = new LightSource();
@@ -130,15 +142,23 @@ int main() {
 		area.addObject(lamp3);
 	}*/
 
-	/*for (int i = 0; i < 80; i++) {
-		GameObject* myObj3 = new GameObject();
-		myObj3->setTexture(myTexture);
-		myObj3->setPosition(100 + 50*i, 700);
-		myObj3->setTextureSize(300);
-		myObj3->setBoundBox(300);
-		area.addObject(myObj3);
-	}*/
+	/*for (int i = 0; i < 12; i++) {
+		GameObject* wall2 = new GameObject();
+		wall2->setTexture(wallTexture);
+		wall2->setPosition(500 + i*94, 800);
+		wall2->setTextureSize(100);
+		wall2->setBoundBox(100);
+		area.addObject(wall2);
+	}
 
+	for (int i = 0; i < 4; i++) {
+		GameObject* wall2 = new GameObject();
+		wall2->setTexture(wallTexture);
+		wall2->setPosition(500, 800 + i*290);
+		wall2->setTextureSize(100);
+		wall2->setBoundBox(100);
+		area.addObject(wall2);
+	}*/
 
 	//end of temporary stuff--------------------------------------------
 

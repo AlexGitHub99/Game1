@@ -14,6 +14,7 @@ public:
 	void setScreenPosition(float x, float y);
 	void setBoundBox(float newWidth, float newHeight);
 	void setBoundBox(float newWidth);
+	void setBoundBoxOffset(float x, float y);
 	void setTextureSize(float newWidth, float newHeight);
 	void setTextureSize(float newWidth);
 	sf::Texture* getTexture();
@@ -23,6 +24,8 @@ public:
 	float getTextureWidth();
 	float getWidth();
 	float getHeight();
+	float getBoundBoxOffsetX();
+	float getBoundBoxOffsetY();
 	float getX();
 	float getY();
 	std::string getType();
@@ -34,6 +37,8 @@ private:
 	float position[2];
 	float width;
 	float height;
+	float boundBoxOffsetX;
+	float boundBoxOffsetY;
 	float textureWidth;
 	float textureHeight;
 	sf::Texture* texture;

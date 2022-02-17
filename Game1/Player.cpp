@@ -60,6 +60,12 @@ void Player::setBoundBox(float newWidth)
 	height = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 }
 
+void Player::setBoundBoxOffset(float x, float y)
+{
+	boundBoxOffsetX = x;
+	boundBoxOffsetY = y;
+}
+
 void Player::movePosition(float x, float y) {
 	position[0] += x;
 	position[1] += y;
@@ -86,6 +92,16 @@ float Player::getWidth() {
 
 float Player::getHeight() {
 	return height;
+}
+
+float Player::getBoundBoxOffsetX()
+{
+	return boundBoxOffsetX;
+}
+
+float Player::getBoundBoxOffsetY()
+{
+	return boundBoxOffsetY;
 }
 
 float Player::getX() {

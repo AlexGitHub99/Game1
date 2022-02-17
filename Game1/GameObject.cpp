@@ -35,6 +35,12 @@ void GameObject::setBoundBox(float newWidth)
 	height = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 }
 
+void GameObject::setBoundBoxOffset(float x, float y)
+{
+	boundBoxOffsetX = x;
+	boundBoxOffsetY = y;
+}
+
 void GameObject::setTextureSize(float newWidth, float newHeight)
 {
 	textureWidth = newWidth;
@@ -79,6 +85,16 @@ float GameObject::getWidth()
 float GameObject::getHeight()
 {
 	return height;
+}
+
+float GameObject::getBoundBoxOffsetX()
+{
+	return boundBoxOffsetX;
+}
+
+float GameObject::getBoundBoxOffsetY()
+{
+	return boundBoxOffsetY;
 }
 
 float GameObject::getX()

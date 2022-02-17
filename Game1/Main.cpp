@@ -84,9 +84,11 @@ int main() {
 	Player player;
 	player.setPosition(1000, 1000);
 	player.setTexture(playerTexture);
-	player.setBoundBox(70);
-	player.setLightLevel(600); //level that light reaches
+	player.setBoundBox(70, 20);
 	player.setTextureSize(70);
+	player.setBoundBoxOffset(0, player.getTextureHeight() / 2 - player.getHeight() / 2);
+	player.setLightLevel(600); //level that light reaches
+	
 
 	//temporary stuff-----------------------------------------------------------
 	GameObject* myObj = new GameObject();
@@ -101,11 +103,11 @@ int main() {
 	myObj2->setTextureSize(300);
 	myObj2->setBoundBox(300);
 
-	GameObject* wall = new GameObject();
-	wall->setTexture(wallTexture);
-	wall->setPosition(500, 400);
-	wall->setTextureSize(100);
-	wall->setBoundBox(100);
+	//GameObject* wall = new GameObject();
+	//wall->setTexture(wallTexture);
+	//wall->setPosition(500, 400);
+	//wall->setTextureSize(100);
+	//wall->setBoundBox(100);
 
 	LightSource* lamp = new LightSource();
 	lamp->setTexture(lampTexture);
@@ -130,7 +132,7 @@ int main() {
 	area.addObject(myObj2);
 	area.addObject(lamp);
 	area.addObject(lamp2);
-	area.addObject(wall);
+	//area.addObject(wall);
 
 	/*for (int i = 0; i < 20; i++) {
 		LightSource* lamp3 = new LightSource();
@@ -142,23 +144,25 @@ int main() {
 		area.addObject(lamp3);
 	}*/
 
-	/*for (int i = 0; i < 12; i++) {
+	for (int i = 0; i < 12; i++) {
 		GameObject* wall2 = new GameObject();
 		wall2->setTexture(wallTexture);
 		wall2->setPosition(500 + i*94, 800);
+		wall2->setBoundBox(100, 100);
 		wall2->setTextureSize(100);
-		wall2->setBoundBox(100);
+		wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getHeight() / 2);
 		area.addObject(wall2);
 	}
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 20; i++) {
 		GameObject* wall2 = new GameObject();
 		wall2->setTexture(wallTexture);
-		wall2->setPosition(500, 800 + i*290);
+		wall2->setPosition(500, 800 + i*90);
+		wall2->setBoundBox(100, 100);
 		wall2->setTextureSize(100);
-		wall2->setBoundBox(100);
+		wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getHeight() / 2);
 		area.addObject(wall2);
-	}*/
+	}
 
 	//end of temporary stuff--------------------------------------------
 
@@ -280,15 +284,15 @@ int main() {
 				float xDisplacement = 0;
 				float yDisplacement = 0;
 
-				float playerLeft = player.getX() - player.getWidth() / 2;
-				float playerRight = player.getX() + player.getWidth() / 2;
-				float playerBottom = player.getY() - player.getHeight() / 2;
-				float playerTop = player.getY() + player.getHeight() / 2;
+				float playerLeft = player.getX() - player.getWidth() / 2 + player.getBoundBoxOffsetX();
+				float playerRight = player.getX() + player.getWidth() / 2 + player.getBoundBoxOffsetX();
+				float playerBottom = player.getY() - player.getHeight() / 2 + player.getBoundBoxOffsetY();
+				float playerTop = player.getY() + player.getHeight() / 2 + player.getBoundBoxOffsetY();
 
-				float objectLeft = currentObj.getX() - currentObj.getWidth() / 2;
-				float objectRight = currentObj.getX() + currentObj.getWidth() / 2;
-				float objectBottom = currentObj.getY() - currentObj.getHeight() / 2;
-				float objectTop = currentObj.getY() + currentObj.getHeight() / 2;
+				float objectLeft = currentObj.getX() - currentObj.getWidth() / 2 + currentObj.getBoundBoxOffsetX();
+				float objectRight = currentObj.getX() + currentObj.getWidth() / 2 + currentObj.getBoundBoxOffsetX();
+				float objectBottom = currentObj.getY() - currentObj.getHeight() / 2 + currentObj.getBoundBoxOffsetY();
+				float objectTop = currentObj.getY() + currentObj.getHeight() / 2 + currentObj.getBoundBoxOffsetY();
 
 				if (
 					playerLeft < objectRight and // player left is left of object right             left bottom corner
@@ -470,12 +474,9 @@ int main() {
 			blackRect.setFillColor(sf::Color(0, 0, 0, 255));
 			mainWindow.draw(blackRect);
 		}
-		
-		//Add player to light source list
-		float playerLightDistX = player.getLightLevel() / (float)FOVW * (float)screenWidth;
 
+		//Create (empty) list of light sources
 		std::vector<std::pair<sf::Vector2f, float>> sourcePositions;
-		sourcePositions.push_back(std::pair<sf::Vector2f, float>(sf::Vector2f((float)screenWidth / 2, (float)screenHeight / 2), playerLightDistX));
 
 		//draw objects
 		for (int i = 0; i < objects->size(); i++) {
@@ -489,10 +490,27 @@ int main() {
 			mainWindow.draw(*currentSprite);
 			
 			if (currentObj->getType().compare("lightSource") == 0) {
-				float objectLightDistX = currentObj->getLightLevel() / (float)FOVW * (float)screenWidth;
-				sourcePositions.push_back(std::pair<sf::Vector2f, float>(currentSprite->getPosition(), objectLightDistX));
+				float objectLightDist = currentObj->getLightLevel() / (float)FOVW * (float)screenWidth;
+				sourcePositions.push_back(std::pair<sf::Vector2f, float>(currentSprite->getPosition(), objectLightDist));
 			}
 		}
+
+		//draw player
+		float* newCameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
+		float newCameraGap[2] = { *newCameraGapTemp, *(newCameraGapTemp + 1) };
+		player.setScreenPosition((float)screenWidth / 2 + (newCameraGap[0] - player.getTextureWidth() / 2) / (float)FOVW * (float)screenWidth, (float)screenHeight / 2 + (newCameraGap[1] - player.getTextureHeight() / 2) / (float)FOVH * (float)screenHeight);
+		player.getSprite()->setScale(player.getTextureWidth() * (float)screenWidth / (float)FOVW / player.getSprite()->getTexture()->getSize().x, player.getTextureHeight() * (float)screenHeight / (float)FOVH / player.getSprite()->getTexture()->getSize().y);
+
+		if (player.isFacingLeft()) {
+			player.getSprite()->scale(-1.f, 1.f); //flip horizontally
+			player.moveScreenPosition(player.getTextureWidth() * (float)screenWidth / (float)FOVW, 0.f);
+		}
+
+		mainWindow.draw(*player.getSprite());
+
+		//Add player to light source list
+		float playerLightDist = player.getLightLevel() / (float)FOVW * (float)screenWidth;
+		sourcePositions.push_back(std::pair<sf::Vector2f, float>(sf::Vector2f((float)screenWidth/2 + newCameraGap[0] / (float)FOVW * (float)screenWidth, (float)screenHeight / 2 + newCameraGap[1] / (float)FOVH * (float)screenHeight), playerLightDist));
 
 		//create lightMap
 		float xRatio = (float)screenWidth / (float)lightMapWidth;
@@ -519,21 +537,6 @@ int main() {
 				lightMap[x][y] = alpha;
 			}
 		}
-
-		//draw player
-		float* newCameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
-		float newCameraGap[2] = { *newCameraGapTemp, *(newCameraGapTemp + 1) };
-		player.setScreenPosition((float)screenWidth / 2 + (newCameraGap[0] - player.getTextureWidth() / 2) / (float)FOVW * (float)screenWidth, (float)screenHeight / 2 + (newCameraGap[1] - player.getTextureHeight() / 2) / (float)FOVH * (float)screenHeight);
-		player.getSprite()->setScale(player.getTextureWidth() * (float)screenWidth / (float)FOVW / player.getSprite()->getTexture()->getSize().x, player.getTextureHeight() * (float)screenHeight / (float)FOVH / player.getSprite()->getTexture()->getSize().y);
-
-		if (player.isFacingLeft()) {
-			//player.getSprite()->setOrigin(player.getSprite()->getTexture()->getSize().x / 2, player.getSprite()->getTexture()->getSize().y / 2); //set origin to center for transformation
-			player.getSprite()->scale(-1.f, 1.f); //flip horizontally
-			//player.getSprite()->setOrigin(0.f, 0.f);//set origin back to top left
-			player.moveScreenPosition(player.getTextureWidth() * (float)screenWidth / (float)FOVW, 0.f);
-		}
-
-		mainWindow.draw(*player.getSprite());
 
 		//draw lightMap
 		setPoints(lightPoints, lightMap, baseLightLevel);

@@ -10,6 +10,7 @@ public:
 	void setPosition(float x, float y);
 	void setBoundBox(float newWidth, float newHeight);
 	void setBoundBox(float newWidth);
+	void setBoundBoxOffset(float x, float y);
 	void movePosition(float x, float y);
 	void setScreenPosition(float x, float y);
 	void moveScreenPosition(float x, float y);
@@ -22,6 +23,8 @@ public:
 	sf::Sprite* getSprite();
 	float getWidth();
 	float getHeight();
+	float getBoundBoxOffsetX();
+	float getBoundBoxOffsetY();
 	float getX();
 	float getY();
 	float getLightLevel();
@@ -33,6 +36,8 @@ private:
 	float position[2];
 	float width;
 	float height;
+	float boundBoxOffsetX;
+	float boundBoxOffsetY;
 	float lightLevel;
 	float textureWidth;
 	float textureHeight;

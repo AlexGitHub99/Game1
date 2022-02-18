@@ -84,7 +84,7 @@ int main() {
 	Player player;
 	player.setPosition(1000, 1000);
 	player.setTexture(playerTexture);
-	player.setBoundBox(70, 20);
+	player.setBoundBox(70, 40);
 	player.setTextureSize(70);
 	player.setBoundBoxOffset(0, player.getTextureHeight() / 2 - player.getHeight() / 2);
 	player.setLightLevel(600); //level that light reaches
@@ -103,25 +103,26 @@ int main() {
 	myObj2->setTextureSize(300);
 	myObj2->setBoundBox(300);
 
-	//GameObject* wall = new GameObject();
-	//wall->setTexture(wallTexture);
-	//wall->setPosition(500, 400);
-	//wall->setTextureSize(100);
-	//wall->setBoundBox(100);
+	GameObject* wall = new GameObject();
+	wall->setTexture(wallTexture);
+	wall->setPosition(700, 900);
+	wall->setTextureSize(100);
+	wall->setBoundBox(100, 100);
+	wall->setBoundBoxOffset(0, wall->getTextureHeight() / 2 - wall->getHeight() / 2);
 
 	LightSource* lamp = new LightSource();
 	lamp->setTexture(lampTexture);
-	lamp->setPosition(200, 800);
+	lamp->setPosition(900, 800);
 	lamp->setTextureSize(50);
 	lamp->setBoundBox(50);
 	lamp->setLightLevel(500);
 
-	LightSource* lamp2 = new LightSource();
-	lamp2->setTexture(lampTexture);
-	lamp2->setPosition(900, 800);
-	lamp2->setTextureSize(60);
-	lamp2->setBoundBox(60);
-	lamp2->setLightLevel(600);
+	//LightSource* lamp2 = new LightSource();
+	//lamp2->setTexture(lampTexture);
+	//lamp2->setPosition(900, 800);
+	//lamp2->setTextureSize(60);
+	//lamp2->setBoundBox(60);
+	//lamp2->setLightLevel(600);
 
 	sf::Sprite lightSprite(lightTexture);
 	lightSprite.setPosition(screenWidth / 2, screenHeight / 2);
@@ -131,8 +132,8 @@ int main() {
 	area.addObject(myObj);
 	area.addObject(myObj2);
 	area.addObject(lamp);
-	area.addObject(lamp2);
-	//area.addObject(wall);
+	//area.addObject(lamp2);
+	area.addObject(wall);
 
 	/*for (int i = 0; i < 20; i++) {
 		LightSource* lamp3 = new LightSource();
@@ -157,8 +158,8 @@ int main() {
 	for (int i = 0; i < 20; i++) {
 		GameObject* wall2 = new GameObject();
 		wall2->setTexture(wallTexture);
-		wall2->setPosition(500, 800 + i*90);
-		wall2->setBoundBox(100, 100);
+		wall2->setPosition(500, 800 + i*80);
+		wall2->setBoundBox(100, 80);
 		wall2->setTextureSize(100);
 		wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getHeight() / 2);
 		area.addObject(wall2);
@@ -214,7 +215,7 @@ int main() {
 			}
 		}
 
-		std::vector<GameObject*>* objects = area.getObjects();
+		std::list<GameObject*>* objects = area.getObjects();
 		//get keyboard input
 		float angle = 0.0;
 		bool UP = false;
@@ -278,8 +279,8 @@ int main() {
 			//collissions
 
 			//object collisions
-			for (int i = 0; i < objects->size(); i++) {
-				GameObject currentObj = *objects->at(i);
+			for (std::list<GameObject*>::iterator it = objects->begin(); it != objects->end(); it++) {
+				GameObject currentObj = **it;
 
 				float xDisplacement = 0;
 				float yDisplacement = 0;
@@ -478,15 +479,36 @@ int main() {
 		//Create (empty) list of light sources
 		std::vector<std::pair<sf::Vector2f, float>> sourcePositions;
 
-		//draw objects
-		for (int i = 0; i < objects->size(); i++) {
-			GameObject* currentObj = objects->at(i);
+		//set player screen position
+		float* newCameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
+		float newCameraGap[2] = { *newCameraGapTemp, *(newCameraGapTemp + 1) };
+		player.setScreenPosition((float)screenWidth / 2 + (newCameraGap[0] - player.getTextureWidth() / 2) / (float)FOVW * (float)screenWidth, (float)screenHeight / 2 + (newCameraGap[1] - player.getTextureHeight() / 2) / (float)FOVH * (float)screenHeight);
+		player.getSprite()->setScale(player.getTextureWidth()* (float)screenWidth / (float)FOVW / player.getSprite()->getTexture()->getSize().x, player.getTextureHeight()* (float)screenHeight / (float)FOVH / player.getSprite()->getTexture()->getSize().y);
+
+		if (player.isFacingLeft()) {
+			player.getSprite()->scale(-1.f, 1.f); //flip horizontally
+			player.moveScreenPosition(player.getTextureWidth() * (float)screenWidth / (float)FOVW, 0.f);
+		}
+
+		//draw objects and player
+		bool hasDrawnPlayer = false;
+		for (std::list<GameObject*>::iterator it = objects->begin(); it != objects->end(); it++) {
+			GameObject* currentObj = *it;
 			float objectPos[2] = { *currentObj->getPosition(), *(currentObj->getPosition() + 1) };
 			float* temp = relativePosition(cameraPos[0], cameraPos[1], objectPos[0], objectPos[1]);
 			float relativePosition[2] = { *temp, *(temp + 1) };
 			currentObj->setScreenPosition((relativePosition[0] - currentObj->getTextureWidth()/2)/(float)FOVW* (float)screenWidth + (float)screenWidth / 2, (relativePosition[1] - currentObj->getTextureHeight() / 2)/(float)FOVH* (float)screenHeight + (float)screenHeight / 2);
 			sf::Sprite* currentSprite = currentObj->getSprite();
 			currentSprite->setScale(currentObj->getTextureWidth() / (float)FOVW * (float)screenWidth / currentObj->getTexture()->getSize().x, currentObj->getTextureHeight() / (float)FOVH * (float)screenHeight / currentObj->getTexture()->getSize().y);
+
+			if (
+				currentObj->getSprite()->getPosition().y + currentObj->getTextureHeight() / (float)FOVH * (float)screenHeight / 2 > player.getSprite()->getPosition().y + player.getTextureHeight() * (float)screenHeight / (float)FOVH / 2 and
+				hasDrawnPlayer == false
+				) { //draw player if current object is in front of player
+				mainWindow.draw(*player.getSprite());
+				hasDrawnPlayer = true;
+			}
+
 			mainWindow.draw(*currentSprite);
 			
 			if (currentObj->getType().compare("lightSource") == 0) {
@@ -494,19 +516,9 @@ int main() {
 				sourcePositions.push_back(std::pair<sf::Vector2f, float>(currentSprite->getPosition(), objectLightDist));
 			}
 		}
-
-		//draw player
-		float* newCameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
-		float newCameraGap[2] = { *newCameraGapTemp, *(newCameraGapTemp + 1) };
-		player.setScreenPosition((float)screenWidth / 2 + (newCameraGap[0] - player.getTextureWidth() / 2) / (float)FOVW * (float)screenWidth, (float)screenHeight / 2 + (newCameraGap[1] - player.getTextureHeight() / 2) / (float)FOVH * (float)screenHeight);
-		player.getSprite()->setScale(player.getTextureWidth() * (float)screenWidth / (float)FOVW / player.getSprite()->getTexture()->getSize().x, player.getTextureHeight() * (float)screenHeight / (float)FOVH / player.getSprite()->getTexture()->getSize().y);
-
-		if (player.isFacingLeft()) {
-			player.getSprite()->scale(-1.f, 1.f); //flip horizontally
-			player.moveScreenPosition(player.getTextureWidth() * (float)screenWidth / (float)FOVW, 0.f);
+		if (!hasDrawnPlayer) {
+			mainWindow.draw(*player.getSprite());
 		}
-
-		mainWindow.draw(*player.getSprite());
 
 		//Add player to light source list
 		float playerLightDist = player.getLightLevel() / (float)FOVW * (float)screenWidth;

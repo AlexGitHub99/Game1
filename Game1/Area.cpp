@@ -13,10 +13,22 @@ void Area::setSize(float newWidth, float newHeight)
 
 void Area::addObject(GameObject* newObj)
 {
+	if (objects->empty()) {
+		objects->push_back(newObj);
+		return;
+	}
+	for (std::list<GameObject*>::iterator it = objects->begin(); it != objects->end(); it++) {
+		float yPosNew = *(newObj->getPosition() + 1) + newObj->getTextureHeight() / 2;
+		float yPos = *((*it)->getPosition() + 1) + (*it)->getTextureHeight() / 2;
+		if (yPosNew < yPos) {
+			objects->insert(it, newObj);
+			return;
+		}
+	}
 	objects->push_back(newObj);
 }
 
-std::vector<GameObject*>* Area::getObjects()
+std::list<GameObject*>* Area::getObjects()
 {
 	return objects;
 }

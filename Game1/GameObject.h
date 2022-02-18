@@ -22,8 +22,10 @@ public:
 	float* getPosition();
 	float getTextureHeight();
 	float getTextureWidth();
-	float getWidth();
-	float getHeight();
+	float getRenderWidth();
+	float getRenderHeight();
+	float getBoundBoxWidth();
+	float getBoundBoxHeight();
 	float getBoundBoxOffsetX();
 	float getBoundBoxOffsetY();
 	float getX();
@@ -35,8 +37,8 @@ public:
 
 private:
 	float position[2];
-	float width;
-	float height;
+	float boundBoxWidth;
+	float boundBoxHeight;
 	float boundBoxOffsetX;
 	float boundBoxOffsetY;
 	float textureWidth;

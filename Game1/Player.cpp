@@ -50,14 +50,14 @@ void Player::setFaceLeft(bool isTrue)
 }
 
 void Player::setBoundBox(float newWidth, float newHeight) {
-	width = newWidth;
-	height = newHeight;
+	boundBoxWidth = newWidth;
+	boundBoxHeight = newHeight;
 }
 
 void Player::setBoundBox(float newWidth)
 {
-	width = newWidth;
-	height = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+	boundBoxWidth = newWidth;
+	boundBoxHeight = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 }
 
 void Player::setBoundBoxOffset(float x, float y)
@@ -86,12 +86,12 @@ sf::Sprite* Player::getSprite()
 	return sprite;
 }
 
-float Player::getWidth() {
-	return width;
+float Player::getBoundBoxWidth() {
+	return boundBoxWidth;
 }
 
-float Player::getHeight() {
-	return height;
+float Player::getBoundBoxHeight() {
+	return boundBoxHeight;
 }
 
 float Player::getBoundBoxOffsetX()
@@ -125,6 +125,16 @@ float Player::getTextureHeight()
 float Player::getTextureWidth()
 {
 	return textureWidth;
+}
+
+float Player::getRenderWidth()
+{
+	return sprite->getTexture()->getSize().x * sprite->getScale().x;
+}
+
+float Player::getRenderHeight()
+{
+	return sprite->getTexture()->getSize().y * sprite->getScale().y;
 }
 
 bool Player::isFacingLeft()

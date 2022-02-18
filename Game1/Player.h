@@ -21,8 +21,8 @@ public:
 	float* getPosition();
 	sf::Texture* getTexture();
 	sf::Sprite* getSprite();
-	float getWidth();
-	float getHeight();
+	float getBoundBoxWidth();
+	float getBoundBoxHeight();
 	float getBoundBoxOffsetX();
 	float getBoundBoxOffsetY();
 	float getX();
@@ -30,12 +30,14 @@ public:
 	float getLightLevel();
 	float getTextureHeight();
 	float getTextureWidth();
+	float getRenderWidth();
+	float getRenderHeight();
 	bool isFacingLeft();
 
 private:
 	float position[2];
-	float width;
-	float height;
+	float boundBoxWidth;
+	float boundBoxHeight;
 	float boundBoxOffsetX;
 	float boundBoxOffsetY;
 	float lightLevel;

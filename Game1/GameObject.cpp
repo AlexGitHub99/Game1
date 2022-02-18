@@ -25,14 +25,14 @@ void GameObject::setScreenPosition(float x, float y)
 
 void GameObject::setBoundBox(float newWidth, float newHeight)
 {
-	width = newWidth;
-	height = newHeight;
+	boundBoxWidth = newWidth;
+	boundBoxHeight = newHeight;
 }
 
 void GameObject::setBoundBox(float newWidth)
 {
-	width = newWidth;
-	height = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+	boundBoxWidth = newWidth;
+	boundBoxHeight = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 }
 
 void GameObject::setBoundBoxOffset(float x, float y)
@@ -77,14 +77,24 @@ float GameObject::getTextureWidth()
 	return textureWidth;
 }
 
-float GameObject::getWidth()
+float GameObject::getRenderWidth()
 {
-	return width;
+	return sprite->getTexture()->getSize().x * sprite->getScale().x;
 }
 
-float GameObject::getHeight()
+float GameObject::getRenderHeight()
 {
-	return height;
+	return sprite->getTexture()->getSize().y * sprite->getScale().y;
+}
+
+float GameObject::getBoundBoxWidth()
+{
+	return boundBoxWidth;
+}
+
+float GameObject::getBoundBoxHeight()
+{
+	return boundBoxHeight;
 }
 
 float GameObject::getBoundBoxOffsetX()

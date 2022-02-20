@@ -36,7 +36,6 @@ public:
 	virtual float getLightLevel();
 
 private:
-	float position[2];
 	float boundBoxWidth;
 	float boundBoxHeight;
 	float boundBoxOffsetX;
@@ -48,6 +47,7 @@ private:
 	
 protected:
 	std::string type;
+	float position[2];
 
 };
 

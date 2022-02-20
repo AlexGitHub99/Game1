@@ -28,9 +28,27 @@ void Area::addObject(GameObject* newObj)
 	objects->push_back(newObj);
 }
 
+void Area::sortObject(GameObject* obj)
+{
+	objects->remove(obj);
+	addObject(obj);
+}
+
+void Area::addEntity(Entity* newEnt)
+{
+	entities->push_back(newEnt);
+	addObject(newEnt);
+}
+
+
 std::list<GameObject*>* Area::getObjects()
 {
 	return objects;
+}
+
+std::vector<Entity*>* Area::getEntities()
+{
+	return entities;
 }
 
 sf::Sprite* Area::getBackground()

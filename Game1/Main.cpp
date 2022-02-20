@@ -16,6 +16,7 @@
 #include "Area.h"
 #include "Player.h"
 #include "LightSource.h"
+#include "Orb.h"
 
 int PLAYER_SPEED = 1000; //coord per second
 int CAMERA_SPEED = 3;
@@ -93,6 +94,12 @@ int main() {
 	
 
 	//temporary stuff-----------------------------------------------------------
+	Orb* orb = new Orb();
+	orb->setTexture(lampTexture);
+	orb->setPosition(0, 0);
+	orb->setTextureSize(100);
+	orb->setBoundBox(100);
+
 	GameObject* myObj = new GameObject();
 	myObj->setTexture(rockTexture);
 	myObj->setPosition(250, 250);
@@ -136,6 +143,7 @@ int main() {
 	area.addObject(lamp);
 	//area.addObject(lamp2);
 	area.addObject(wall);
+	area.addEntity(orb);
 
 	/*for (int i = 0; i < 20; i++) {
 		LightSource* lamp3 = new LightSource();
@@ -427,6 +435,12 @@ int main() {
 		else {
 			cameraPos[1] += cameraGap[1] * cameraSpeed / 5000;
 		}
+
+		std::vector<Entity*>* entities = area.getEntities();
+		for (int i = 0; i < entities->size(); i++) {
+			//cast to creature then move
+		}
+		
 
 		//------------------------------------------------------
 		//DRAWING

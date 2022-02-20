@@ -18,6 +18,7 @@ public:
 	void setTextureSize(float newWidth, float newHeight);
 	void setTextureSize(float newWidth);
 	void setFaceLeft(bool isTrue);
+	void setHealth(float newHealth);
 	float* getPosition();
 	sf::Texture* getTexture();
 	sf::Sprite* getSprite();
@@ -33,6 +34,7 @@ public:
 	float getRenderWidth();
 	float getRenderHeight();
 	bool isFacingLeft();
+	float getHealth();
 
 private:
 	float position[2];
@@ -44,6 +46,7 @@ private:
 	float textureWidth;
 	float textureHeight;
 	bool facingLeft;
+	bool health;
 
 	sf::Texture* texture;
 	sf::Sprite* sprite;

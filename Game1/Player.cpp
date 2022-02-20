@@ -49,6 +49,11 @@ void Player::setFaceLeft(bool isTrue)
 	facingLeft = isTrue;
 }
 
+void Player::setHealth(float newHealth)
+{
+	health = newHealth;
+}
+
 void Player::setBoundBox(float newWidth, float newHeight) {
 	boundBoxWidth = newWidth;
 	boundBoxHeight = newHeight;
@@ -140,4 +145,9 @@ float Player::getRenderHeight()
 bool Player::isFacingLeft()
 {
 	return facingLeft;
+}
+
+float Player::getHealth()
+{
+	return health;
 }

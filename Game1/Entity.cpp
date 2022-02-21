@@ -9,3 +9,7 @@ float Entity::getSpeed()
 {
 	return speed;
 }
+
+void Entity::update(Area& area, Player &player, float ms)
+{
+}

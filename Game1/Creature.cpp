@@ -9,7 +9,3 @@ float Creature::getDamage()
 {
 	return damage;
 }
-
-void Creature::move(Area& area)
-{
-}

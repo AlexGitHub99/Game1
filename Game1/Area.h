@@ -1,13 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
-#include "Entity.h"
 #include <list>
+class Entity;
 
 class Area
 {
 public:
-	Area() {
+	Area(sf::Texture* newBackground, float newWidth, float newHeight) {
+		background = new sf::Sprite(*newBackground);
+		width = newWidth;
+		height = newHeight;
 		objects = new std::list<GameObject*>;
 		entities = new std::vector<Entity*>;
 	}

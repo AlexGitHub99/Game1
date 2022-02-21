@@ -6,11 +6,15 @@ class Creature :
 
 {
 public:
+    Creature() {
+        damage = 100;
+        damageRadius = 100;
+    }
     void setDamage(float newDamage);
     float getDamage();
-    virtual void move(Area &area);
-private:
+    
+protected:
     float damage;
-
+    float damageRadius;
 };
 

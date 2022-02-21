@@ -5,6 +5,22 @@
 class Player
 {
 public:
+	Player(sf::Texture* newTexture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, float newHealth) {
+		texture = newTexture;
+		sprite = new sf::Sprite(*texture);
+		textureWidth = newTextureWidth;
+		textureHeight = newTextureWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+		boundBoxWidth = newBoundBoxWidth;
+		boundBoxHeight = newBoundBoxHeight;
+		health = newHealth;
+		lightLevel = 0;
+		position[0] = 0;
+		position[1] = 0;
+		facingLeft = false;
+		boundBoxOffsetX = 0;
+		boundBoxOffsetY = 0;
+
+	}
 	void setTexture(sf::Texture* newTexture);
 	void setSprite(sf::Sprite* newSprite);
 	void setPosition(float x, float y);
@@ -46,7 +62,7 @@ private:
 	float textureWidth;
 	float textureHeight;
 	bool facingLeft;
-	bool health;
+	float health;
 
 	sf::Texture* texture;
 	sf::Sprite* sprite;

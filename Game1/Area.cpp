@@ -37,7 +37,7 @@ void Area::sortObject(GameObject* obj)
 void Area::addEntity(Entity* newEnt)
 {
 	entities->push_back(newEnt);
-	addObject(newEnt);
+	addObject((GameObject*)newEnt);
 }
 
 

@@ -1,15 +1,14 @@
 #pragma once
 #include "GameObject.h"
-#include "Area.h"
 #include "Player.h"
+class Area;
 
 class Entity :
     public GameObject
 {
 public:
-    Entity() {
-        speed = 100;
-    }
+    Entity(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight);
+
     void setSpeed(float newSpeed);
     float getSpeed();
     virtual void update(Area& area, Player &player, float ms);

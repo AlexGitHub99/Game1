@@ -6,7 +6,7 @@ class Creature :
 
 {
 public:
-    Creature() {
+    Creature(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight) : Entity(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight) {
         damage = 100;
         damageRadius = 100;
     }

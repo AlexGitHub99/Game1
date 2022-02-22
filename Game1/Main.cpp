@@ -18,6 +18,7 @@
 #include "LightSource.h"
 #include "Orb.h"
 
+using namespace std;
 int PLAYER_SPEED = 1000; //coord per second
 int CAMERA_SPEED = 3;
 float menuSize = 1;
@@ -31,7 +32,7 @@ void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1],
 void getDesktopResolution(int& horizontal, int& vertical);
 void renderBackground(Area& area, int screenSize[2], float cameraPos[2], int FOV[2]);
 void setPlayerScreenPos(Player& player, float cameraGap[2], int screenSize[2], int FOV[2]);
-void renderObject(GameObject* obj, int screenSize[2], float cameraPos[2], int FOV[2]);
+void renderObject(shared_ptr<GameObject>, int screenSize[2], float cameraPos[2], int FOV[2]);
 
 int main() {
 
@@ -55,23 +56,29 @@ int main() {
 
 	sf::RenderWindow mainWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Game", sf::Style::Fullscreen);
 
-	sf::Texture *rockTexture = new sf::Texture();
+	//load textures
+	shared_ptr<sf::Texture> rockTexture(new sf::Texture());
 	if (!rockTexture->loadFromFile("resources/rock_1.png")) {
 		return -1;
 	}
-
-	sf::Texture* wallTexture = new sf::Texture();
+	shared_ptr<sf::Texture> wallTexture(new sf::Texture());
 	if (!wallTexture->loadFromFile("resources/wall.png")) {
 		return -1;
 	}
-
-	sf::Texture *playerTexture = new sf::Texture();
+	shared_ptr<sf::Texture> playerTexture(new sf::Texture());
 	if (!playerTexture->loadFromFile("resources/player.png")) {
 		return -1;
 	}
-
-	sf::Texture* backgroundTexture = new sf::Texture();
+	shared_ptr<sf::Texture> backgroundTexture(new sf::Texture());
 	if (!backgroundTexture->loadFromFile("resources/area_1.png")) {
+		return -1;
+	}
+	shared_ptr<sf::Texture> lampTexture(new sf::Texture());
+	if (!lampTexture->loadFromFile("resources/lamp.png")) {
+		return -1;
+	}
+	shared_ptr<sf::Texture> orbTexture(new sf::Texture());
+	if (!orbTexture->loadFromFile("resources/orb.png")) {
 		return -1;
 	}
 
@@ -80,16 +87,6 @@ int main() {
 		return -1;
 	}
 
-	sf::Texture* lampTexture = new sf::Texture();
-	if (!lampTexture->loadFromFile("resources/lamp.png")) {
-		return -1;
-	}
-
-	sf::Texture* orbTexture = new sf::Texture();
-	if (!orbTexture->loadFromFile("resources/orb.png")) {
-		return -1;
-	}
-	
 	Player player(playerTexture, 70, 70, 40, 100);
 	player.setPosition(1000, 1000);
 	player.setBoundBoxOffset(0, player.getTextureHeight() / 2 - player.getBoundBoxHeight() / 2);
@@ -97,37 +94,21 @@ int main() {
 	
 
 	//temporary stuff-----------------------------------------------------------
-	Orb* orb = new Orb();
-	orb->setTexture(orbTexture);
+	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 0, 0));
 	orb->setPosition(0, 0);
-	orb->setTextureSize(100);
-	orb->setBoundBox(0);
 
-	GameObject* rock1 = new GameObject();
-	rock1->setTexture(rockTexture);
+	shared_ptr<GameObject> rock1 = make_shared<GameObject> (GameObject(rockTexture, 100, 100, 60));
 	rock1->setPosition(250, 250);
-	rock1->setTextureSize(100);
-	rock1->setBoundBox(100);
 
-	GameObject* rock2 = new GameObject();
-	rock2->setTexture(rockTexture);
+	shared_ptr<GameObject> rock2 = make_shared<GameObject> (GameObject(rockTexture, 300, 300, 200));
 	rock2->setPosition(1000, 400);
-	rock2->setTextureSize(300);
-	rock2->setBoundBox(300);
 
-	GameObject* wall = new GameObject();
-	wall->setTexture(wallTexture);
+	shared_ptr<GameObject> wall = make_shared<GameObject> (GameObject(wallTexture, 100, 100, 100));
 	wall->setPosition(700, 900);
-	wall->setTextureSize(100);
-	wall->setBoundBox(100, 100);
 	wall->setBoundBoxOffset(0, wall->getTextureHeight() / 2 - wall->getBoundBoxHeight() / 2);
 
-	LightSource* lamp = new LightSource();
-	lamp->setTexture(lampTexture);
+	shared_ptr<LightSource> lamp = make_shared<LightSource> (LightSource(lampTexture, 50, 50, 30, 500));
 	lamp->setPosition(900, 800);
-	lamp->setTextureSize(50);
-	lamp->setBoundBox(50);
-	lamp->setLightLevel(500);
 
 	sf::Sprite lightSprite(lightTexture);
 	lightSprite.setPosition(screenSize[0] / 2, screenSize[1] / 2);
@@ -139,35 +120,26 @@ int main() {
 	area.addObject(wall);
 	area.addEntity(orb);
 
-	/*for (int i = 0; i < 20; i++) {
-		LightSource* lamp3 = new LightSource();
-		lamp3->setTexture(lampTexture);
-		lamp3->setPosition(100 + i*100, 700);
-		lamp3->setTextureSize(50);
-		lamp3->setBoundBox(50);
-		lamp3->setLightLevel(500);
-		area.addObject(lamp3);
-	}*/
 
-	for (int i = 0; i < 12; i++) {
-		GameObject* wall2 = new GameObject();
-		wall2->setTexture(wallTexture);
-		wall2->setPosition(500 + i*94, 800);
-		wall2->setBoundBox(100, 100);
-		wall2->setTextureSize(100);
-		wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getBoundBoxHeight() / 2);
-		area.addObject(wall2);
-	}
+	//for (int i = 0; i < 12; i++) {
+	//	GameObject* wall2 = new GameObject();
+	//	wall2->setTexture(wallTexture);
+	//	wall2->setPosition(500 + i*94, 800);
+	//	wall2->setBoundBox(100, 100);
+	//	wall2->setTextureSize(100);
+	//	wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getBoundBoxHeight() / 2);
+	//	area.addObject(wall2);
+	//}
 
-	for (int i = 0; i < 20; i++) {
-		GameObject* wall2 = new GameObject();
-		wall2->setTexture(wallTexture);
-		wall2->setPosition(500, 800 + i*80);
-		wall2->setBoundBox(100, 80);
-		wall2->setTextureSize(100);
-		wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getBoundBoxHeight() / 2);
-		area.addObject(wall2);
-	}
+	//for (int i = 0; i < 20; i++) {
+	//	GameObject* wall2 = new GameObject();
+	//	wall2->setTexture(wallTexture);
+	//	wall2->setPosition(500, 800 + i*80);
+	//	wall2->setBoundBox(100, 80);
+	//	wall2->setTextureSize(100);
+	//	wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getBoundBoxHeight() / 2);
+	//	area.addObject(wall2);
+	//}
 
 	//end of temporary stuff--------------------------------------------
 
@@ -193,6 +165,7 @@ int main() {
 
 	float cameraSpeed = 0;
 	float cameraPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
+	float prevHealth = player.getHealth();
 
 	//main loop
 	while (mainWindow.isOpen()) {
@@ -217,7 +190,7 @@ int main() {
 			}
 		}
 
-		std::list<GameObject*>* objects = area.getObjects();
+		std::shared_ptr<std::list<std::shared_ptr<GameObject>>> objects = area.getObjects();
 		//get keyboard input
 		float angle = 0.0;
 		bool UP = false;
@@ -283,8 +256,8 @@ int main() {
 		//collissions
 
 			//object collisions
-		for (std::list<GameObject*>::iterator it = objects->begin(); it != objects->end(); it++) {
-			GameObject* currentObj = *it;
+		for (std::list<shared_ptr<GameObject>>::iterator it = objects->begin(); it != objects->end(); it++) {
+			shared_ptr<GameObject> currentObj = *it;
 
 			float xDisplacement = 0;
 			float yDisplacement = 0;
@@ -428,10 +401,17 @@ int main() {
 			cameraPos[1] += cameraGap[1] - cameraGap[1] * pow(3, -ms/100);
 		}
 
-		std::vector<Entity*>* entities = area.getEntities();
+		std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = area.getEntities();
 		for (int i = 0; i < entities->size(); i++) {
 
 			entities->at(i)->update(area, player, ms);
+			if (player.getHealth() < prevHealth) {
+				player.getSprite()->setColor(sf::Color(255, 0, 0, 255));
+			}
+			else {
+				player.getSprite()->setColor(sf::Color(255, 255, 255, 255));
+			}
+			prevHealth = player.getHealth();
 			if (player.getHealth() <= 0) {
 				std::cout << player.getHealth() << std::endl;
 				player.setPosition(spawnPoint[0], spawnPoint[1]);
@@ -492,8 +472,8 @@ int main() {
 
 		//draw objects and player
 		bool hasDrawnPlayer = false;
-		for (std::list<GameObject*>::iterator it = objects->begin(); it != objects->end(); it++) {
-			GameObject* currentObj = *it;
+		for (std::list<shared_ptr<GameObject>>::iterator it = objects->begin(); it != objects->end(); it++) {
+			shared_ptr<GameObject> currentObj = *it;
 			renderObject(currentObj, screenSize, cameraPos, FOV);
 
 			if (hasDrawnPlayer == false and
@@ -653,7 +633,7 @@ void getDesktopResolution(int& horizontal, int& vertical)
 }
 
 void renderBackground(Area &area, int screenSize[2], float cameraPos[2], int FOV[2]) {
-	sf::Sprite* background = area.getBackground();
+	shared_ptr<sf::Sprite> background = area.getBackground();
 	sf::Vector2u backgroundSize = background->getTexture()->getSize();
 
 	float errorX = (cameraPos[0] - (float)FOV[0] / 2) / area.getWidth() * (float)backgroundSize.x - 1 - 
@@ -685,14 +665,14 @@ void setPlayerScreenPos(Player &player, float cameraGap[2], int screenSize[2], i
 	}
 }
 
-void renderObject(GameObject* obj, int screenSize[2], float cameraPos[2], int FOV[2]) {
+void renderObject(shared_ptr<GameObject> obj, int screenSize[2], float cameraPos[2], int FOV[2]) {
 	float objectPos[2] = { *obj->getPosition(), *(obj->getPosition() + 1) };
 	float* temp = relativePosition(cameraPos[0], cameraPos[1], objectPos[0], objectPos[1]);
 	float relativePosition[2] = { *temp, *(temp + 1) };
 	free(temp);
 	obj->setScreenPosition((relativePosition[0] - obj->getTextureWidth() / 2) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2,
 		(relativePosition[1] - obj->getTextureHeight() / 2) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2);
-	sf::Sprite* currentSprite = obj->getSprite();
-	currentSprite->setScale(obj->getTextureWidth() / (float)FOV[0] * (float)screenSize[0] / obj->getTexture()->getSize().x,
-		obj->getTextureHeight() / (float)FOV[1] * (float)screenSize[1] / obj->getTexture()->getSize().y);
+	shared_ptr<sf::Sprite> currentSprite = obj->getSprite();
+	currentSprite->setScale(obj->getTextureWidth() / (float)FOV[0] * (float)screenSize[0] / currentSprite->getTexture()->getSize().x,
+		obj->getTextureHeight() / (float)FOV[1] * (float)screenSize[1] / currentSprite->getTexture()->getSize().y);
 }

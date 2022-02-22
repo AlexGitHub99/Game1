@@ -1,14 +1,16 @@
 #include "GameObject.h"
 
-void GameObject::setTexture(sf::Texture* newTexture)
-{
-	texture = newTexture;
-	sprite = new sf::Sprite(*texture);
-}
-
-void GameObject::setSprite(sf::Sprite* newSprite)
-{
-	sprite = newSprite;
+GameObject::GameObject(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight) {
+	sprite = std::shared_ptr<sf::Sprite>(new sf::Sprite(*texture));
+	textureWidth = newTextureWidth;
+	textureHeight = newTextureWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+	boundBoxWidth = newBoundBoxWidth;
+	boundBoxHeight = newBoundBoxHeight;
+	position[0] = 0;
+	position[1] = 0;
+	boundBoxOffsetX = 0;
+	boundBoxOffsetY = 0;
+	type = "object";
 }
 
 void GameObject::setPosition(float x, float y)
@@ -53,12 +55,7 @@ void GameObject::setTextureSize(float newWidth)
 	textureHeight = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 }
 
-sf::Texture* GameObject::getTexture()
-{
-	return texture;
-}
-
-sf::Sprite* GameObject::getSprite()
+std::shared_ptr<sf::Sprite> GameObject::getSprite()
 {
 	return sprite;
 }

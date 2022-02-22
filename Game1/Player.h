@@ -5,9 +5,8 @@
 class Player
 {
 public:
-	Player(sf::Texture* newTexture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, float newHealth) {
-		texture = newTexture;
-		sprite = new sf::Sprite(*texture);
+	Player(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, float newHealth) {
+		sprite = std::unique_ptr<sf::Sprite>(new sf::Sprite(*texture));
 		textureWidth = newTextureWidth;
 		textureHeight = newTextureWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 		boundBoxWidth = newBoundBoxWidth;
@@ -21,8 +20,6 @@ public:
 		boundBoxOffsetY = 0;
 
 	}
-	void setTexture(sf::Texture* newTexture);
-	void setSprite(sf::Sprite* newSprite);
 	void setPosition(float x, float y);
 	void setBoundBox(float newWidth, float newHeight);
 	void setBoundBox(float newWidth);
@@ -36,8 +33,7 @@ public:
 	void setFaceLeft(bool isTrue);
 	void setHealth(float newHealth);
 	float* getPosition();
-	sf::Texture* getTexture();
-	sf::Sprite* getSprite();
+	std::shared_ptr<sf::Sprite> getSprite();
 	float getBoundBoxWidth();
 	float getBoundBoxHeight();
 	float getBoundBoxOffsetX();
@@ -64,7 +60,6 @@ private:
 	bool facingLeft;
 	float health;
 
-	sf::Texture* texture;
-	sf::Sprite* sprite;
+	std::shared_ptr<sf::Sprite> sprite;
 };
 

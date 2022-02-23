@@ -25,14 +25,12 @@ public:
 	void setBoundBox(float newWidth);
 	void setBoundBoxOffset(float x, float y);
 	void movePosition(float x, float y);
-	void setScreenPosition(float x, float y);
 	void moveScreenPosition(float x, float y);
 	void setLightLevel(float newLightLevel);
 	void setTextureSize(float newWidth, float newHeight);
 	void setTextureSize(float newWidth);
 	void setFaceLeft(bool isTrue);
 	void setHealth(float newHealth);
-	float* getPosition();
 	std::shared_ptr<sf::Sprite> getSprite();
 	float getBoundBoxWidth();
 	float getBoundBoxHeight();

@@ -6,11 +6,6 @@ void Player::setPosition(float x, float y)
 	position[1] = y;
 }
 
-void Player::setScreenPosition(float x, float y)
-{
-	sprite->setPosition(x, y);
-}
-
 void Player::moveScreenPosition(float x, float y)
 {
 	sprite->setPosition(sprite->getPosition().x + x, sprite->getPosition().y + y);
@@ -63,11 +58,6 @@ void Player::setBoundBoxOffset(float x, float y)
 void Player::movePosition(float x, float y) {
 	position[0] += x;
 	position[1] += y;
-}
-
-float* Player::getPosition()
-{
-	return position;
 }
 
 std::shared_ptr<sf::Sprite> Player::getSprite()

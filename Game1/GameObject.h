@@ -7,7 +7,6 @@ public:
 	GameObject(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight);
 
 	void setPosition(float x, float y);
-	void setScreenPosition(float x, float y);
 	void setBoundBox(float newWidth, float newHeight);
 	void setBoundBox(float newWidth);
 	void setBoundBoxOffset(float x, float y);

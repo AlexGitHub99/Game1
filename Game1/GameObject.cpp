@@ -20,11 +20,6 @@ void GameObject::setPosition(float x, float y)
 	sprite->setPosition(x, y);
 }
 
-void GameObject::setScreenPosition(float x, float y)
-{
-	sprite->setPosition(x, y);
-}
-
 void GameObject::setBoundBox(float newWidth, float newHeight)
 {
 	boundBoxWidth = newWidth;

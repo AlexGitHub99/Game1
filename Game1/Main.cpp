@@ -143,8 +143,6 @@ int main() {
 
 	//end of temporary stuff--------------------------------------------
 
-	clock_t t = clock();
-
 	int lightMap[lightMapWidth + 1][lightMapHeight + 1]; //extra width because of edge points
 
 	sf::VertexArray* lightPoints = new sf::VertexArray(sf::Quads, lightMapWidth* lightMapHeight * 4);
@@ -164,8 +162,13 @@ int main() {
 	}
 
 	float cameraSpeed = 0;
-	float cameraPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
+	float cameraPos[2] = { player.getX(), player.getY() };
 	float prevHealth = player.getHealth();
+	
+	clock_t t = clock();
+	clock_t tSecond = t;
+	int frames = 0;
+	int fps = 0;
 
 	//main loop
 	while (mainWindow.isOpen()) {
@@ -383,7 +386,7 @@ int main() {
 
 
 		//move camera
-		float playerPos[2] = { *player.getPosition(), *(player.getPosition() + 1) };
+		float playerPos[2] = { player.getX(), player.getY() };
 		float* cameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
 		float cameraGap[2] = { *cameraGapTemp, *(cameraGapTemp + 1) };
 		free(cameraGapTemp);
@@ -566,6 +569,21 @@ int main() {
 		mainWindow.draw(playerCoords);
 		mainWindow.draw(cameraCoords);
 
+		//draw FPS
+		sf::Text framesText;
+		framesText.setFont(courier);
+		framesText.setPosition(0, 80);
+
+		frames++;
+		if ((clock() - tSecond) / CLOCKS_PER_SEC >= 1) {//1 second has passed
+			tSecond = clock();
+			fps = frames;
+			frames = 0;
+		}
+
+		framesText.setString("FPS: " + std::to_string(fps));
+		mainWindow.draw(framesText);
+
 		mainWindow.display();
 
 		//------------------------------------------------------
@@ -583,6 +601,7 @@ float* relativePosition(float primaryX, float primaryY, float secondaryX, float 
 	return relPos;
 }
 
+//old method
 void setSquare(sf::VertexArray* lightPoints, int x, int y, int alpha, int lightMapWidth, int lightMapHeight) { //x and y < lightMapWidth and LightMapHeight
 	(*lightPoints)[y * lightMapWidth * 4 + x * 4].color = sf::Color(0, 0, 0, alpha);
 	(*lightPoints)[y * lightMapWidth * 4 + x * 4 + 1].color = sf::Color(0, 0, 0, alpha);
@@ -591,7 +610,7 @@ void setSquare(sf::VertexArray* lightPoints, int x, int y, int alpha, int lightM
 }
 
 
-//This method is WAYYY better (like 100-1000 times more efficient for same result)
+//This method is WAYYY better (like 100 times more efficient for same result)
 void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1], float baseLevel) { //x and y <= lightMapWidth and LightMapHeight
 	for (int x = 0; x <= lightMapWidth; x++) {
 		for (int y = 0; y <= lightMapHeight; y++) {
@@ -654,7 +673,7 @@ void renderBackground(Area &area, int screenSize[2], float cameraPos[2], int FOV
 }
 
 void setPlayerScreenPos(Player &player, float cameraGap[2], int screenSize[2], int FOV[2]) {
-	player.setScreenPosition((float)screenSize[0] / 2 + (cameraGap[0] - player.getTextureWidth() / 2) / (float)FOV[0] * (float)screenSize[0], //x position
+	player.getSprite()->setPosition((float)screenSize[0] / 2 + (cameraGap[0] - player.getTextureWidth() / 2) / (float)FOV[0] * (float)screenSize[0], //x position
 							(float)screenSize[1] / 2 + (cameraGap[1] - player.getTextureHeight() / 2) / (float)FOV[1] * (float)screenSize[1]); //y position
 	player.getSprite()->setScale(player.getTextureWidth() * (float)screenSize[0] / (float)FOV[0] / player.getSprite()->getTexture()->getSize().x, //x scale
 								player.getTextureHeight() * (float)screenSize[1] / (float)FOV[1] / player.getSprite()->getTexture()->getSize().y); //y scale
@@ -670,7 +689,7 @@ void renderObject(shared_ptr<GameObject> obj, int screenSize[2], float cameraPos
 	float* temp = relativePosition(cameraPos[0], cameraPos[1], objectPos[0], objectPos[1]);
 	float relativePosition[2] = { *temp, *(temp + 1) };
 	free(temp);
-	obj->setScreenPosition((relativePosition[0] - obj->getTextureWidth() / 2) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2,
+	obj->getSprite()->setPosition((relativePosition[0] - obj->getTextureWidth() / 2) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2,
 		(relativePosition[1] - obj->getTextureHeight() / 2) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2);
 	shared_ptr<sf::Sprite> currentSprite = obj->getSprite();
 	currentSprite->setScale(obj->getTextureWidth() / (float)FOV[0] * (float)screenSize[0] / currentSprite->getTexture()->getSize().x,

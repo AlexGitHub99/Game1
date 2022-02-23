@@ -3,7 +3,7 @@
 
 void Orb::update(Area& area, Player &player, float ms)
 {
-	float playerPos[2] = { *(player.getPosition()), *(player.getPosition() + 1) };
+	float playerPos[2] = { player.getX(), player.getY() };
 	float relativePos[2] = {playerPos[0] - position[0], playerPos[1] - position[1]};
 	float distance = sqrt(pow(relativePos[0], 2) + pow(relativePos[1], 2));
 	if (distance <= damageRadius) {

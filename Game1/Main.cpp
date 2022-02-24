@@ -96,7 +96,7 @@ int main() {
 	
 
 	//temporary stuff-----------------------------------------------------------
-	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 50, 50));
+	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 100, 100));
 	orb->setPosition(0, 0);
 
 	shared_ptr<GameObject> rock1 = make_shared<GameObject> (GameObject(rockTexture, 100, 100, 60));
@@ -205,7 +205,7 @@ int main() {
 			}
 		}
 
-		std::shared_ptr<std::list<std::shared_ptr<GameObject>>> objects = area.getObjects();
+		shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
 		//get keyboard input
 		float angle = 0.0;
 		bool UP = false;
@@ -280,6 +280,13 @@ int main() {
 
 		for (std::list<shared_ptr<GameObject>>::iterator it = objects->begin(); it != objects->end(); it++) {
 			shared_ptr<GameObject> currentObj = *it;
+			
+			shared_ptr<Entity> entity = dynamic_pointer_cast<Entity>(currentObj);
+			if (entity != nullptr) {
+				if (!entity->doesPushPlayer()) {
+					continue;
+				}
+			}
 
 			sf::FloatRect objectBox;
 			objectBox.left = currentObj->getX() - currentObj->getBoundBoxWidth() / 2 + currentObj->getBoundBoxOffsetX();
@@ -299,6 +306,8 @@ int main() {
 					player.movePosition(0.0, yDisplacement);
 				}
 			}
+
+			free(displacement);
 		}
 
 		//border collisions

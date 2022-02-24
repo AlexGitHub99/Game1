@@ -95,8 +95,10 @@ int main() {
 
 		bool menuOpen = false;
 		bool initializeMenu = false;
+		bool blink = false;
 
 		clock_t t = clock();
+		clock_t msTimer = t;
 
 		vector<shared_ptr<TextBox>> textBoxes;
 		shared_ptr<TextBox> activeBox;
@@ -108,6 +110,37 @@ int main() {
 			sf::Event event;
 			while (buildWindow.pollEvent(event)) {
 
+				if (activeBox != nullptr) {
+					if (event.type == sf::Event::TextEntered) {
+						sf::String textInput = event.text.unicode;
+						activeBox->addText(textInput);
+					}
+				} 
+				else { //dissalowed events while textbox is active
+					switch (event.type) {
+
+					case (sf::Event::KeyReleased):
+
+						switch (event.key.code) {
+
+						case (sf::Keyboard::Escape):
+							buildWindow.close();
+							break;
+
+						case (sf::Keyboard::M):
+							menuOpen = !menuOpen;
+							if (menuOpen) {
+								initializeMenu = true;
+							}
+							break;
+
+						}
+						break;
+
+					}
+				}
+				
+				//allowed events while textbox is active
 				switch (event.type) {
 
 				case (sf::Event::MouseWheelMoved):
@@ -116,19 +149,12 @@ int main() {
 					break;
 
 				case (sf::Event::KeyReleased):
+
 					switch (event.key.code) {
 
 					case (sf::Keyboard::Escape):
 						buildWindow.close();
 						break;
-
-					case (sf::Keyboard::M):
-						menuOpen = !menuOpen;
-						if (menuOpen) {
-							initializeMenu = true;
-						}
-						break;
-
 					}
 					break;
 
@@ -139,13 +165,19 @@ int main() {
 						if (textBoxes.empty()) {
 							break;
 						}
+
+						bool inTextBox = false;
 						for (vector<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
 							shared_ptr<TextBox> current = *it;
 
 							if (isInside(event.mouseButton.x, event.mouseButton.y, *current->getBox())) {
 								activeBox = current;
-								cout << "yay" << endl;
+								inTextBox = true;
 							}
+						}
+
+						if (!inTextBox) {
+							activeBox.reset();
 						}
 						break;
 					}
@@ -155,7 +187,7 @@ int main() {
 					buildWindow.close();
 					break;
 				}
-
+				
 			}
 
 			shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
@@ -279,13 +311,19 @@ int main() {
 
 			buildWindow.draw(cameraCoords);
 
-			if (initializeMenu) {
-				textBoxes.clear();
-			}
+			
 
 			//draw menu
 			if (menuOpen) {
 				sf::FloatRect menuRect(screenSize[0] * 3 / 4, 0, screenSize[0] / 4, screenSize[1]);
+
+				if (initializeMenu) {
+					textBoxes.clear();
+					shared_ptr<sf::FloatRect> textBoxRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 30, menuRect.top + 80, 100, 50));
+					textBoxes.push_back(make_shared<TextBox>(TextBox("", textBoxRect)));
+				}
+
+				
 				sf::RectangleShape menuBack(sf::Vector2f(menuRect.width, menuRect.height));
 
 				menuBack.setPosition(menuRect.left, menuRect.top);
@@ -305,17 +343,59 @@ int main() {
 
 				currentY += 50;
 
-				shared_ptr<sf::FloatRect> textBoxRect = make_shared<sf::FloatRect>(sf::FloatRect(currentX, currentY, 100, 50));
-				sf::RectangleShape textBox(sf::Vector2f(textBoxRect->width, textBoxRect->height));
-				textBox.setPosition(textBoxRect->left, textBoxRect->top);
-				textBox.setFillColor(sf::Color(220, 220, 220));
+				for (vector<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
+					shared_ptr<TextBox> current = *it;
 
-				buildWindow.draw(textBox);
+					sf::FloatRect textBoxRect = *current->getBox();
+					sf::RectangleShape textBox(sf::Vector2f(textBoxRect.width, textBoxRect.height));
+					textBox.setPosition(textBoxRect.left, textBoxRect.top);
+					textBox.setOutlineThickness(2);
+					textBox.setOutlineColor(sf::Color(100, 100, 100));
+					textBox.setFillColor(sf::Color(220, 220, 220));
 
-				if(initializeMenu) textBoxes.push_back(make_shared<TextBox>(TextBox(newText.getString(), textBoxRect)));
+					buildWindow.draw(textBox);
+
+					sf::Text boxText;
+					boxText.setString(current->getText());
+					boxText.setFont(courier);
+					boxText.setPosition(current->getBox()->left, current->getBox()->top);
+					boxText.setFillColor(sf::Color(0, 0, 0));
+
+					buildWindow.draw(boxText);
+				}
+
 				
+				if (activeBox != nullptr) {
+					shared_ptr<sf::FloatRect> activeRect = activeBox->getBox();
+					sf::RectangleShape textBox(sf::Vector2f(activeRect->width, activeRect->height));
+					textBox.setPosition(activeRect->left, activeRect->top);
+					textBox.setOutlineColor(sf::Color(0, 0, 0));
+					textBox.setOutlineThickness(2);
+					if (blink) {
+						textBox.setFillColor(sf::Color(220, 220, 220));
+					}
+					else {
+						textBox.setFillColor(sf::Color(245, 245, 245));
+					}
+
+					buildWindow.draw(textBox);
+
+					sf::Text enteredText;
+					enteredText.setString(activeBox->getText());
+					enteredText.setFont(courier);
+					enteredText.setPosition(activeBox->getBox()->left, activeBox->getBox()->top);
+					enteredText.setFillColor(sf::Color(0, 0, 0));
+
+					buildWindow.draw(enteredText);
+				}
+
 				if (initializeMenu) {
 					initializeMenu = false;
+				}
+
+				if ((clock() - msTimer) / (CLOCKS_PER_SEC / 1000) >= 300) {
+					blink = !blink;
+					msTimer = clock();
 				}
 			}
 

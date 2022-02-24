@@ -1,5 +1,6 @@
 #pragma once
 #include "Creature.h"
+#include "Path.h"
 
 class Orb :
     public std::enable_shared_from_this<Orb>,

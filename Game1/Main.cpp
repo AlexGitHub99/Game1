@@ -17,6 +17,8 @@
 #include "Player.h"
 #include "LightSource.h"
 #include "Orb.h"
+#include "Path.h"
+#include "CollisionChecker.h"
 
 using namespace std;
 int PLAYER_SPEED = 1000; //coord per second
@@ -94,7 +96,7 @@ int main() {
 	
 
 	//temporary stuff-----------------------------------------------------------
-	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 0, 0));
+	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 50, 50));
 	orb->setPosition(0, 0);
 
 	shared_ptr<GameObject> rock1 = make_shared<GameObject> (GameObject(rockTexture, 100, 100, 60));
@@ -165,6 +167,8 @@ int main() {
 	float cameraPos[2] = { player.getX(), player.getY() };
 	float prevHealth = player.getHealth();
 	
+	CollisionChecker collisionChecker;
+
 	clock_t t = clock();
 	clock_t tSecond = t;
 	int frames = 0;
@@ -176,6 +180,14 @@ int main() {
 		t = clock();
 		sf::Event event;
 		
+		bool secondPassed = (clock() - tSecond) / CLOCKS_PER_SEC >= 1;
+		frames++;
+		if (secondPassed) {//1 second has passed
+			tSecond = clock();
+			fps = frames;
+			frames = 0;
+		}
+
 		while (mainWindow.pollEvent(event)) {
 
 			if (event.type == sf::Event::MouseWheelMoved) {
@@ -258,107 +270,26 @@ int main() {
 
 		//collissions
 
-			//object collisions
+		//object collisions
+
+		sf::FloatRect playerBox;
+		playerBox.left = player.getX() - player.getBoundBoxWidth() / 2 + player.getBoundBoxOffsetX();
+		playerBox.top = player.getY() - player.getBoundBoxHeight() / 2 + player.getBoundBoxOffsetY();
+		playerBox.width = player.getBoundBoxWidth();
+		playerBox.height = player.getBoundBoxHeight();
+
 		for (std::list<shared_ptr<GameObject>>::iterator it = objects->begin(); it != objects->end(); it++) {
 			shared_ptr<GameObject> currentObj = *it;
 
-			float xDisplacement = 0;
-			float yDisplacement = 0;
+			sf::FloatRect objectBox;
+			objectBox.left = currentObj->getX() - currentObj->getBoundBoxWidth() / 2 + currentObj->getBoundBoxOffsetX();
+			objectBox.top = currentObj->getY() - currentObj->getBoundBoxHeight() / 2 + currentObj->getBoundBoxOffsetY();
+			objectBox.width = currentObj->getBoundBoxWidth();
+			objectBox.height = currentObj->getBoundBoxHeight();
 
-			float playerLeft = player.getX() - player.getBoundBoxWidth() / 2 + player.getBoundBoxOffsetX();
-			float playerRight = player.getX() + player.getBoundBoxWidth() / 2 + player.getBoundBoxOffsetX();
-			float playerBottom = player.getY() - player.getBoundBoxHeight() / 2 + player.getBoundBoxOffsetY();
-			float playerTop = player.getY() + player.getBoundBoxHeight() / 2 + player.getBoundBoxOffsetY();
-
-			float objectLeft = currentObj->getX() - currentObj->getBoundBoxWidth() / 2 + currentObj->getBoundBoxOffsetX();
-			float objectRight = currentObj->getX() + currentObj->getBoundBoxWidth() / 2 + currentObj->getBoundBoxOffsetX();
-			float objectBottom = currentObj->getY() - currentObj->getBoundBoxHeight() / 2 + currentObj->getBoundBoxOffsetY();
-			float objectTop = currentObj->getY() + currentObj->getBoundBoxHeight() / 2 + currentObj->getBoundBoxOffsetY();
-
-			if (
-				playerLeft < objectRight and // player left is left of object right             left bottom corner
-				playerLeft > objectLeft and // player left is right of object left      
-				playerBottom < objectTop and // player bottom is under object top
-				playerBottom > objectBottom // player bottom is above object bottom 
-				)
-			{
-				xDisplacement = (objectRight)-(playerLeft);
-				yDisplacement = (objectTop)-(playerBottom);
-			}
-			else if (
-				playerRight > objectLeft and // player right is right of object left			right bottom corner
-				playerRight < objectRight and // player right is left of object right     
-				playerBottom < objectTop and // player bottom is under object top      
-				playerBottom > objectBottom // player bottom is above object bottom  
-				)
-			{
-
-				xDisplacement = (objectLeft)-(playerRight);
-				yDisplacement = (objectTop)-(playerBottom);
-			}
-			else if (
-				playerLeft < objectRight and // player left is left of object right				left top corner
-				playerLeft > objectLeft and // player left is right of object left      
-				playerTop > objectBottom and // player top is above object bottom      
-				playerTop < objectTop // player top is under object top        
-				)
-			{
-
-				xDisplacement = (objectRight)-(playerLeft);
-				yDisplacement = (objectBottom)-(playerTop);
-			}
-			else if (
-				playerRight > objectLeft and // player right is right of object left			right top corner
-				playerRight < objectRight and // player right is left of object right     
-				playerTop > objectBottom and // player top is above object bottom      
-				playerTop < objectTop // player top is under object top  
-				)
-			{
-
-				xDisplacement = (objectLeft)-(playerRight);
-				yDisplacement = (objectBottom)-(playerTop);
-			}
-			else if (
-				playerLeft < objectRight and // player left is left of object right				entire left
-				playerLeft > objectLeft and // player left is right of object left 
-				playerBottom < objectBottom and // player bottom is below object bottom
-				playerTop > objectTop // player top is above object top
-				)
-			{
-				xDisplacement = (objectRight)-(playerLeft);
-				yDisplacement = 999; //arbitrary
-			}
-			else if (
-				playerRight > objectLeft and // player right is right of object left			entire right
-				playerRight < objectRight and // player right is left of object right
-				playerBottom < objectBottom and // player bottom is below object bottom
-				playerTop > objectTop // player top is above object top
-				)
-			{
-				xDisplacement = (objectLeft)-(playerRight);
-				yDisplacement = 999; //arbitrary
-			}
-			else if (
-				playerRight > objectRight and // player right is right of object right			entire bottom
-				playerLeft < objectLeft and // player left is left of object left
-				playerBottom < objectTop and // player bottom is below object top
-				playerBottom > objectBottom // player bottom is above object bottom
-				)
-			{
-				xDisplacement = 999; //arbitrary
-				yDisplacement = (objectTop)-(playerBottom);
-			}
-			else if (
-				playerRight > objectRight and // player right is right of object right			entire top
-				playerLeft < objectLeft and // player left is left of object left
-				playerTop > objectBottom and // player top is above object bottom
-				playerTop < objectTop // player top is below object top
-				)
-			{
-				xDisplacement = 999; //arbitrary
-				yDisplacement = (objectBottom)-(playerTop);
-			}
-
+			float* displacement = collisionChecker.check(playerBox, objectBox);
+			float xDisplacement = *displacement;
+			float yDisplacement = *(displacement + 1);
 
 			if (xDisplacement != 0 and yDisplacement != 0) {
 				if (abs(xDisplacement) < abs(yDisplacement)) {
@@ -404,6 +335,8 @@ int main() {
 			cameraPos[1] += cameraGap[1] - cameraGap[1] * pow(3, -ms/100);
 		}
 
+
+		//update entities
 		std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = area.getEntities();
 		for (int i = 0; i < entities->size(); i++) {
 
@@ -416,10 +349,14 @@ int main() {
 			}
 			prevHealth = player.getHealth();
 			if (player.getHealth() <= 0) {
-				std::cout << player.getHealth() << std::endl;
 				player.setPosition(spawnPoint[0], spawnPoint[1]);
 				player.setHealth(100);
 			}
+
+			/*if (secondPassed) {
+				Path path;
+				path.find(area, *entities->at(i), player);
+			}*/
 		}
 		
 
@@ -573,13 +510,6 @@ int main() {
 		sf::Text framesText;
 		framesText.setFont(courier);
 		framesText.setPosition(0, 80);
-
-		frames++;
-		if ((clock() - tSecond) / CLOCKS_PER_SEC >= 1) {//1 second has passed
-			tSecond = clock();
-			fps = frames;
-			frames = 0;
-		}
 
 		framesText.setString("FPS: " + std::to_string(fps));
 		mainWindow.draw(framesText);

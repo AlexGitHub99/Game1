@@ -1,6 +1,7 @@
 #include "GameObject.h"
 
 GameObject::GameObject(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight) {
+	id = rand();
 	sprite = std::shared_ptr<sf::Sprite>(new sf::Sprite(*texture));
 	textureWidth = newTextureWidth;
 	textureHeight = newTextureWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
@@ -11,6 +12,11 @@ GameObject::GameObject(std::shared_ptr<sf::Texture> texture, float newTextureWid
 	boundBoxOffsetX = 0;
 	boundBoxOffsetY = 0;
 	type = "object";
+}
+
+int GameObject::getId()
+{
+	return id;
 }
 
 void GameObject::setPosition(float x, float y)

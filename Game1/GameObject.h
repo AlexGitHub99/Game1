@@ -6,6 +6,7 @@ class GameObject
 public:
 	GameObject(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight);
 
+	int getId();
 	void setPosition(float x, float y);
 	void setBoundBox(float newWidth, float newHeight);
 	void setBoundBox(float newWidth);
@@ -30,6 +31,7 @@ public:
 	virtual float getLightLevel();
 
 protected:
+	int id;
 	float boundBoxWidth;
 	float boundBoxHeight;
 	float boundBoxOffsetX;

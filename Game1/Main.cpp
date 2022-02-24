@@ -19,6 +19,7 @@
 #include "Orb.h"
 #include "Path.h"
 #include "CollisionChecker.h"
+#include "TextBox.h"
 
 using namespace std;
 int PLAYER_SPEED = 1000; //coord per second
@@ -35,17 +36,16 @@ void getDesktopResolution(int& horizontal, int& vertical);
 void renderBackground(Area& area, int screenSize[2], float cameraPos[2], int FOV[2]);
 void setPlayerScreenPos(Player& player, float cameraGap[2], int screenSize[2], int FOV[2]);
 void renderObject(shared_ptr<GameObject>, int screenSize[2], float cameraPos[2], int FOV[2]);
+bool isInside(float x, float y, sf::FloatRect& bounds);
 
 int main() {
-
 	int screenSize[2];
 	getDesktopResolution(screenSize[0], screenSize[1]);
-	int baseLightLevel = 10;
 	float FOVRatio = 16 / 10;
 	int FOV[2];
 	FOV[0] = 2000;
 	FOV[1] = (int)round((float)FOV[0] / FOVRatio);
-	float spawnPoint[2] = { 200, 200 };
+
 	if ((float)screenSize[0] / (float)screenSize[1] > (float)FOV[0] / (float)FOV[1]) {
 		FOVRatio = (float)screenSize[0] / (float)screenSize[1];
 		FOV[1] = (int)round((float)FOV[0] / FOVRatio);
@@ -54,9 +54,6 @@ int main() {
 		FOVRatio = ((float)screenSize[0] / (float)screenSize[1]);
 		FOV[0] = (int)round((float)FOV[1] * FOVRatio);
 	}
-
-
-	sf::RenderWindow mainWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Game", sf::Style::Fullscreen);
 
 	//load textures
 	shared_ptr<sf::Texture> rockTexture(new sf::Texture());
@@ -88,6 +85,310 @@ int main() {
 	if (!lightTexture.loadFromFile("resources/light.png")) {
 		return -1;
 	}
+
+
+	if (true) {
+		float BUILD_CAM_SPEED = 1500;
+		sf::RenderWindow buildWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Builder", sf::Style::Fullscreen);
+		Area area(backgroundTexture, 4000, 4000);
+		float cameraPos[2] = { 0, 0 };
+
+		bool menuOpen = false;
+		bool initializeMenu = false;
+
+		clock_t t = clock();
+
+		vector<shared_ptr<TextBox>> textBoxes;
+		shared_ptr<TextBox> activeBox;
+
+		while(buildWindow.isOpen()) {
+			float ms = (clock() - t) * 1000 / CLOCKS_PER_SEC;
+			t = clock();
+
+			sf::Event event;
+			while (buildWindow.pollEvent(event)) {
+
+				switch (event.type) {
+
+				case (sf::Event::MouseWheelMoved):
+					FOV[0] += -(float)FOV[0] * (float)event.mouseWheel.delta / 20;
+					FOV[1] = (float)FOV[0] / FOVRatio;
+					break;
+
+				case (sf::Event::KeyReleased):
+					switch (event.key.code) {
+
+					case (sf::Keyboard::Escape):
+						buildWindow.close();
+						break;
+
+					case (sf::Keyboard::M):
+						menuOpen = !menuOpen;
+						if (menuOpen) {
+							initializeMenu = true;
+						}
+						break;
+
+					}
+					break;
+
+				case (sf::Event::MouseButtonReleased):
+					switch (event.mouseButton.button) {
+
+					case (sf::Mouse::Left):
+						if (textBoxes.empty()) {
+							break;
+						}
+						for (vector<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
+							shared_ptr<TextBox> current = *it;
+
+							if (isInside(event.mouseButton.x, event.mouseButton.y, *current->getBox())) {
+								activeBox = current;
+								cout << "yay" << endl;
+							}
+						}
+						break;
+					}
+					break;
+
+				case (sf::Event::Closed):
+					buildWindow.close();
+					break;
+				}
+
+			}
+
+			shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
+			//get keyboard input
+			float angle = 0.0;
+			bool UP = false;
+			bool DOWN = false;
+			bool RIGHT = false;
+			bool LEFT = false;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				LEFT = true;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			{
+				RIGHT = true;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			{
+				UP = true;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			{
+				DOWN = true;
+			}
+
+
+			//handle movement
+			if (UP == true or RIGHT == true or DOWN == true or LEFT == true) {
+				float magnitude = ms / 1000 * BUILD_CAM_SPEED;
+				if (UP == true and RIGHT == true) {
+					angle = M_PI / 4;
+				}
+				else if (UP == true and LEFT == true) {
+					angle = M_PI * 3 / 4;
+				}
+				else if (DOWN == true and RIGHT == true) {
+					angle = -M_PI / 4;
+				}
+				else if (DOWN == true and LEFT == true) {
+					angle = -M_PI * 3 / 4;
+				}
+				else if (UP == true) {
+					angle = M_PI / 2;
+				}
+				else if (DOWN == true) {
+					angle = -M_PI / 2;
+				}
+				else if (RIGHT == true) {
+					angle = 0;
+				}
+				else if (LEFT == true) {
+					angle = M_PI;
+				}
+
+				cameraPos[0] += cos(angle) * magnitude;
+				cameraPos[1] += sin(angle) * -magnitude;
+
+			}
+
+			//------------------------------------------------------
+			//DRAWING
+			//------------------------------------------------------
+			buildWindow.clear();
+
+			//draw background
+			renderBackground(area, screenSize, cameraPos, FOV);
+
+			buildWindow.draw(*area.getBackground());
+
+			//draw black area outside of background border
+			float backgroundScreenEdgeLeft = -cameraPos[0] / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2;
+			float backgroundScreenEdgeRight = (area.getWidth() - cameraPos[0]) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2;
+			float backgroundScreenEdgeTop = -cameraPos[1] / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2;
+			float backgroundScreenEdgeBottom = (area.getHeight() - cameraPos[1]) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2;
+
+			if (backgroundScreenEdgeLeft > 0) {
+				sf::RectangleShape blackRect(sf::Vector2f(backgroundScreenEdgeLeft, screenSize[1]));
+				blackRect.setPosition(0, 0);
+				blackRect.setFillColor(sf::Color(0, 0, 0, 255));
+				buildWindow.draw(blackRect);
+			}
+			if (backgroundScreenEdgeRight < screenSize[0]) {
+				sf::RectangleShape blackRect(sf::Vector2f(backgroundScreenEdgeRight, screenSize[1]));
+				blackRect.setPosition(backgroundScreenEdgeRight, 0);
+				blackRect.setFillColor(sf::Color(0, 0, 0, 255));
+				buildWindow.draw(blackRect);
+			}
+			if (backgroundScreenEdgeTop > 0) {
+				sf::RectangleShape blackRect(sf::Vector2f(screenSize[0], backgroundScreenEdgeTop));
+				blackRect.setPosition(0, 0);
+				blackRect.setFillColor(sf::Color(0, 0, 0, 255));
+				buildWindow.draw(blackRect);
+			}
+			if (backgroundScreenEdgeBottom < screenSize[1]) {
+				sf::RectangleShape blackRect(sf::Vector2f(screenSize[0], backgroundScreenEdgeBottom));
+				blackRect.setPosition(0, backgroundScreenEdgeBottom);
+				blackRect.setFillColor(sf::Color(0, 0, 0, 255));
+				buildWindow.draw(blackRect);
+			}
+
+			//draw objects and player
+			for (std::list<shared_ptr<GameObject>>::iterator it = objects->begin(); it != objects->end(); it++) {
+				shared_ptr<GameObject> currentObj = *it;
+				renderObject(currentObj, screenSize, cameraPos, FOV);
+
+				buildWindow.draw(*currentObj->getSprite());
+
+			}
+
+			//draw coords
+			sf::Font courier;
+			if (!courier.loadFromFile("resources/fonts/CourierPrime-Regular.ttf")) {
+				return -1;
+			}
+			sf::Text cameraCoords;
+			cameraCoords.setFont(courier);
+			cameraCoords.setString("Camera X: " + std::to_string(cameraPos[0]) + " Y : " + std::to_string(cameraPos[1]));
+
+			cameraCoords.setPosition(0, 0);
+
+			buildWindow.draw(cameraCoords);
+
+			if (initializeMenu) {
+				textBoxes.clear();
+			}
+
+			//draw menu
+			if (menuOpen) {
+				sf::FloatRect menuRect(screenSize[0] * 3 / 4, 0, screenSize[0] / 4, screenSize[1]);
+				sf::RectangleShape menuBack(sf::Vector2f(menuRect.width, menuRect.height));
+
+				menuBack.setPosition(menuRect.left, menuRect.top);
+				menuBack.setFillColor(sf::Color(174, 174, 174));
+				buildWindow.draw(menuBack);
+
+				float currentY = menuRect.top + 30;
+				float currentX = menuRect.left + 30;
+
+				sf::Text newText;
+				newText.setFont(courier);
+				newText.setString("Camera speed:");
+				newText.setPosition(currentX, currentY);
+				newText.setFillColor(sf::Color(0, 0, 0));
+
+				buildWindow.draw(newText);
+
+				currentY += 50;
+
+				shared_ptr<sf::FloatRect> textBoxRect = make_shared<sf::FloatRect>(sf::FloatRect(currentX, currentY, 100, 50));
+				sf::RectangleShape textBox(sf::Vector2f(textBoxRect->width, textBoxRect->height));
+				textBox.setPosition(textBoxRect->left, textBoxRect->top);
+				textBox.setFillColor(sf::Color(220, 220, 220));
+
+				buildWindow.draw(textBox);
+
+				if(initializeMenu) textBoxes.push_back(make_shared<TextBox>(TextBox(newText.getString(), textBoxRect)));
+				
+				if (initializeMenu) {
+					initializeMenu = false;
+				}
+			}
+
+
+
+
+
+
+			//display
+			buildWindow.display();
+
+			//------------------------------------------------------
+			//END OF DRAWING
+			//------------------------------------------------------
+
+		}
+
+		return 0;
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+	//[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+	// 
+	//                                                                                    Actuall Game Play
+	// 
+	//[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+	//[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+
+	sf::RenderWindow mainWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Game", sf::Style::Fullscreen);
+
+	int baseLightLevel = 10;
+	float spawnPoint[2] = { 200, 200 };
 
 	Player player(playerTexture, 70, 70, 40, 100);
 	player.setPosition(1000, 1000);
@@ -307,7 +608,7 @@ int main() {
 				}
 			}
 
-			free(displacement);
+			std::free(displacement);
 		}
 
 		//border collisions
@@ -329,7 +630,7 @@ int main() {
 		float playerPos[2] = { player.getX(), player.getY() };
 		float* cameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
 		float cameraGap[2] = { *cameraGapTemp, *(cameraGapTemp + 1) };
-		free(cameraGapTemp);
+		std::free(cameraGapTemp);
 
 		if (abs(cameraGap[0]) < 0.5) {
 			cameraPos[0] = playerPos[0];
@@ -416,7 +717,7 @@ int main() {
 		//set player screen position
 		float* newCameraGapTemp = relativePosition(cameraPos[0], cameraPos[1], playerPos[0], playerPos[1]);
 		float newCameraGap[2] = { *newCameraGapTemp, *(newCameraGapTemp + 1) };
-		free(newCameraGapTemp);
+		std::free(newCameraGapTemp);
 		setPlayerScreenPos(player, newCameraGap, screenSize, FOV);
 
 		//draw objects and player
@@ -627,10 +928,20 @@ void renderObject(shared_ptr<GameObject> obj, int screenSize[2], float cameraPos
 	float objectPos[2] = { *obj->getPosition(), *(obj->getPosition() + 1) };
 	float* temp = relativePosition(cameraPos[0], cameraPos[1], objectPos[0], objectPos[1]);
 	float relativePosition[2] = { *temp, *(temp + 1) };
-	free(temp);
+	std::free(temp);
 	obj->getSprite()->setPosition((relativePosition[0] - obj->getTextureWidth() / 2) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2,
 		(relativePosition[1] - obj->getTextureHeight() / 2) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2);
 	shared_ptr<sf::Sprite> currentSprite = obj->getSprite();
 	currentSprite->setScale(obj->getTextureWidth() / (float)FOV[0] * (float)screenSize[0] / currentSprite->getTexture()->getSize().x,
 		obj->getTextureHeight() / (float)FOV[1] * (float)screenSize[1] / currentSprite->getTexture()->getSize().y);
+}
+
+bool isInside(float x, float y, sf::FloatRect &bounds) {
+	if (x >= bounds.left and
+		x <= bounds.left + bounds.width and
+		y >= bounds.top and
+		y <= bounds.top + bounds.height) {
+		return true;
+	}
+	return false;
 }

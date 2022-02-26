@@ -19,3 +19,4 @@ void TextBox::addText(string newText)
 {
     text += newText;
 }
+

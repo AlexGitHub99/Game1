@@ -100,7 +100,7 @@ int main() {
 		clock_t t = clock();
 		clock_t msTimer = t;
 
-		vector<shared_ptr<TextBox>> textBoxes;
+		list<shared_ptr<TextBox>> textBoxes;
 		shared_ptr<TextBox> activeBox;
 
 		while(buildWindow.isOpen()) {
@@ -111,9 +111,20 @@ int main() {
 			while (buildWindow.pollEvent(event)) {
 
 				if (activeBox != nullptr) {
-					if (event.type == sf::Event::TextEntered) {
+					
+					switch(event.type) {
+					case (sf::Event::TextEntered): {
 						sf::String textInput = event.text.unicode;
 						activeBox->addText(textInput);
+						break;
+					}
+					case (sf::Event::KeyReleased):
+						if (event.key.code == sf::Keyboard::Enter) {
+							BUILD_CAM_SPEED = stof(activeBox->getText());
+							activeBox->setText("");
+							activeBox.reset();
+							
+						}
 					}
 				} 
 				else { //dissalowed events while textbox is active
@@ -167,7 +178,7 @@ int main() {
 						}
 
 						bool inTextBox = false;
-						for (vector<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
+						for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
 							shared_ptr<TextBox> current = *it;
 
 							if (isInside(event.mouseButton.x, event.mouseButton.y, *current->getBox())) {
@@ -343,7 +354,7 @@ int main() {
 
 				currentY += 50;
 
-				for (vector<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
+				for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
 					shared_ptr<TextBox> current = *it;
 
 					sf::FloatRect textBoxRect = *current->getBox();

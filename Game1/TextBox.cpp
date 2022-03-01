@@ -20,3 +20,10 @@ void TextBox::addText(string newText)
     text += newText;
 }
 
+bool TextBox::backspace()
+{
+    if (text.size() == 0) return false;
+    text.pop_back();
+    return true;
+}
+

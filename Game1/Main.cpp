@@ -114,8 +114,17 @@ int main() {
 					
 					switch(event.type) {
 					case (sf::Event::TextEntered): {
-						sf::String textInput = event.text.unicode;
-						activeBox->addText(textInput);
+						sf::String rawInput = event.text.unicode;
+						if (rawInput.getSize() > 1) {
+							break;
+						}
+						char chr = *(rawInput.getData());
+						if ((chr - 48 >= 0 and chr - 48 <= 9) or chr == '.') {
+							activeBox->addText(rawInput.toAnsiString());
+						}
+						else if (chr == 8) {
+							activeBox->backspace();
+						}
 						break;
 					}
 					case (sf::Event::KeyReleased):
@@ -336,7 +345,6 @@ int main() {
 
 				
 				sf::RectangleShape menuBack(sf::Vector2f(menuRect.width, menuRect.height));
-
 				menuBack.setPosition(menuRect.left, menuRect.top);
 				menuBack.setFillColor(sf::Color(174, 174, 174));
 				buildWindow.draw(menuBack);
@@ -349,10 +357,22 @@ int main() {
 				newText.setString("Camera speed:");
 				newText.setPosition(currentX, currentY);
 				newText.setFillColor(sf::Color(0, 0, 0));
+				buildWindow.draw(newText);
 
+				currentY += 120;
+				
+				newText.setString("Objects:");
+				newText.setPosition(currentX, currentY);
 				buildWindow.draw(newText);
 
 				currentY += 50;
+
+				sf::RectangleShape itemBack(sf::Vector2f(menuRect.width - (currentX - menuRect.left)* 2, menuRect.height / 2));
+				itemBack.setPosition(currentX, currentY);
+				itemBack.setFillColor(sf::Color(0, 0, 0, 0));
+				itemBack.setOutlineColor(sf::Color(100, 100, 100));
+				itemBack.setOutlineThickness(3);
+				buildWindow.draw(itemBack);
 
 				for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
 					shared_ptr<TextBox> current = *it;

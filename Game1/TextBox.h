@@ -14,6 +14,7 @@ public:
 	shared_ptr<sf::FloatRect> getBox();
 	void setText(string newText);
 	void addText(string newText);
+	bool backspace();
 
 private:
 	string text;

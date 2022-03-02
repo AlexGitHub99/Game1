@@ -11,6 +11,7 @@ public:
 	void setBoundBox(float newWidth, float newHeight);
 	void setBoundBox(float newWidth);
 	void setBoundBoxOffset(float x, float y);
+	void setBoundBoxOffsetToBottom();
 	void setTextureSize(float newWidth, float newHeight);
 	void setTextureSize(float newWidth);
 	std::shared_ptr<sf::Sprite> getSprite();

@@ -44,6 +44,11 @@ void GameObject::setBoundBoxOffset(float x, float y)
 	boundBoxOffsetY = y;
 }
 
+void GameObject::setBoundBoxOffsetToBottom()
+{
+	boundBoxOffsetY = textureHeight / 2 - boundBoxHeight / 2;
+}
+
 void GameObject::setTextureSize(float newWidth, float newHeight)
 {
 	textureWidth = newWidth;

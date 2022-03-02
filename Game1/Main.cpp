@@ -20,6 +20,8 @@
 #include "Path.h"
 #include "CollisionChecker.h"
 #include "TextBox.h"
+#include "Entity.h"
+#include <any>
 
 using namespace std;
 int PLAYER_SPEED = 1000; //coord per second
@@ -37,6 +39,14 @@ void renderBackground(Area& area, int screenSize[2], float cameraPos[2], int FOV
 void setPlayerScreenPos(Player& player, float cameraGap[2], int screenSize[2], int FOV[2]);
 void renderObject(shared_ptr<GameObject>, int screenSize[2], float cameraPos[2], int FOV[2]);
 bool isInside(float x, float y, sf::FloatRect& bounds);
+
+//load textures
+shared_ptr<sf::Texture> rockTexture(new sf::Texture());
+shared_ptr<sf::Texture> wallTexture(new sf::Texture());
+shared_ptr<sf::Texture> playerTexture(new sf::Texture());
+shared_ptr<sf::Texture> backgroundTexture(new sf::Texture());
+shared_ptr<sf::Texture> lampTexture(new sf::Texture());
+shared_ptr<sf::Texture> orbTexture(new sf::Texture());
 
 int main() {
 	int screenSize[2];
@@ -56,35 +66,77 @@ int main() {
 	}
 
 	//load textures
-	shared_ptr<sf::Texture> rockTexture(new sf::Texture());
 	if (!rockTexture->loadFromFile("resources/rock_1.png")) {
 		return -1;
 	}
-	shared_ptr<sf::Texture> wallTexture(new sf::Texture());
 	if (!wallTexture->loadFromFile("resources/wall.png")) {
 		return -1;
 	}
-	shared_ptr<sf::Texture> playerTexture(new sf::Texture());
 	if (!playerTexture->loadFromFile("resources/player.png")) {
 		return -1;
 	}
-	shared_ptr<sf::Texture> backgroundTexture(new sf::Texture());
 	if (!backgroundTexture->loadFromFile("resources/area_1.png")) {
 		return -1;
 	}
-	shared_ptr<sf::Texture> lampTexture(new sf::Texture());
 	if (!lampTexture->loadFromFile("resources/lamp.png")) {
 		return -1;
 	}
-	shared_ptr<sf::Texture> orbTexture(new sf::Texture());
 	if (!orbTexture->loadFromFile("resources/orb.png")) {
 		return -1;
 	}
 
-	sf::Texture lightTexture;
-	if (!lightTexture.loadFromFile("resources/light.png")) {
-		return -1;
-	}
+	struct MenuObject {
+		virtual shared_ptr<GameObject> createObject() {
+			return nullptr;
+		};
+		string type;
+		shared_ptr<sf::Sprite> sprite;
+	};
+
+	struct Lamp : public MenuObject {
+		Lamp() {
+			texture = lampTexture;
+			width = 50;
+			lightLevel = 100;
+			box[0] = 50;
+			box[1] = 50;
+			type = "Lamp";
+			sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
+		};
+
+		shared_ptr<GameObject> createObject() override {
+			shared_ptr<LightSource> obj = make_shared<LightSource>(LightSource(texture, width, box[0], box[1], lightLevel));
+			obj->setBoundBoxOffsetToBottom();
+			return obj;
+		}
+
+		shared_ptr<sf::Texture> texture;
+		float width;
+		float lightLevel;
+		float box[2];
+	};
+
+	struct Wall : public MenuObject {
+		Wall() {
+			texture = wallTexture;
+			width = 100;
+			box[0] = 100;
+			box[1] = 100;
+			type = "Wall";
+			sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
+		};
+
+		shared_ptr<GameObject> createObject() override {
+			shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1]));
+			obj->setBoundBoxOffsetToBottom();
+			return obj;
+		}
+
+		shared_ptr<sf::Texture> texture;
+		float width;
+		float box[2];
+	};
+
 
 
 	if (true) {
@@ -102,6 +154,12 @@ int main() {
 
 		list<shared_ptr<TextBox>> textBoxes;
 		shared_ptr<TextBox> activeBox;
+
+		shared_ptr<Lamp> lamp = make_shared<Lamp>(Lamp());
+		shared_ptr<Wall> wall = make_shared<Wall>(Wall());
+		vector<shared_ptr<MenuObject>> menuObjects;
+		menuObjects.push_back(lamp);
+		menuObjects.push_back(wall);
 
 		while(buildWindow.isOpen()) {
 			float ms = (clock() - t) * 1000 / CLOCKS_PER_SEC;
@@ -366,13 +424,50 @@ int main() {
 				buildWindow.draw(newText);
 
 				currentY += 50;
-
-				sf::RectangleShape itemBack(sf::Vector2f(menuRect.width - (currentX - menuRect.left)* 2, menuRect.height / 2));
-				itemBack.setPosition(currentX, currentY);
+				
+				//draw item menu
+				sf::FloatRect itemBackRect(currentX, currentY, menuRect.width - (currentX - menuRect.left) * 2, menuRect.height / 2);
+				sf::RectangleShape itemBack(sf::Vector2f(itemBackRect.width, itemBackRect.height));
+				itemBack.setPosition(itemBackRect.left, itemBackRect.top);
 				itemBack.setFillColor(sf::Color(0, 0, 0, 0));
 				itemBack.setOutlineColor(sf::Color(100, 100, 100));
 				itemBack.setOutlineThickness(3);
 				buildWindow.draw(itemBack);
+
+				float positionIterator[2];
+				positionIterator[0] = itemBackRect.left + itemBackRect.width * 8 / 30;
+				positionIterator[1] = itemBackRect.top + itemBackRect.height * 7 / 50;
+
+				for (vector<shared_ptr<MenuObject>>::iterator it = menuObjects.begin(); it != menuObjects.end(); it++) {
+					float size[2];
+
+					bool exists = false;
+					if ((*it)->type.compare("Lamp") == 0) {
+						shared_ptr<Lamp> obj = static_pointer_cast<Lamp>(*it);
+						size[0] = obj->texture->getSize().x;
+						size[1] = obj->texture->getSize().y;
+						exists = true;
+					}
+					else if ((*it)->type.compare("Wall") == 0) {
+						shared_ptr<Wall> obj = static_pointer_cast<Wall>(*it);
+						size[0] = obj->texture->getSize().x;
+						size[1] = obj->texture->getSize().y;
+						exists = true;
+					}
+
+					if (exists) {
+						shared_ptr<sf::Sprite> sprite = (*it)->sprite;
+						sprite->setOrigin(size[0] / 2, size[1] / 2);
+						sprite->setScale(itemBackRect.height / 5 / size[1], itemBackRect.height / 5 / size[1]);
+						sprite->setPosition(positionIterator[0], positionIterator[1]);
+						buildWindow.draw(*sprite);
+					}
+					positionIterator[0] += itemBackRect.width * 14 / 30;
+					if (positionIterator[0] > itemBackRect.left + itemBackRect.width) {
+						positionIterator[0] = itemBackRect.left + itemBackRect.width * 8 / 30;
+						positionIterator[1] += itemBackRect.height * 12 / 50;
+					}
+				}
 
 				for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
 					shared_ptr<TextBox> current = *it;
@@ -517,21 +612,18 @@ int main() {
 	shared_ptr<GameObject> rock2 = make_shared<GameObject> (GameObject(rockTexture, 300, 300, 200));
 	rock2->setPosition(1000, 400);
 
-	shared_ptr<GameObject> wall = make_shared<GameObject> (GameObject(wallTexture, 100, 100, 100));
-	wall->setPosition(700, 900);
-	wall->setBoundBoxOffset(0, wall->getTextureHeight() / 2 - wall->getBoundBoxHeight() / 2);
+	shared_ptr<GameObject> myWall = make_shared<GameObject> (GameObject(wallTexture, 100, 100, 100));
+	myWall->setPosition(700, 900);
+	myWall->setBoundBoxOffsetToBottom();
 
-	shared_ptr<LightSource> lamp = make_shared<LightSource> (LightSource(lampTexture, 50, 50, 30, 500));
-	lamp->setPosition(900, 800);
-
-	sf::Sprite lightSprite(lightTexture);
-	lightSprite.setPosition(screenSize[0] / 2, screenSize[1] / 2);
+	shared_ptr<LightSource> myLamp = make_shared<LightSource> (LightSource(lampTexture, 50, 50, 30, 500));
+	myLamp->setPosition(900, 800);
 
 	Area area(backgroundTexture, 4000, 4000);
 	area.addObject(rock1);
 	area.addObject(rock2);
-	area.addObject(lamp);
-	area.addObject(wall);
+	area.addObject(myLamp);
+	area.addObject(myWall);
 	area.addEntity(orb);
 
 

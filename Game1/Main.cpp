@@ -38,6 +38,7 @@ void getDesktopResolution(int& horizontal, int& vertical);
 void renderBackground(Area& area, int screenSize[2], float cameraPos[2], int FOV[2]);
 void setPlayerScreenPos(Player& player, float cameraGap[2], int screenSize[2], int FOV[2]);
 void renderObject(shared_ptr<GameObject>, int screenSize[2], float cameraPos[2], int FOV[2]);
+void renderObjectToMouse(shared_ptr<GameObject>, int screenSize[2], int FOV[2], sf::Vector2i mousePos);
 bool isInside(float x, float y, sf::FloatRect& bounds);
 
 //load textures
@@ -137,7 +138,26 @@ int main() {
 		float box[2];
 	};
 
+	struct Rock : public MenuObject {
+		Rock() {
+			texture = rockTexture;
+			width = 150;
+			box[0] = 150;
+			box[1] = 100;
+			type = "Rock";
+			sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
+		};
 
+		shared_ptr<GameObject> createObject() override {
+			shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1]));
+			obj->setBoundBoxOffsetToBottom();
+			return obj;
+		}
+
+		shared_ptr<sf::Texture> texture;
+		float width;
+		float box[2];
+	};
 
 	if (true) {
 		float BUILD_CAM_SPEED = 1500;
@@ -152,14 +172,23 @@ int main() {
 		clock_t t = clock();
 		clock_t msTimer = t;
 
+		sf::FloatRect menuRect(screenSize[0] * 3 / 4, 0, screenSize[0] / 4, screenSize[1]);
+		sf::FloatRect itemBackRect(menuRect.left + 30, menuRect.top + 400, menuRect.width - (menuRect.left + 30 - menuRect.left) * 2, menuRect.height / 2);
 		list<shared_ptr<TextBox>> textBoxes;
 		shared_ptr<TextBox> activeBox;
+		
+		shared_ptr<MenuObject> selectedObjectStruct;
+		shared_ptr<GameObject> selectedObject;
+		int selectedLocation = -1;
 
 		shared_ptr<Lamp> lamp = make_shared<Lamp>(Lamp());
 		shared_ptr<Wall> wall = make_shared<Wall>(Wall());
+		shared_ptr<Rock> rock = make_shared<Rock>(Rock());
+
 		vector<shared_ptr<MenuObject>> menuObjects;
 		menuObjects.push_back(lamp);
 		menuObjects.push_back(wall);
+		menuObjects.push_back(rock);
 
 		while(buildWindow.isOpen()) {
 			float ms = (clock() - t) * 1000 / CLOCKS_PER_SEC;
@@ -240,23 +269,62 @@ int main() {
 					switch (event.mouseButton.button) {
 
 					case (sf::Mouse::Left):
-						if (textBoxes.empty()) {
-							break;
-						}
-
 						bool inTextBox = false;
-						for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
-							shared_ptr<TextBox> current = *it;
+						if (!textBoxes.empty()) {
+							for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
+								shared_ptr<TextBox> current = *it;
 
-							if (isInside(event.mouseButton.x, event.mouseButton.y, *current->getBox())) {
-								activeBox = current;
-								inTextBox = true;
+								if (isInside(event.mouseButton.x, event.mouseButton.y, *current->getBox())) {
+									activeBox = current;
+									inTextBox = true;
+								}
 							}
 						}
-
 						if (!inTextBox) {
 							activeBox.reset();
 						}
+
+						if (isInside(event.mouseButton.x, event.mouseButton.y, itemBackRect)) {
+							selectedLocation = floor((event.mouseButton.x - itemBackRect.left) / (itemBackRect.width / 2)) + floor((event.mouseButton.y - itemBackRect.top) / (itemBackRect.height / 4)) * 2;
+
+							if (selectedLocation >= menuObjects.size()) {
+								break;
+							}
+
+							selectedObjectStruct = menuObjects.at(selectedLocation);
+							if (selectedObjectStruct->type.compare("Lamp") == 0) {
+								shared_ptr<Lamp> obj = static_pointer_cast<Lamp>(selectedObjectStruct);
+								selectedObject = obj->createObject();
+							}
+							else if (selectedObjectStruct->type.compare("Wall") == 0) {
+								shared_ptr<Wall> obj = static_pointer_cast<Wall>(selectedObjectStruct);
+								selectedObject = obj->createObject();
+							}
+							else if (selectedObjectStruct->type.compare("Rock") == 0) {
+								shared_ptr<Rock> obj = static_pointer_cast<Rock>(selectedObjectStruct);
+								selectedObject = obj->createObject();
+							}
+						}
+
+						if (!isInside(event.mouseButton.x, event.mouseButton.y, menuRect) and selectedObjectStruct != nullptr) { //not clicking in menu
+							selectedObject->setPosition(cameraPos[0] + (-(float)screenSize[0]/2 + event.mouseButton.x) / (float)screenSize[0] * (float)FOV[0] - selectedObject->getBoundBoxOffsetX(),
+														cameraPos[1] + (-(float)screenSize[1]/2 + event.mouseButton.y) / (float)screenSize[1] * (float)FOV[1] - selectedObject->getBoundBoxOffsetY());
+							selectedObject->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+							area.addObject(selectedObject);
+							if (selectedObjectStruct->type.compare("Lamp") == 0) {
+								shared_ptr<Lamp> obj = static_pointer_cast<Lamp>(selectedObjectStruct);
+								selectedObject = obj->createObject();
+							}
+							else if (selectedObjectStruct->type.compare("Wall") == 0) {
+								shared_ptr<Wall> obj = static_pointer_cast<Wall>(selectedObjectStruct);
+								selectedObject = obj->createObject();
+							}
+							else if (selectedObjectStruct->type.compare("Rock") == 0) {
+								shared_ptr<Rock> obj = static_pointer_cast<Rock>(selectedObjectStruct);
+								selectedObject = obj->createObject();
+							}
+						}
+
 						break;
 					}
 					break;
@@ -393,14 +461,11 @@ int main() {
 
 			//draw menu
 			if (menuOpen) {
-				sf::FloatRect menuRect(screenSize[0] * 3 / 4, 0, screenSize[0] / 4, screenSize[1]);
-
 				if (initializeMenu) {
 					textBoxes.clear();
 					shared_ptr<sf::FloatRect> textBoxRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 30, menuRect.top + 80, 100, 50));
 					textBoxes.push_back(make_shared<TextBox>(TextBox("", textBoxRect)));
 				}
-
 				
 				sf::RectangleShape menuBack(sf::Vector2f(menuRect.width, menuRect.height));
 				menuBack.setPosition(menuRect.left, menuRect.top);
@@ -426,7 +491,6 @@ int main() {
 				currentY += 50;
 				
 				//draw item menu
-				sf::FloatRect itemBackRect(currentX, currentY, menuRect.width - (currentX - menuRect.left) * 2, menuRect.height / 2);
 				sf::RectangleShape itemBack(sf::Vector2f(itemBackRect.width, itemBackRect.height));
 				itemBack.setPosition(itemBackRect.left, itemBackRect.top);
 				itemBack.setFillColor(sf::Color(0, 0, 0, 0));
@@ -437,6 +501,19 @@ int main() {
 				float positionIterator[2];
 				positionIterator[0] = itemBackRect.left + itemBackRect.width * 8 / 30;
 				positionIterator[1] = itemBackRect.top + itemBackRect.height * 7 / 50;
+
+				//draw selected box
+				if (selectedLocation != -1) {
+					sf::FloatRect selectedRect;
+					selectedRect.left = (selectedLocation % 2) * itemBackRect.width / 2 + itemBackRect.left;
+					selectedRect.top = floor(selectedLocation / 2) * itemBackRect.height / 4 + itemBackRect.top;
+					selectedRect.width = itemBackRect.width / 2;
+					selectedRect.height = itemBackRect.height / 4;
+					sf::RectangleShape selectedShape(sf::Vector2f(selectedRect.width, selectedRect.height));
+					selectedShape.setPosition(selectedRect.left, selectedRect.top);
+					selectedShape.setFillColor(sf::Color(193, 255, 166, 200));
+					buildWindow.draw(selectedShape);
+				}
 
 				for (vector<shared_ptr<MenuObject>>::iterator it = menuObjects.begin(); it != menuObjects.end(); it++) {
 					float size[2];
@@ -450,6 +527,12 @@ int main() {
 					}
 					else if ((*it)->type.compare("Wall") == 0) {
 						shared_ptr<Wall> obj = static_pointer_cast<Wall>(*it);
+						size[0] = obj->texture->getSize().x;
+						size[1] = obj->texture->getSize().y;
+						exists = true;
+					}
+					else if ((*it)->type.compare("Rock") == 0) {
+						shared_ptr<Rock> obj = static_pointer_cast<Rock>(*it);
 						size[0] = obj->texture->getSize().x;
 						size[1] = obj->texture->getSize().y;
 						exists = true;
@@ -515,10 +598,19 @@ int main() {
 					buildWindow.draw(enteredText);
 				}
 
+				//drawObject at mouse
+				if (selectedObject != nullptr) {
+					renderObjectToMouse(selectedObject, screenSize, FOV, sf::Mouse::getPosition());
+					selectedObject->getSprite()->setColor(sf::Color(255, 255, 255, 100));
+					buildWindow.draw(*selectedObject->getSprite());
+				}
+
+				//done intializing menu
 				if (initializeMenu) {
 					initializeMenu = false;
 				}
 
+				//adjust blink timer for text box
 				if ((clock() - msTimer) / (CLOCKS_PER_SEC / 1000) >= 300) {
 					blink = !blink;
 					msTimer = clock();
@@ -1134,6 +1226,16 @@ void renderObject(shared_ptr<GameObject> obj, int screenSize[2], float cameraPos
 	std::free(temp);
 	obj->getSprite()->setPosition((relativePosition[0] - obj->getTextureWidth() / 2) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2,
 		(relativePosition[1] - obj->getTextureHeight() / 2) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2);
+	shared_ptr<sf::Sprite> currentSprite = obj->getSprite();
+	currentSprite->setScale(obj->getTextureWidth() / (float)FOV[0] * (float)screenSize[0] / currentSprite->getTexture()->getSize().x,
+		obj->getTextureHeight() / (float)FOV[1] * (float)screenSize[1] / currentSprite->getTexture()->getSize().y);
+}
+
+void renderObjectToMouse(shared_ptr<GameObject> obj, int screenSize[2], int FOV[2], sf::Vector2i mousePos)
+{
+	sf::Vector2f mousePosf(mousePos.x, mousePos.y);
+	obj->getSprite()->setPosition(mousePos.x - (obj->getTextureWidth() / 2 + obj->getBoundBoxOffsetX()) / (float)FOV[0] * (float)screenSize[0],
+								 mousePos.y - (obj->getTextureHeight() / 2 + obj->getBoundBoxOffsetY()) / (float)FOV[1] * (float)screenSize[1]);
 	shared_ptr<sf::Sprite> currentSprite = obj->getSprite();
 	currentSprite->setScale(obj->getTextureWidth() / (float)FOV[0] * (float)screenSize[0] / currentSprite->getTexture()->getSize().x,
 		obj->getTextureHeight() / (float)FOV[1] * (float)screenSize[1] / currentSprite->getTexture()->getSize().y);

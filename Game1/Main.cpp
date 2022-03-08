@@ -11,6 +11,8 @@
 #include <thread>
 #include <fstream>
 #include <time.h>
+#include <algorithm>
+#include <array>
 #include "wtypes.h"
 #include "GameObject.h"
 #include "Area.h"
@@ -21,7 +23,7 @@
 #include "CollisionChecker.h"
 #include "TextBox.h"
 #include "Entity.h"
-#include <any>
+#include "Button.h"
 
 using namespace std;
 int PLAYER_SPEED = 1000; //coord per second
@@ -40,6 +42,10 @@ void setPlayerScreenPos(Player& player, float cameraGap[2], int screenSize[2], i
 void renderObject(shared_ptr<GameObject>, int screenSize[2], float cameraPos[2], int FOV[2]);
 void renderObjectToMouse(shared_ptr<GameObject>, int screenSize[2], int FOV[2], sf::Vector2i mousePos);
 bool isInside(float x, float y, sf::FloatRect& bounds);
+void initializeObject(shared_ptr<GameObject> obj, int screenSize[2], float cameraPos[2], int FOV[2], int mouseX, int mouseY);
+float screenToGameX(shared_ptr<GameObject> obj, int screenWidth, float cameraX, int FOVWidth, int mouseX);
+float screenToGameY(shared_ptr<GameObject> obj, int screenHeight, float cameraY, int FOVHeight, int mouseY);
+void drawButton(sf::RenderWindow& buildWindow, Button& button, sf::Font& font);
 
 //load textures
 shared_ptr<sf::Texture> rockTexture(new sf::Texture());
@@ -174,12 +180,17 @@ int main() {
 
 		sf::FloatRect menuRect(screenSize[0] * 3 / 4, 0, screenSize[0] / 4, screenSize[1]);
 		sf::FloatRect itemBackRect(menuRect.left + 30, menuRect.top + 400, menuRect.width - (menuRect.left + 30 - menuRect.left) * 2, menuRect.height / 2);
+		
+		shared_ptr<sf::FloatRect> exportButtonRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 30, menuRect.top + menuRect.height - 100, 120, 50));
+		Button exportButton(exportButtonRect, "Export");
+		
 		list<shared_ptr<TextBox>> textBoxes;
 		shared_ptr<TextBox> activeBox;
 		
 		shared_ptr<MenuObject> selectedObjectStruct;
 		shared_ptr<GameObject> selectedObject;
 		int selectedLocation = -1;
+		vector<array<int, 2>> grid;
 
 		shared_ptr<Lamp> lamp = make_shared<Lamp>(Lamp());
 		shared_ptr<Wall> wall = make_shared<Wall>(Wall());
@@ -197,7 +208,7 @@ int main() {
 			sf::Event event;
 			while (buildWindow.pollEvent(event)) {
 
-				if (activeBox != nullptr) {
+				if (activeBox != nullptr) {//textbox events
 					
 					switch(event.type) {
 					case (sf::Event::TextEntered): {
@@ -241,6 +252,9 @@ int main() {
 							}
 							break;
 
+						case (sf::Keyboard::LShift):
+							grid.clear();
+							break;
 						}
 						break;
 
@@ -307,8 +321,7 @@ int main() {
 						}
 
 						if (!isInside(event.mouseButton.x, event.mouseButton.y, menuRect) and selectedObjectStruct != nullptr) { //not clicking in menu
-							selectedObject->setPosition(cameraPos[0] + (-(float)screenSize[0]/2 + event.mouseButton.x) / (float)screenSize[0] * (float)FOV[0] - selectedObject->getBoundBoxOffsetX(),
-														cameraPos[1] + (-(float)screenSize[1]/2 + event.mouseButton.y) / (float)screenSize[1] * (float)FOV[1] - selectedObject->getBoundBoxOffsetY());
+							initializeObject(selectedObject, screenSize, cameraPos, FOV, event.mouseButton.x, event.mouseButton.y);
 							selectedObject->getSprite()->setColor(sf::Color(255, 255, 255, 255));
 							area.addObject(selectedObject);
 							if (selectedObjectStruct->type.compare("Lamp") == 0) {
@@ -325,15 +338,49 @@ int main() {
 							}
 						}
 
+						//set all buttons to unpressed
+						exportButton.setPressed(false);
+						
+
 						break;
 					}
 					break;
 
+				case(sf::Event::MouseButtonPressed):
+					if (isInside(event.mouseButton.x, event.mouseButton.y, *exportButton.getRect())) {
+						exportButton.setPressed(true);
+					}
+					break;
 				case (sf::Event::Closed):
 					buildWindow.close();
 					break;
 				}
 				
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) and
+				(sf::Mouse::isButtonPressed(sf::Mouse::Left))) {
+				array<int, 2> mapCoords = {floor(screenToGameX(selectedObject, screenSize[0], cameraPos[0], FOV[0], sf::Mouse::getPosition().x) / selectedObject->getBoundBoxWidth()),
+									floor(screenToGameY(selectedObject, screenSize[1], cameraPos[1], FOV[1], sf::Mouse::getPosition().y) / selectedObject->getBoundBoxHeight())};
+				if (find(grid.begin(), grid.end(), mapCoords) == grid.end()) { //not already in current coordinate square
+					//initializeObject(selectedObject, screenSize, cameraPos, FOV, sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+					selectedObject->setPosition(mapCoords[0] * selectedObject->getBoundBoxWidth(), mapCoords[1] * selectedObject->getBoundBoxHeight());
+					selectedObject->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+					area.addObject(selectedObject);
+					if (selectedObjectStruct->type.compare("Lamp") == 0) {
+						shared_ptr<Lamp> obj = static_pointer_cast<Lamp>(selectedObjectStruct);
+						selectedObject = obj->createObject();
+					}
+					else if (selectedObjectStruct->type.compare("Wall") == 0) {
+						shared_ptr<Wall> obj = static_pointer_cast<Wall>(selectedObjectStruct);
+						selectedObject = obj->createObject();
+					}
+					else if (selectedObjectStruct->type.compare("Rock") == 0) {
+						shared_ptr<Rock> obj = static_pointer_cast<Rock>(selectedObjectStruct);
+						selectedObject = obj->createObject();
+					}
+					grid.push_back(mapCoords);
+				}
 			}
 
 			shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
@@ -515,6 +562,7 @@ int main() {
 					buildWindow.draw(selectedShape);
 				}
 
+				//draw menu objects in selected box
 				for (vector<shared_ptr<MenuObject>>::iterator it = menuObjects.begin(); it != menuObjects.end(); it++) {
 					float size[2];
 
@@ -551,7 +599,10 @@ int main() {
 						positionIterator[1] += itemBackRect.height * 12 / 50;
 					}
 				}
+				
+				drawButton(buildWindow, exportButton, courier);
 
+				//draw all textboxes
 				for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
 					shared_ptr<TextBox> current = *it;
 
@@ -573,7 +624,7 @@ int main() {
 					buildWindow.draw(boxText);
 				}
 
-				
+				//draw active textbox
 				if (activeBox != nullptr) {
 					shared_ptr<sf::FloatRect> activeRect = activeBox->getBox();
 					sf::RectangleShape textBox(sf::Vector2f(activeRect->width, activeRect->height));
@@ -1249,4 +1300,41 @@ bool isInside(float x, float y, sf::FloatRect &bounds) {
 		return true;
 	}
 	return false;
+}
+
+void initializeObject(shared_ptr<GameObject> obj, int screenSize[2], float cameraPos[2], int FOV[2], int mouseX, int mouseY)
+{
+	obj->setPosition(screenToGameX(obj, screenSize[0], cameraPos[0], FOV[0], mouseX),
+					screenToGameY(obj, screenSize[1], cameraPos[1], FOV[1], mouseY));
+}
+
+float screenToGameX(shared_ptr<GameObject> obj, int screenWidth, float cameraX, int FOVWidth, int mouseX)
+{
+	return cameraX + (-(float)screenWidth / 2 + mouseX) / (float)screenWidth * (float)FOVWidth - obj->getBoundBoxOffsetX();
+}
+
+float screenToGameY(shared_ptr<GameObject> obj, int screenHeight, float cameraY, int FOVHeight, int mouseY)
+{
+	return cameraY + (-(float)screenHeight / 2 + mouseY) / (float)screenHeight * (float)FOVHeight - obj->getBoundBoxOffsetY();
+}
+
+void drawButton(sf::RenderWindow& buildWindow, Button& button, sf::Font& font)
+{
+	sf::FloatRect exportButtonRect = *button.getRect();
+	sf::RectangleShape exportButton(sf::Vector2f(exportButtonRect.width, exportButtonRect.height));
+	exportButton.setPosition(exportButtonRect.left, exportButtonRect.top);
+	if (button.isPressed()) {
+		exportButton.setFillColor(sf::Color(100, 100, 100));
+	}
+	else {
+		exportButton.setFillColor(sf::Color(200, 200, 200));
+	}
+	buildWindow.draw(exportButton);
+
+	sf::Text exportText;
+	exportText.setFont(font);
+	exportText.setString("Export");
+	exportText.setFillColor(sf::Color(0, 0, 0));
+	exportText.setPosition(exportButtonRect.left + 5, exportButtonRect.top);
+	buildWindow.draw(exportText);
 }

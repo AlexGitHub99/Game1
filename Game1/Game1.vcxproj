@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Area.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionChecker.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Area.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionChecker.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Entity.h" />

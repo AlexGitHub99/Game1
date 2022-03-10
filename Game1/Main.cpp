@@ -13,6 +13,7 @@
 #include <time.h>
 #include <algorithm>
 #include <array>
+#include <json/writer.h>
 #include "wtypes.h"
 #include "GameObject.h"
 #include "Area.h"
@@ -46,6 +47,7 @@ void initializeObject(shared_ptr<GameObject> obj, int screenSize[2], float camer
 float screenToGameX(shared_ptr<GameObject> obj, int screenWidth, float cameraX, int FOVWidth, int mouseX);
 float screenToGameY(shared_ptr<GameObject> obj, int screenHeight, float cameraY, int FOVHeight, int mouseY);
 void drawButton(sf::RenderWindow& buildWindow, Button& button, sf::Font& font);
+void exportArea(Area& area);
 
 //load textures
 shared_ptr<sf::Texture> rockTexture(new sf::Texture());
@@ -338,9 +340,14 @@ int main() {
 							}
 						}
 
+						if (isInside(event.mouseButton.x, event.mouseButton.y, *exportButton.getRect())) {
+							exportArea(area);
+						}
+
 						//set all buttons to unpressed
 						exportButton.setPressed(false);
 						
+
 
 						break;
 					}
@@ -1337,4 +1344,23 @@ void drawButton(sf::RenderWindow& buildWindow, Button& button, sf::Font& font)
 	exportText.setFillColor(sf::Color(0, 0, 0));
 	exportText.setPosition(exportButtonRect.left + 5, exportButtonRect.top);
 	buildWindow.draw(exportText);
+}
+
+void exportArea(Area& area)
+{
+	//test
+	Json::Value event;
+	Json::Value vec(Json::arrayValue);
+	vec.append(Json::Value(1));
+	vec.append(Json::Value(2));
+	vec.append(Json::Value(3));
+
+	event["competitors"]["home"]["name"] = "Liverpool";
+	event["competitors"]["away"]["code"] = 89223;
+	event["competitors"]["away"]["name"] = "Aston Villa";
+	event["competitors"]["away"]["code"] = vec;
+
+	std::cout << event << std::endl;
+
+
 }

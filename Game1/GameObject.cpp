@@ -1,17 +1,18 @@
 #include "GameObject.h"
 
-GameObject::GameObject(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight) {
+GameObject::GameObject(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath) {
 	id = rand();
 	sprite = std::shared_ptr<sf::Sprite>(new sf::Sprite(*texture));
-	textureWidth = newTextureWidth;
-	textureHeight = newTextureWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
-	boundBoxWidth = newBoundBoxWidth;
-	boundBoxHeight = newBoundBoxHeight;
+	textureSize[0] = newTextureWidth;
+	textureSize[1] = newTextureWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+	boundBox[0] = newBoundBoxWidth;
+	boundBox[1] = newBoundBoxHeight;
 	position[0] = 0;
 	position[1] = 0;
-	boundBoxOffsetX = 0;
-	boundBoxOffsetY = 0;
+	boundBoxOffset[0] = 0;
+	boundBoxOffset[1] = 0;
 	type = "object";
+	texturePath = newTexturePath;
 }
 
 int GameObject::getId()
@@ -28,37 +29,37 @@ void GameObject::setPosition(float x, float y)
 
 void GameObject::setBoundBox(float newWidth, float newHeight)
 {
-	boundBoxWidth = newWidth;
-	boundBoxHeight = newHeight;
+	boundBox[0] = newWidth;
+	boundBox[1] = newHeight;
 }
 
 void GameObject::setBoundBox(float newWidth)
 {
-	boundBoxWidth = newWidth;
-	boundBoxHeight = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+	boundBox[0] = newWidth;
+	boundBox[1] = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 }
 
 void GameObject::setBoundBoxOffset(float x, float y)
 {
-	boundBoxOffsetX = x;
-	boundBoxOffsetY = y;
+	boundBoxOffset[0] = x;
+	boundBoxOffset[1] = y;
 }
 
 void GameObject::setBoundBoxOffsetToBottom()
 {
-	boundBoxOffsetY = textureHeight / 2 - boundBoxHeight / 2;
+	boundBoxOffset[1] = textureSize[1] / 2 - boundBox[1] / 2;
 }
 
 void GameObject::setTextureSize(float newWidth, float newHeight)
 {
-	textureWidth = newWidth;
-	textureHeight = newHeight;
+	textureSize[0] = newWidth;
+	textureSize[1] = newHeight;
 }
 
 void GameObject::setTextureSize(float newWidth)
 {
-	textureWidth = newWidth;
-	textureHeight = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
+	textureSize[0] = newWidth;
+	textureSize[1] = newWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 }
 
 std::shared_ptr<sf::Sprite> GameObject::getSprite()
@@ -72,12 +73,12 @@ float* GameObject::getPosition() {
 
 float GameObject::getTextureHeight()
 {
-	return textureHeight;
+	return textureSize[1];
 }
 
 float GameObject::getTextureWidth()
 {
-	return textureWidth;
+	return textureSize[0];
 }
 
 float GameObject::getRenderWidth()
@@ -92,22 +93,22 @@ float GameObject::getRenderHeight()
 
 float GameObject::getBoundBoxWidth()
 {
-	return boundBoxWidth;
+	return boundBox[0];
 }
 
 float GameObject::getBoundBoxHeight()
 {
-	return boundBoxHeight;
+	return boundBox[1];
 }
 
 float GameObject::getBoundBoxOffsetX()
 {
-	return boundBoxOffsetX;
+	return boundBoxOffset[0];
 }
 
 float GameObject::getBoundBoxOffsetY()
 {
-	return boundBoxOffsetY;
+	return boundBoxOffset[1];
 }
 
 float GameObject::getX()
@@ -123,6 +124,11 @@ float GameObject::getY()
 std::string GameObject::getType()
 {
 	return type;
+}
+
+std::string GameObject::getTexturePath()
+{
+	return texturePath;
 }
 
 

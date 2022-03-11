@@ -1,5 +1,14 @@
 #include "Area.h"
 
+ Area::Area(std::shared_ptr<sf::Texture> newBackground, float newWidth, float newHeight, std::string newTexturePath) {
+	background = std::shared_ptr<sf::Sprite>(new sf::Sprite(*newBackground));
+	width = newWidth;
+	height = newHeight;
+	objects = std::shared_ptr<std::list<std::shared_ptr<GameObject>>>(new std::list<std::shared_ptr<GameObject>>);
+	entities = std::shared_ptr<std::vector<std::shared_ptr<Entity>>>(new std::vector<std::shared_ptr<Entity>>);
+	texturePath = newTexturePath;
+}
+
 void Area::setSize(float newWidth, float newHeight)
 {
 	width = newWidth;
@@ -59,4 +68,9 @@ float Area::getWidth()
 float Area::getHeight()
 {
 	return width;
+}
+
+std::string Area::getTexturePath()
+{
+	return texturePath;
 }

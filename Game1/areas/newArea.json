@@ -1,0 +1,4834 @@
+{
+	"background" : "resources/area_1.png",
+	"entities" : [],
+	"height" : 4000.0,
+	"objects" : 
+	[
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 41,
+			"position" : 
+			[
+				1549.786865234375,
+				1279.6929931640625
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 18467,
+			"position" : 
+			[
+				2089.193115234375,
+				1311.7242431640625
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 9040,
+			"position" : 
+			[
+				2700.0,
+				1400.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 8942,
+			"position" : 
+			[
+				2600.0,
+				1400.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 19264,
+			"position" : 
+			[
+				2500.0,
+				1400.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 22648,
+			"position" : 
+			[
+				2400.0,
+				1400.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 6334,
+			"position" : 
+			[
+				2243.7568359375,
+				1549.9476318359375
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 31322,
+			"position" : 
+			[
+				1600.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 30333,
+			"position" : 
+			[
+				1700.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 17673,
+			"position" : 
+			[
+				1800.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 4664,
+			"position" : 
+			[
+				1900.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 15141,
+			"position" : 
+			[
+				2000.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 7711,
+			"position" : 
+			[
+				2100.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 28253,
+			"position" : 
+			[
+				2200.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 30106,
+			"position" : 
+			[
+				2800.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 27446,
+			"position" : 
+			[
+				2400.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 23805,
+			"position" : 
+			[
+				2300.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 13977,
+			"position" : 
+			[
+				900.0,
+				1500.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 2306,
+			"position" : 
+			[
+				914.143310546875,
+				1584.757080078125
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 6868,
+			"position" : 
+			[
+				2300.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 20037,
+			"position" : 
+			[
+				2000.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 12859,
+			"position" : 
+			[
+				1900.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 8723,
+			"position" : 
+			[
+				2200.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 288,
+			"position" : 
+			[
+				2800.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 16118,
+			"position" : 
+			[
+				2100.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 4639,
+			"position" : 
+			[
+				1200.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 29658,
+			"position" : 
+			[
+				1100.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 22704,
+			"position" : 
+			[
+				1000.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 9930,
+			"position" : 
+			[
+				900.0,
+				1600.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 25547,
+			"position" : 
+			[
+				2300.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 27644,
+			"position" : 
+			[
+				2200.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 32662,
+			"position" : 
+			[
+				2100.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 32757,
+			"position" : 
+			[
+				2000.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 9741,
+			"position" : 
+			[
+				2400.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 27529,
+			"position" : 
+			[
+				2500.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 3035,
+			"position" : 
+			[
+				2600.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 22190,
+			"position" : 
+			[
+				2700.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 1842,
+			"position" : 
+			[
+				2800.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 32439,
+			"position" : 
+			[
+				1500.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 24626,
+			"position" : 
+			[
+				1600.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 11323,
+			"position" : 
+			[
+				1700.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 5537,
+			"position" : 
+			[
+				1800.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 21538,
+			"position" : 
+			[
+				1900.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 4833,
+			"position" : 
+			[
+				1400.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 31115,
+			"position" : 
+			[
+				1300.0,
+				1700.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 22386,
+			"position" : 
+			[
+				750.0,
+				1800.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 19072,
+			"position" : 
+			[
+				1350.0,
+				1800.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 6270,
+			"position" : 
+			[
+				1500.0,
+				1800.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 5829,
+			"position" : 
+			[
+				1650.0,
+				1800.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 26777,
+			"position" : 
+			[
+				1800.0,
+				1800.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 15573,
+			"position" : 
+			[
+				1950.0,
+				1800.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 5097,
+			"position" : 
+			[
+				2100.0,
+				1800.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 26500,
+			"position" : 
+			[
+				1969.072265625,
+				1847.1781005859375
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 778,
+			"position" : 
+			[
+				2500.0,
+				1800.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 12316,
+			"position" : 
+			[
+				2600.0,
+				1800.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 15890,
+			"position" : 
+			[
+				2000.0,
+				1800.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 26308,
+			"position" : 
+			[
+				1600.0,
+				1800.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 16944,
+			"position" : 
+			[
+				1500.0,
+				1800.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 2082,
+			"position" : 
+			[
+				1900.0,
+				1800.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 22929,
+			"position" : 
+			[
+				1800.0,
+				1800.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 16541,
+			"position" : 
+			[
+				1700.0,
+				1800.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 5021,
+			"position" : 
+			[
+				900.0,
+				1900.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 28745,
+			"position" : 
+			[
+				1050.0,
+				1900.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 26924,
+			"position" : 
+			[
+				1200.0,
+				1900.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 16512,
+			"position" : 
+			[
+				2100.0,
+				1900.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 23986,
+			"position" : 
+			[
+				1950.0,
+				1900.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 6729,
+			"position" : 
+			[
+				2000.0,
+				1900.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 24370,
+			"position" : 
+			[
+				2100.0,
+				1900.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 15350,
+			"position" : 
+			[
+				2200.0,
+				1900.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 7376,
+			"position" : 
+			[
+				1700.0,
+				1900.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 13931,
+			"position" : 
+			[
+				1600.0,
+				1900.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 13290,
+			"position" : 
+			[
+				1950.0,
+				2000.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 9161,
+			"position" : 
+			[
+				1800.0,
+				2000.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 11478,
+			"position" : 
+			[
+				2841.8779296875,
+				2030.775634765625
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 26962,
+			"position" : 
+			[
+				3138.548583984375,
+				2051.68408203125
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 29358,
+			"position" : 
+			[
+				2809.052978515625,
+				2096.9921875
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 16827,
+			"position" : 
+			[
+				1350.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 9961,
+			"position" : 
+			[
+				1500.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 491,
+			"position" : 
+			[
+				1650.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 2995,
+			"position" : 
+			[
+				1800.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 11942,
+			"position" : 
+			[
+				1950.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 4827,
+			"position" : 
+			[
+				2100.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 5436,
+			"position" : 
+			[
+				2250.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 15006,
+			"position" : 
+			[
+				2200.0,
+				2000.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 31101,
+			"position" : 
+			[
+				2300.0,
+				2000.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 24393,
+			"position" : 
+			[
+				2400.0,
+				2000.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 18756,
+			"position" : 
+			[
+				1900.0,
+				2000.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 11840,
+			"position" : 
+			[
+				1800.0,
+				2000.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 4966,
+			"position" : 
+			[
+				1700.0,
+				2000.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 18636,
+			"position" : 
+			[
+				1800.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 22355,
+			"position" : 
+			[
+				1650.0,
+				2100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 19169,
+			"position" : 
+			[
+				2103.49853515625,
+				2160.412353515625
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 24464,
+			"position" : 
+			[
+				2576.048583984375,
+				2143.96533203125
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 32391,
+			"position" : 
+			[
+				2250.0,
+				2200.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 14604,
+			"position" : 
+			[
+				2400.0,
+				2200.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 3902,
+			"position" : 
+			[
+				2550.0,
+				2200.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 3548,
+			"position" : 
+			[
+				2400.0,
+				2100.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 19629,
+			"position" : 
+			[
+				2300.0,
+				2100.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 12623,
+			"position" : 
+			[
+				2200.0,
+				2100.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 24084,
+			"position" : 
+			[
+				2100.0,
+				2100.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				100.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				100.0
+			],
+			"id" : 19954,
+			"position" : 
+			[
+				2000.0,
+				2100.0
+			],
+			"sprite" : "resources/wall.png",
+			"textureSize" : 
+			[
+				300.0,
+				100.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 24767,
+			"position" : 
+			[
+				1650.0,
+				2200.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 23655,
+			"position" : 
+			[
+				1500.0,
+				2200.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 15574,
+			"position" : 
+			[
+				1350.0,
+				2200.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 153,
+			"position" : 
+			[
+				2550.0,
+				2300.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 292,
+			"position" : 
+			[
+				2400.0,
+				2300.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 19895,
+			"position" : 
+			[
+				1950.0,
+				2300.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 5447,
+			"position" : 
+			[
+				2100.0,
+				2300.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 21726,
+			"position" : 
+			[
+				2250.0,
+				2300.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 9894,
+			"position" : 
+			[
+				1800.0,
+				2300.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 4031,
+			"position" : 
+			[
+				1350.0,
+				2300.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 23281,
+			"position" : 
+			[
+				1418.52978515625,
+				2302.527587890625
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 12382,
+			"position" : 
+			[
+				2400.0,
+				2400.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 17421,
+			"position" : 
+			[
+				2250.0,
+				2400.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 18716,
+			"position" : 
+			[
+				2100.0,
+				2400.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 19718,
+			"position" : 
+			[
+				1950.0,
+				2400.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 26299,
+			"position" : 
+			[
+				1800.0,
+				2400.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 17035,
+			"position" : 
+			[
+				1650.0,
+				2400.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 12052,
+			"position" : 
+			[
+				1350.0,
+				2400.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 11337,
+			"position" : 
+			[
+				2400.0,
+				2400.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 28703,
+			"position" : 
+			[
+				2161.570556640625,
+				2475.63134765625
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 14771,
+			"position" : 
+			[
+				2400.0,
+				2500.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 11538,
+			"position" : 
+			[
+				2250.0,
+				2500.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 1869,
+			"position" : 
+			[
+				2100.0,
+				2500.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 19912,
+			"position" : 
+			[
+				1950.0,
+				2500.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 25667,
+			"position" : 
+			[
+				1800.0,
+				2500.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 27350,
+			"position" : 
+			[
+				1350.0,
+				2500.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 18007,
+			"position" : 
+			[
+				2400.0,
+				2500.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 6422,
+			"position" : 
+			[
+				2950.0,
+				2550.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 24946,
+			"position" : 
+			[
+				3000.0,
+				2550.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 27506,
+			"position" : 
+			[
+				3050.0,
+				2600.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 13030,
+			"position" : 
+			[
+				3100.0,
+				2600.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 16413,
+			"position" : 
+			[
+				3150.0,
+				2600.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 1150,
+			"position" : 
+			[
+				1500.0,
+				2600.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 16941,
+			"position" : 
+			[
+				1650.0,
+				2600.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 21724,
+			"position" : 
+			[
+				1800.0,
+				2600.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 13966,
+			"position" : 
+			[
+				1950.0,
+				2600.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 3430,
+			"position" : 
+			[
+				2100.0,
+				2600.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 31107,
+			"position" : 
+			[
+				2250.0,
+				2600.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 30191,
+			"position" : 
+			[
+				2400.0,
+				2600.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 9758,
+			"position" : 
+			[
+				3900.0,
+				2600.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 18588,
+			"position" : 
+			[
+				3384.94677734375,
+				2648.253662109375
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 29168,
+			"position" : 
+			[
+				3150.0,
+				2650.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 900,
+			"position" : 
+			[
+				3200.0,
+				2650.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 32591,
+			"position" : 
+			[
+				3250.0,
+				2650.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 18762,
+			"position" : 
+			[
+				3300.0,
+				2650.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 1655,
+			"position" : 
+			[
+				3300.0,
+				2700.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 17410,
+			"position" : 
+			[
+				3350.0,
+				2700.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 6359,
+			"position" : 
+			[
+				3400.0,
+				2700.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 15457,
+			"position" : 
+			[
+				2400.0,
+				2700.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 27624,
+			"position" : 
+			[
+				3450.0,
+				2750.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 5705,
+			"position" : 
+			[
+				2428.50048828125,
+				2762.950927734375
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 28145,
+			"position" : 
+			[
+				1706.010498046875,
+				2769.22216796875
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 20537,
+			"position" : 
+			[
+				3450.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 21548,
+			"position" : 
+			[
+				3400.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 4596,
+			"position" : 
+			[
+				2950.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 24021,
+			"position" : 
+			[
+				3000.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 27348,
+			"position" : 
+			[
+				3050.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 23199,
+			"position" : 
+			[
+				3100.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 19668,
+			"position" : 
+			[
+				3150.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 24484,
+			"position" : 
+			[
+				3200.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 8281,
+			"position" : 
+			[
+				3250.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 4734,
+			"position" : 
+			[
+				3300.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 53,
+			"position" : 
+			[
+				3350.0,
+				2800.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 12287,
+			"position" : 
+			[
+				2550.0,
+				2800.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 6483,
+			"position" : 
+			[
+				3350.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 27595,
+			"position" : 
+			[
+				3300.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 4041,
+			"position" : 
+			[
+				3250.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 3602,
+			"position" : 
+			[
+				3200.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 24350,
+			"position" : 
+			[
+				3150.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 10291,
+			"position" : 
+			[
+				3100.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 30836,
+			"position" : 
+			[
+				3050.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 9374,
+			"position" : 
+			[
+				3000.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 11020,
+			"position" : 
+			[
+				2950.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 1999,
+			"position" : 
+			[
+				3450.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 26418,
+			"position" : 
+			[
+				3500.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 27938,
+			"position" : 
+			[
+				3550.0,
+				2850.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 6900,
+			"position" : 
+			[
+				3550.0,
+				2900.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 3788,
+			"position" : 
+			[
+				3600.0,
+				2900.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 27753,
+			"position" : 
+			[
+				2700.0,
+				2900.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 18127,
+			"position" : 
+			[
+				3600.0,
+				2950.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 467,
+			"position" : 
+			[
+				3600.0,
+				3000.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 10383,
+			"position" : 
+			[
+				2700.0,
+				3000.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 3728,
+			"position" : 
+			[
+				3600.0,
+				3050.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 14893,
+			"position" : 
+			[
+				3600.0,
+				3100.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 24648,
+			"position" : 
+			[
+				3550.0,
+				3100.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 14945,
+			"position" : 
+			[
+				2700.0,
+				3100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 8909,
+			"position" : 
+			[
+				2850.0,
+				3100.0
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 22483,
+			"position" : 
+			[
+				3550.0,
+				3150.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 17807,
+			"position" : 
+			[
+				3500.0,
+				3150.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 32209,
+			"position" : 
+			[
+				2923.861572265625,
+				3139.1826171875
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 2421,
+			"position" : 
+			[
+				3500.0,
+				3200.0
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		},
+		{
+			"boundBox" : 
+			[
+				50.0,
+				50.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				6.25
+			],
+			"id" : 14310,
+			"position" : 
+			[
+				3550.16552734375,
+				3220.909912109375
+			],
+			"sprite" : "resources/lamp.png",
+			"textureSize" : 
+			[
+				62.5,
+				50.0
+			],
+			"type" : "lightSource"
+		}
+	],
+	"width" : 4000.0
+}

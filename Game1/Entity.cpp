@@ -1,8 +1,9 @@
 #include "Entity.h"
 
-Entity::Entity(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight) : GameObject(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight) {
+Entity::Entity(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath) : GameObject(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight, newTexturePath) {
 	speed = 100;
 	pushPlayer = false;
+	type = "entity";
 }
 
 void Entity::setSpeed(float newSpeed)

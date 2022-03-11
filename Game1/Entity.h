@@ -7,7 +7,7 @@ class Entity :
     public GameObject
 {
 public:
-    Entity(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight);
+    Entity(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath);
 
     void setSpeed(float newSpeed);
     void setPushPlayer(bool value);

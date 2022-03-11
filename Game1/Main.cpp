@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <array>
 #include <json/writer.h>
+#include <fstream>
+
 #include "wtypes.h"
 #include "GameObject.h"
 #include "Area.h"
@@ -56,6 +58,7 @@ shared_ptr<sf::Texture> playerTexture(new sf::Texture());
 shared_ptr<sf::Texture> backgroundTexture(new sf::Texture());
 shared_ptr<sf::Texture> lampTexture(new sf::Texture());
 shared_ptr<sf::Texture> orbTexture(new sf::Texture());
+map<string, string> texturePaths;
 
 int main() {
 	int screenSize[2];
@@ -75,22 +78,29 @@ int main() {
 	}
 
 	//load textures
-	if (!rockTexture->loadFromFile("resources/rock_1.png")) {
+	texturePaths.insert(pair<string, string>("rock", "resources/rock_1.png"));
+	texturePaths.insert(pair<string, string>("wall", "resources/wall.png"));
+	texturePaths.insert(pair<string, string>("player", "resources/player.png"));
+	texturePaths.insert(pair<string, string>("area1", "resources/area_1.png"));
+	texturePaths.insert(pair<string, string>("lamp", "resources/lamp.png"));
+	texturePaths.insert(pair<string, string>("orb", "resources/orb.png"));
+
+	if (!rockTexture->loadFromFile(texturePaths.at("rock"))) {
 		return -1;
 	}
-	if (!wallTexture->loadFromFile("resources/wall.png")) {
+	if (!wallTexture->loadFromFile(texturePaths.at("wall"))) {
 		return -1;
 	}
-	if (!playerTexture->loadFromFile("resources/player.png")) {
+	if (!playerTexture->loadFromFile(texturePaths.at("player"))) {
 		return -1;
 	}
-	if (!backgroundTexture->loadFromFile("resources/area_1.png")) {
+	if (!backgroundTexture->loadFromFile(texturePaths.at("area1"))) {
 		return -1;
 	}
-	if (!lampTexture->loadFromFile("resources/lamp.png")) {
+	if (!lampTexture->loadFromFile(texturePaths.at("lamp"))) {
 		return -1;
 	}
-	if (!orbTexture->loadFromFile("resources/orb.png")) {
+	if (!orbTexture->loadFromFile(texturePaths.at("orb"))) {
 		return -1;
 	}
 
@@ -105,6 +115,7 @@ int main() {
 	struct Lamp : public MenuObject {
 		Lamp() {
 			texture = lampTexture;
+			texturePath = texturePaths.at("lamp");
 			width = 50;
 			lightLevel = 100;
 			box[0] = 50;
@@ -114,12 +125,13 @@ int main() {
 		};
 
 		shared_ptr<GameObject> createObject() override {
-			shared_ptr<LightSource> obj = make_shared<LightSource>(LightSource(texture, width, box[0], box[1], lightLevel));
+			shared_ptr<LightSource> obj = make_shared<LightSource>(LightSource(texture, width, box[0], box[1], lightLevel, texturePath));
 			obj->setBoundBoxOffsetToBottom();
 			return obj;
 		}
 
 		shared_ptr<sf::Texture> texture;
+		string texturePath;
 		float width;
 		float lightLevel;
 		float box[2];
@@ -128,6 +140,7 @@ int main() {
 	struct Wall : public MenuObject {
 		Wall() {
 			texture = wallTexture;
+			texturePath = texturePaths.at("wall");
 			width = 100;
 			box[0] = 100;
 			box[1] = 100;
@@ -136,12 +149,13 @@ int main() {
 		};
 
 		shared_ptr<GameObject> createObject() override {
-			shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1]));
+			shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], texturePath));
 			obj->setBoundBoxOffsetToBottom();
 			return obj;
 		}
 
 		shared_ptr<sf::Texture> texture;
+		string texturePath;
 		float width;
 		float box[2];
 	};
@@ -149,6 +163,7 @@ int main() {
 	struct Rock : public MenuObject {
 		Rock() {
 			texture = rockTexture;
+			texturePath = texturePaths.at("rock");
 			width = 150;
 			box[0] = 150;
 			box[1] = 100;
@@ -157,12 +172,13 @@ int main() {
 		};
 
 		shared_ptr<GameObject> createObject() override {
-			shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1]));
+			shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], texturePath));
 			obj->setBoundBoxOffsetToBottom();
 			return obj;
 		}
 
 		shared_ptr<sf::Texture> texture;
+		string texturePath;
 		float width;
 		float box[2];
 	};
@@ -170,7 +186,7 @@ int main() {
 	if (true) {
 		float BUILD_CAM_SPEED = 1500;
 		sf::RenderWindow buildWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Builder", sf::Style::Fullscreen);
-		Area area(backgroundTexture, 4000, 4000);
+		Area area(backgroundTexture, 4000, 4000, texturePaths["area1"]);
 		float cameraPos[2] = { 0, 0 };
 
 		bool menuOpen = false;
@@ -753,23 +769,23 @@ int main() {
 	
 
 	//temporary stuff-----------------------------------------------------------
-	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 100, 100));
+	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 100, 100, texturePaths.at("orb")));
 	orb->setPosition(0, 0);
 
-	shared_ptr<GameObject> rock1 = make_shared<GameObject> (GameObject(rockTexture, 100, 100, 60));
+	shared_ptr<GameObject> rock1 = make_shared<GameObject> (GameObject(rockTexture, 100, 100, 60, texturePaths.at("rock")));
 	rock1->setPosition(250, 250);
 
-	shared_ptr<GameObject> rock2 = make_shared<GameObject> (GameObject(rockTexture, 300, 300, 200));
+	shared_ptr<GameObject> rock2 = make_shared<GameObject> (GameObject(rockTexture, 300, 300, 200, texturePaths.at("rock")));
 	rock2->setPosition(1000, 400);
 
-	shared_ptr<GameObject> myWall = make_shared<GameObject> (GameObject(wallTexture, 100, 100, 100));
+	shared_ptr<GameObject> myWall = make_shared<GameObject> (GameObject(wallTexture, 100, 100, 100, texturePaths.at("wall")));
 	myWall->setPosition(700, 900);
 	myWall->setBoundBoxOffsetToBottom();
 
-	shared_ptr<LightSource> myLamp = make_shared<LightSource> (LightSource(lampTexture, 50, 50, 30, 500));
+	shared_ptr<LightSource> myLamp = make_shared<LightSource> (LightSource(lampTexture, 50, 50, 30, 500, texturePaths.at("lamp")));
 	myLamp->setPosition(900, 800);
 
-	Area area(backgroundTexture, 4000, 4000);
+	Area area(backgroundTexture, 4000, 4000, texturePaths["area1"]);
 	area.addObject(rock1);
 	area.addObject(rock2);
 	area.addObject(myLamp);
@@ -1346,21 +1362,62 @@ void drawButton(sf::RenderWindow& buildWindow, Button& button, sf::Font& font)
 	buildWindow.draw(exportText);
 }
 
-void exportArea(Area& area)
+void exportArea(Area& area) //export area as JSON formatted file
 {
-	//test
-	Json::Value event;
-	Json::Value vec(Json::arrayValue);
-	vec.append(Json::Value(1));
-	vec.append(Json::Value(2));
-	vec.append(Json::Value(3));
+	//JSON structuring
+	Json::Value areaData;
+	Json::Value objectsData(Json::arrayValue);
+	Json::Value entitiesData(Json::arrayValue);
 
-	event["competitors"]["home"]["name"] = "Liverpool";
-	event["competitors"]["away"]["code"] = 89223;
-	event["competitors"]["away"]["name"] = "Aston Villa";
-	event["competitors"]["away"]["code"] = vec;
+	shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
+	shared_ptr<vector<shared_ptr<Entity>>> entities = area.getEntities();
 
-	std::cout << event << std::endl;
+	//add objects to JSON array
+	for (list<shared_ptr<GameObject>>::iterator it = objects->begin(); it != objects->end(); it++) {
+		shared_ptr<GameObject> currentObj = *it;
+		Json::Value currentObjData;
 
+		currentObjData["id"] = currentObj->getId();
+		currentObjData["boundBox"] = Json::arrayValue;
+		currentObjData["boundBox"].append(currentObj->getBoundBoxWidth());
+		currentObjData["boundBox"].append(currentObj->getBoundBoxHeight());
+		currentObjData["boundBoxOffset"] = Json::arrayValue;
+		currentObjData["boundBoxOffset"].append(currentObj->getBoundBoxOffsetX());
+		currentObjData["boundBoxOffset"].append(currentObj->getBoundBoxOffsetY());
+		currentObjData["textureSize"] = Json::arrayValue;
+		currentObjData["textureSize"].append(currentObj->getTextureHeight());
+		currentObjData["textureSize"].append(currentObj->getTextureWidth());
+		currentObjData["position"] = Json::arrayValue;
+		currentObjData["position"].append(currentObj->getX());
+		currentObjData["position"].append(currentObj->getY());
+		currentObjData["type"] = currentObj->getType();
+		currentObjData["sprite"] = currentObj->getTexturePath();
+
+		objectsData.append(currentObjData);
+		
+	}
+
+	//add entities to JSON array ommiting data members that are already included in objects except for type and id
+	for (vector<shared_ptr<Entity>>::iterator it = entities->begin(); it != entities->end(); it++) {
+		shared_ptr<Entity> currentEnt = *it;
+		Json::Value currentEntData;
+
+		currentEntData["id"] = currentEnt->getId();
+		currentEntData["type"] = currentEnt->getType();
+		currentEntData["speed"] = currentEnt->getSpeed();
+		currentEntData["pushPlayer"] = currentEnt->doesPushPlayer();
+
+		entitiesData.append(currentEntData);
+	}
+
+	areaData["width"] = area.getWidth();
+	areaData["height"] = area.getHeight();
+	areaData["background"] = area.getTexturePath();
+	areaData["objects"] = objectsData;
+	areaData["entities"] = entitiesData;
+
+	//save JSON object to file
+	ofstream outFile("areas/newArea.json");
+	outFile << areaData << endl;
 
 }

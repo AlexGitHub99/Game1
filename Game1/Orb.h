@@ -7,11 +7,7 @@ class Orb :
     public Creature
 {
 public:
-    Orb(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight) : Creature(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight) {
-        speed = 700;
-        damage = 50;
-        damageRadius = 60;
-    }
+    Orb(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath);
     void update(Area& area, Player &player, float ms) override;
 };
 

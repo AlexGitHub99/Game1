@@ -1,6 +1,13 @@
 #include "Orb.h"
 #include <iostream>
 
+Orb::Orb(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath) : Creature(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight, newTexturePath) {
+	speed = 700;
+	damage = 50;
+	damageRadius = 60;
+	type = "orb";
+}
+
 void Orb::update(Area& area, Player &player, float ms)
 {
 	float playerPos[2] = { player.getX(), player.getY() };
@@ -18,10 +25,10 @@ void Orb::update(Area& area, Player &player, float ms)
 	CollisionChecker collisionChecker;
 
 	sf::FloatRect orbBox;
-	orbBox.left = position[0] - boundBoxWidth / 2;
-	orbBox.top = position[1] - boundBoxHeight / 2;
-	orbBox.width = boundBoxWidth;
-	orbBox.height = boundBoxHeight;
+	orbBox.left = position[0] - boundBox[0] / 2;
+	orbBox.top = position[1] - boundBox[1] / 2;
+	orbBox.width = boundBox[0];
+	orbBox.height = boundBox[1];
 
 	shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
 

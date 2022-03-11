@@ -8,13 +8,7 @@
 class Area
 {
 public:
-	Area(std::shared_ptr<sf::Texture> newBackground, float newWidth, float newHeight) {
-		background = std::shared_ptr<sf::Sprite>(new sf::Sprite(*newBackground));
-		width = newWidth;
-		height = newHeight;
-		objects = std::shared_ptr<std::list<std::shared_ptr<GameObject>>>(new std::list<std::shared_ptr<GameObject>>);
-		entities = std::shared_ptr<std::vector<std::shared_ptr<Entity>>>(new std::vector<std::shared_ptr<Entity>>);
-	}
+	Area(std::shared_ptr<sf::Texture> newBackground, float newWidth, float newHeight, std::string newTexturePath);
 
 	void setSize(float newWidth, float newHeight);
 	void addObject(std::shared_ptr<GameObject> newObj);
@@ -25,11 +19,13 @@ public:
 	std::shared_ptr<sf::Sprite> getBackground();
 	float getWidth();
 	float getHeight();
+	std::string getTexturePath();
 private:
 	std::shared_ptr<std::list<std::shared_ptr<GameObject>>> objects;
 	std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities;
 	std::shared_ptr<sf::Sprite> background;
 	float width;
 	float height;
+	std::string texturePath;
 };
 

@@ -5,7 +5,7 @@ class LightSource :
     public GameObject
 {
 public:
-	LightSource(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, float lightLevel) : lightLevel(lightLevel), GameObject(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight) {
+	LightSource(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, float lightLevel, std::string newTexturePath) : lightLevel(lightLevel), GameObject(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight, newTexturePath) {
 		type = "lightSource";
 	}
 

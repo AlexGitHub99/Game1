@@ -8,6 +8,6 @@ class Orb :
 {
 public:
     Orb(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath);
-    void update(Area& area, Player &player, float ms) override;
+    void update(std::shared_ptr<Area>& area, Player &player, float ms) override;
 };
 

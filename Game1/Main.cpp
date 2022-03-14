@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <array>
 #include <json/writer.h>
+#include <json/reader.h>
 #include <fstream>
 
 #include "wtypes.h"
@@ -40,7 +41,7 @@ float* relativePosition(float primaryX, float primaryY, float secondaryX, float 
 void setSquare(sf::VertexArray* lightPoints, int x, int y, int alpha, int lightMapWidth, int lightMapHeight);
 void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1], float baseLevel);
 void getDesktopResolution(int& horizontal, int& vertical);
-void renderBackground(Area& area, int screenSize[2], float cameraPos[2], int FOV[2]);
+void renderBackground(shared_ptr<Area>& area, int screenSize[2], float cameraPos[2], int FOV[2]);
 void setPlayerScreenPos(Player& player, float cameraGap[2], int screenSize[2], int FOV[2]);
 void renderObject(shared_ptr<GameObject>, int screenSize[2], float cameraPos[2], int FOV[2]);
 void renderObjectToMouse(shared_ptr<GameObject>, int screenSize[2], int FOV[2], sf::Vector2i mousePos);
@@ -49,7 +50,13 @@ void initializeObject(shared_ptr<GameObject> obj, int screenSize[2], float camer
 float screenToGameX(shared_ptr<GameObject> obj, int screenWidth, float cameraX, int FOVWidth, int mouseX);
 float screenToGameY(shared_ptr<GameObject> obj, int screenHeight, float cameraY, int FOVHeight, int mouseY);
 void drawButton(sf::RenderWindow& buildWindow, Button& button, sf::Font& font);
-void exportArea(Area& area);
+void exportArea(shared_ptr<Area>& area, string fileName);
+shared_ptr<Area> importArea(string fileName);
+bool isNumber(char chr);
+bool isDot(char chr);
+bool isBackSpace(char chr);
+bool isLetter(char chr);
+bool isUnderScore(char chr);
 
 //load textures
 shared_ptr<sf::Texture> rockTexture(new sf::Texture());
@@ -59,6 +66,85 @@ shared_ptr<sf::Texture> backgroundTexture(new sf::Texture());
 shared_ptr<sf::Texture> lampTexture(new sf::Texture());
 shared_ptr<sf::Texture> orbTexture(new sf::Texture());
 map<string, string> texturePaths;
+
+struct MenuObject {
+	virtual shared_ptr<GameObject> createObject() {
+		return nullptr;
+	};
+	string type;
+	shared_ptr<sf::Sprite> sprite;
+};
+
+struct Lamp : public MenuObject {
+	Lamp() {
+		texture = lampTexture;
+		texturePath = texturePaths.at("lamp");
+		width = 50;
+		lightLevel = 100;
+		box[0] = 50;
+		box[1] = 50;
+		type = "Lamp";
+		sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
+	};
+
+	shared_ptr<GameObject> createObject() override {
+		shared_ptr<LightSource> obj = make_shared<LightSource>(LightSource(texture, width, box[0], box[1], lightLevel, texturePath));
+		obj->setBoundBoxOffsetToBottom();
+		return obj;
+	}
+
+	shared_ptr<sf::Texture> texture;
+	string texturePath;
+	float width;
+	float lightLevel;
+	float box[2];
+};
+
+struct Wall : public MenuObject {
+	Wall() {
+		texture = wallTexture;
+		texturePath = texturePaths.at("wall");
+		width = 100;
+		box[0] = 100;
+		box[1] = 100;
+		type = "Wall";
+		sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
+	};
+
+	shared_ptr<GameObject> createObject() override {
+		shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], texturePath));
+		obj->setBoundBoxOffsetToBottom();
+		return obj;
+	}
+
+	shared_ptr<sf::Texture> texture;
+	string texturePath;
+	float width;
+	float box[2];
+};
+
+struct Rock : public MenuObject {
+	Rock() {
+		texture = rockTexture;
+		texturePath = texturePaths.at("rock");
+		width = 150;
+		box[0] = 150;
+		box[1] = 100;
+		type = "Rock";
+		sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
+	};
+
+	shared_ptr<GameObject> createObject() override {
+		shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], texturePath));
+		obj->setBoundBoxOffsetToBottom();
+		return obj;
+	}
+
+	shared_ptr<sf::Texture> texture;
+	string texturePath;
+	float width;
+	float box[2];
+};
 
 int main() {
 	int screenSize[2];
@@ -104,89 +190,11 @@ int main() {
 		return -1;
 	}
 
-	struct MenuObject {
-		virtual shared_ptr<GameObject> createObject() {
-			return nullptr;
-		};
-		string type;
-		shared_ptr<sf::Sprite> sprite;
-	};
-
-	struct Lamp : public MenuObject {
-		Lamp() {
-			texture = lampTexture;
-			texturePath = texturePaths.at("lamp");
-			width = 50;
-			lightLevel = 100;
-			box[0] = 50;
-			box[1] = 50;
-			type = "Lamp";
-			sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
-		};
-
-		shared_ptr<GameObject> createObject() override {
-			shared_ptr<LightSource> obj = make_shared<LightSource>(LightSource(texture, width, box[0], box[1], lightLevel, texturePath));
-			obj->setBoundBoxOffsetToBottom();
-			return obj;
-		}
-
-		shared_ptr<sf::Texture> texture;
-		string texturePath;
-		float width;
-		float lightLevel;
-		float box[2];
-	};
-
-	struct Wall : public MenuObject {
-		Wall() {
-			texture = wallTexture;
-			texturePath = texturePaths.at("wall");
-			width = 100;
-			box[0] = 100;
-			box[1] = 100;
-			type = "Wall";
-			sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
-		};
-
-		shared_ptr<GameObject> createObject() override {
-			shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], texturePath));
-			obj->setBoundBoxOffsetToBottom();
-			return obj;
-		}
-
-		shared_ptr<sf::Texture> texture;
-		string texturePath;
-		float width;
-		float box[2];
-	};
-
-	struct Rock : public MenuObject {
-		Rock() {
-			texture = rockTexture;
-			texturePath = texturePaths.at("rock");
-			width = 150;
-			box[0] = 150;
-			box[1] = 100;
-			type = "Rock";
-			sprite = make_shared<sf::Sprite>(sf::Sprite(*texture));
-		};
-
-		shared_ptr<GameObject> createObject() override {
-			shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], texturePath));
-			obj->setBoundBoxOffsetToBottom();
-			return obj;
-		}
-
-		shared_ptr<sf::Texture> texture;
-		string texturePath;
-		float width;
-		float box[2];
-	};
-
 	if (true) {
 		float BUILD_CAM_SPEED = 1500;
 		sf::RenderWindow buildWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Builder", sf::Style::Fullscreen);
-		Area area(backgroundTexture, 4000, 4000, texturePaths["area1"]);
+		shared_ptr<Area> area = make_shared<Area>(Area(backgroundTexture, 4000, 4000, texturePaths.at("area1")));
+
 		float cameraPos[2] = { 0, 0 };
 
 		bool menuOpen = false;
@@ -199,9 +207,11 @@ int main() {
 		sf::FloatRect menuRect(screenSize[0] * 3 / 4, 0, screenSize[0] / 4, screenSize[1]);
 		sf::FloatRect itemBackRect(menuRect.left + 30, menuRect.top + 400, menuRect.width - (menuRect.left + 30 - menuRect.left) * 2, menuRect.height / 2);
 		
-		shared_ptr<sf::FloatRect> exportButtonRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 30, menuRect.top + menuRect.height - 100, 120, 50));
+		shared_ptr<sf::FloatRect> exportButtonRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 250, menuRect.top + menuRect.height - 200, 120, 50));
 		Button exportButton(exportButtonRect, "Export");
-		
+		shared_ptr<sf::FloatRect> importButtonRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 250, menuRect.top + menuRect.height - 100, 120, 50));
+		Button importButton(importButtonRect, "Import");
+
 		list<shared_ptr<TextBox>> textBoxes;
 		shared_ptr<TextBox> activeBox;
 		
@@ -235,18 +245,33 @@ int main() {
 							break;
 						}
 						char chr = *(rawInput.getData());
-						if ((chr - 48 >= 0 and chr - 48 <= 9) or chr == '.') {
-							activeBox->addText(rawInput.toAnsiString());
+						if (activeBox->getInputType().compare("float") == 0) {
+							if (isNumber(chr) or isDot(chr)) {
+								activeBox->addText(rawInput.toAnsiString());
+							}
+							else if (isBackSpace(chr)) {
+								activeBox->backspace();
+							}
 						}
-						else if (chr == 8) {
-							activeBox->backspace();
+						else if (activeBox->getInputType().compare("file") == 0) {
+							if (isLetter(chr) or isUnderScore(chr) or isNumber(chr)) {
+								activeBox->addText(rawInput.toAnsiString());
+							}
+							else if (isBackSpace(chr)) {
+								activeBox->backspace();
+							}
 						}
 						break;
 					}
 					case (sf::Event::KeyReleased):
 						if (event.key.code == sf::Keyboard::Enter) {
-							BUILD_CAM_SPEED = stof(activeBox->getText());
-							activeBox->setText("");
+							if (activeBox->getId().compare("camSpeed") == 0) {
+								try {
+									BUILD_CAM_SPEED = stof(activeBox->getText());
+								}
+								catch (invalid_argument) {}
+								activeBox->setText("");
+							}
 							activeBox.reset();
 							
 						}
@@ -275,7 +300,7 @@ int main() {
 							break;
 						}
 						break;
-
+						
 					}
 				}
 				
@@ -341,7 +366,7 @@ int main() {
 						if (!isInside(event.mouseButton.x, event.mouseButton.y, menuRect) and selectedObjectStruct != nullptr) { //not clicking in menu
 							initializeObject(selectedObject, screenSize, cameraPos, FOV, event.mouseButton.x, event.mouseButton.y);
 							selectedObject->getSprite()->setColor(sf::Color(255, 255, 255, 255));
-							area.addObject(selectedObject);
+							area->addObject(selectedObject);
 							if (selectedObjectStruct->type.compare("Lamp") == 0) {
 								shared_ptr<Lamp> obj = static_pointer_cast<Lamp>(selectedObjectStruct);
 								selectedObject = obj->createObject();
@@ -356,13 +381,40 @@ int main() {
 							}
 						}
 
-						if (isInside(event.mouseButton.x, event.mouseButton.y, *exportButton.getRect())) {
-							exportArea(area);
+						if (isInside(event.mouseButton.x, event.mouseButton.y, *exportButton.getRect())) { //export button pressed
+							string fileName;
+							for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
+								shared_ptr<TextBox> current = *it;
+								if (current->getId().compare("fileExport") == 0) {
+									fileName = current->getText();
+								}
+							}
+							if (fileName.length() > 0) {
+								exportArea(area, fileName);
+							}
+
+						}
+
+						if (isInside(event.mouseButton.x, event.mouseButton.y, *importButton.getRect())) { //import button pressed
+							string fileName;
+							for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
+								shared_ptr<TextBox> current = *it;
+								if (current->getId().compare("fileImport") == 0) {
+									fileName = current->getText();
+								}
+							}
+							if (fileName.length() > 0) {
+								shared_ptr<Area> newArea = importArea(fileName);
+								if (newArea != nullptr) {
+									area = newArea;
+								}
+							}
+
 						}
 
 						//set all buttons to unpressed
 						exportButton.setPressed(false);
-						
+						importButton.setPressed(false);
 
 
 						break;
@@ -389,7 +441,7 @@ int main() {
 					//initializeObject(selectedObject, screenSize, cameraPos, FOV, sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
 					selectedObject->setPosition(mapCoords[0] * selectedObject->getBoundBoxWidth(), mapCoords[1] * selectedObject->getBoundBoxHeight());
 					selectedObject->getSprite()->setColor(sf::Color(255, 255, 255, 255));
-					area.addObject(selectedObject);
+					area->addObject(selectedObject);
 					if (selectedObjectStruct->type.compare("Lamp") == 0) {
 						shared_ptr<Lamp> obj = static_pointer_cast<Lamp>(selectedObjectStruct);
 						selectedObject = obj->createObject();
@@ -406,7 +458,7 @@ int main() {
 				}
 			}
 
-			shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
+			shared_ptr<list<shared_ptr<GameObject>>> objects = area->getObjects();
 			//get keyboard input
 			float angle = 0.0;
 			bool UP = false;
@@ -430,9 +482,9 @@ int main() {
 				DOWN = true;
 			}
 
-
 			//handle movement
-			if (UP == true or RIGHT == true or DOWN == true or LEFT == true) {
+			if (activeBox == nullptr and 
+				(UP == true or RIGHT == true or DOWN == true or LEFT == true)) {
 				float magnitude = ms / 1000 * BUILD_CAM_SPEED;
 				if (UP == true and RIGHT == true) {
 					angle = M_PI / 4;
@@ -472,13 +524,13 @@ int main() {
 			//draw background
 			renderBackground(area, screenSize, cameraPos, FOV);
 
-			buildWindow.draw(*area.getBackground());
+			buildWindow.draw(*area->getBackground());
 
 			//draw black area outside of background border
 			float backgroundScreenEdgeLeft = -cameraPos[0] / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2;
-			float backgroundScreenEdgeRight = (area.getWidth() - cameraPos[0]) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2;
+			float backgroundScreenEdgeRight = (area->getWidth() - cameraPos[0]) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2;
 			float backgroundScreenEdgeTop = -cameraPos[1] / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2;
-			float backgroundScreenEdgeBottom = (area.getHeight() - cameraPos[1]) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2;
+			float backgroundScreenEdgeBottom = (area->getHeight() - cameraPos[1]) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2;
 
 			if (backgroundScreenEdgeLeft > 0) {
 				sf::RectangleShape blackRect(sf::Vector2f(backgroundScreenEdgeLeft, screenSize[1]));
@@ -533,8 +585,13 @@ int main() {
 			if (menuOpen) {
 				if (initializeMenu) {
 					textBoxes.clear();
-					shared_ptr<sf::FloatRect> textBoxRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 30, menuRect.top + 80, 100, 50));
-					textBoxes.push_back(make_shared<TextBox>(TextBox("", textBoxRect)));
+					shared_ptr<sf::FloatRect> camSpeedTextBoxRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 30, menuRect.top + 80, 100, 50));
+					shared_ptr<sf::FloatRect> exportFileTextBoxRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 30, menuRect.top + menuRect.height - 200, 200, 50));
+					shared_ptr<sf::FloatRect> importFileTextBoxRect = make_shared<sf::FloatRect>(sf::FloatRect(menuRect.left + 30, menuRect.top + menuRect.height - 100, 200, 50));
+					textBoxes.push_back(make_shared<TextBox>(TextBox("", camSpeedTextBoxRect, "float", "camSpeed")));
+					textBoxes.push_back(make_shared<TextBox>(TextBox("", exportFileTextBoxRect, "file", "fileExport")));
+					textBoxes.push_back(make_shared<TextBox>(TextBox("", importFileTextBoxRect, "file", "fileImport")));
+					initializeMenu = false;
 				}
 				
 				sf::RectangleShape menuBack(sf::Vector2f(menuRect.width, menuRect.height));
@@ -624,6 +681,7 @@ int main() {
 				}
 				
 				drawButton(buildWindow, exportButton, courier);
+				drawButton(buildWindow, importButton, courier);
 
 				//draw all textboxes
 				for (list<shared_ptr<TextBox>>::iterator it = textBoxes.begin(); it != textBoxes.end(); it++) {
@@ -677,11 +735,6 @@ int main() {
 					renderObjectToMouse(selectedObject, screenSize, FOV, sf::Mouse::getPosition());
 					selectedObject->getSprite()->setColor(sf::Color(255, 255, 255, 100));
 					buildWindow.draw(*selectedObject->getSprite());
-				}
-
-				//done intializing menu
-				if (initializeMenu) {
-					initializeMenu = false;
 				}
 
 				//adjust blink timer for text box
@@ -785,12 +838,12 @@ int main() {
 	shared_ptr<LightSource> myLamp = make_shared<LightSource> (LightSource(lampTexture, 50, 50, 30, 500, texturePaths.at("lamp")));
 	myLamp->setPosition(900, 800);
 
-	Area area(backgroundTexture, 4000, 4000, texturePaths["area1"]);
-	area.addObject(rock1);
-	area.addObject(rock2);
-	area.addObject(myLamp);
-	area.addObject(myWall);
-	area.addEntity(orb);
+	shared_ptr<Area> area = make_shared<Area>(Area(backgroundTexture, 4000, 4000, texturePaths["area1"]));
+	area->addObject(rock1);
+	area->addObject(rock2);
+	area->addObject(myLamp);
+	area->addObject(myWall);
+	area->addEntity(orb);
 
 
 	//for (int i = 0; i < 12; i++) {
@@ -800,7 +853,7 @@ int main() {
 	//	wall2->setBoundBox(100, 100);
 	//	wall2->setTextureSize(100);
 	//	wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getBoundBoxHeight() / 2);
-	//	area.addObject(wall2);
+	//	area->addObject(wall2);
 	//}
 
 	//for (int i = 0; i < 20; i++) {
@@ -810,7 +863,7 @@ int main() {
 	//	wall2->setBoundBox(100, 80);
 	//	wall2->setTextureSize(100);
 	//	wall2->setBoundBoxOffset(0, wall2->getTextureHeight() / 2 - wall2->getBoundBoxHeight() / 2);
-	//	area.addObject(wall2);
+	//	area->addObject(wall2);
 	//}
 
 	//end of temporary stuff--------------------------------------------
@@ -875,7 +928,7 @@ int main() {
 			}
 		}
 
-		shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
+		shared_ptr<list<shared_ptr<GameObject>>> objects = area->getObjects();
 		//get keyboard input
 		float angle = 0.0;
 		bool UP = false;
@@ -984,14 +1037,14 @@ int main() {
 		if (player.getX() - player.getBoundBoxWidth() / 2 < 0) {
 			player.movePosition(0 - (player.getX() - player.getBoundBoxWidth() / 2), 0.0);
 		}
-		if (player.getX() + player.getBoundBoxWidth() / 2 > area.getWidth()) {
-			player.movePosition(area.getWidth() - (player.getX() + player.getBoundBoxWidth() / 2), 0.0);
+		if (player.getX() + player.getBoundBoxWidth() / 2 > area->getWidth()) {
+			player.movePosition(area->getWidth() - (player.getX() + player.getBoundBoxWidth() / 2), 0.0);
 		}
 		if (player.getY() - player.getBoundBoxHeight() / 2 < 0) {
 			player.movePosition(0.0, 0 - (player.getY() - player.getBoundBoxHeight() / 2));
 		}
-		if (player.getY() + player.getBoundBoxHeight() / 2 > area.getHeight()) {
-			player.movePosition(0.0, area.getHeight() - (player.getY() + player.getBoundBoxHeight() / 2));
+		if (player.getY() + player.getBoundBoxHeight() / 2 > area->getHeight()) {
+			player.movePosition(0.0, area->getHeight() - (player.getY() + player.getBoundBoxHeight() / 2));
 		}
 
 
@@ -1016,7 +1069,7 @@ int main() {
 
 
 		//update entities
-		std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = area.getEntities();
+		std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = area->getEntities();
 		for (int i = 0; i < entities->size(); i++) {
 
 			entities->at(i)->update(area, player, ms);
@@ -1047,13 +1100,13 @@ int main() {
 		//draw background
 		renderBackground(area, screenSize, cameraPos, FOV);
 
-		mainWindow.draw(*area.getBackground());
+		mainWindow.draw(*area->getBackground());
 
 		//draw black area outside of background border
 		float backgroundScreenEdgeLeft = -cameraPos[0] / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2;
-		float backgroundScreenEdgeRight = (area.getWidth() - cameraPos[0]) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2;
+		float backgroundScreenEdgeRight = (area->getWidth() - cameraPos[0]) / (float)FOV[0] * (float)screenSize[0] + (float)screenSize[0] / 2;
 		float backgroundScreenEdgeTop = -cameraPos[1] / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2;
-		float backgroundScreenEdgeBottom = (area.getHeight() - cameraPos[1]) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2;
+		float backgroundScreenEdgeBottom = (area->getHeight() - cameraPos[1]) / (float)FOV[1] * (float)screenSize[1] + (float)screenSize[1] / 2;
 
 		if (backgroundScreenEdgeLeft > 0) {
 			sf::RectangleShape blackRect(sf::Vector2f(backgroundScreenEdgeLeft, screenSize[1]));
@@ -1260,18 +1313,18 @@ void getDesktopResolution(int& horizontal, int& vertical)
 	vertical = desktop.bottom;
 }
 
-void renderBackground(Area &area, int screenSize[2], float cameraPos[2], int FOV[2]) {
-	shared_ptr<sf::Sprite> background = area.getBackground();
+void renderBackground(shared_ptr<Area>& area, int screenSize[2], float cameraPos[2], int FOV[2]) {
+	shared_ptr<sf::Sprite> background = area->getBackground();
 	sf::Vector2u backgroundSize = background->getTexture()->getSize();
 
-	float errorX = (cameraPos[0] - (float)FOV[0] / 2) / area.getWidth() * (float)backgroundSize.x - 1 - 
-					(int)((cameraPos[0] - (float)FOV[0] / 2) / area.getWidth() * (float)backgroundSize.x - 1);
-	float errorY = (cameraPos[1] - (float)FOV[1] / 2) / area.getHeight() * (float)backgroundSize.y - 1 - 
-					(int)((cameraPos[1] - (float)FOV[1] / 2) / area.getHeight() * (float)backgroundSize.y - 1);
-	sf::IntRect backgroundRect((cameraPos[0] - (float)FOV[0] / 2) / area.getWidth() * (float)backgroundSize.x - 1, //left
-		(cameraPos[1] - (float)FOV[1] / 2) / area.getHeight() * (float)backgroundSize.y - 1, //top
-		(float)FOV[0] / area.getWidth() * (float)backgroundSize.x + 2, //width
-		(float)FOV[1] / area.getHeight() * (float)backgroundSize.y + 2); //height
+	float errorX = (cameraPos[0] - (float)FOV[0] / 2) / area->getWidth() * (float)backgroundSize.x - 1 - 
+					(int)((cameraPos[0] - (float)FOV[0] / 2) / area->getWidth() * (float)backgroundSize.x - 1);
+	float errorY = (cameraPos[1] - (float)FOV[1] / 2) / area->getHeight() * (float)backgroundSize.y - 1 - 
+					(int)((cameraPos[1] - (float)FOV[1] / 2) / area->getHeight() * (float)backgroundSize.y - 1);
+	sf::IntRect backgroundRect((cameraPos[0] - (float)FOV[0] / 2) / area->getWidth() * (float)backgroundSize.x - 1, //left
+		(cameraPos[1] - (float)FOV[1] / 2) / area->getHeight() * (float)backgroundSize.y - 1, //top
+		(float)FOV[0] / area->getWidth() * (float)backgroundSize.x + 2, //width
+		(float)FOV[1] / area->getHeight() * (float)backgroundSize.y + 2); //height
 	background->setTextureRect(backgroundRect);
 	background->setScale((float)screenSize[0] / ((float)background->getTextureRect().width - 2),
 		(float)screenSize[1] / ((float)background->getTextureRect().height - 2));
@@ -1343,34 +1396,34 @@ float screenToGameY(shared_ptr<GameObject> obj, int screenHeight, float cameraY,
 
 void drawButton(sf::RenderWindow& buildWindow, Button& button, sf::Font& font)
 {
-	sf::FloatRect exportButtonRect = *button.getRect();
-	sf::RectangleShape exportButton(sf::Vector2f(exportButtonRect.width, exportButtonRect.height));
-	exportButton.setPosition(exportButtonRect.left, exportButtonRect.top);
+	sf::FloatRect buttonRect = *button.getRect();
+	sf::RectangleShape buttonShape(sf::Vector2f(buttonRect.width, buttonRect.height));
+	buttonShape.setPosition(buttonRect.left, buttonRect.top);
 	if (button.isPressed()) {
-		exportButton.setFillColor(sf::Color(100, 100, 100));
+		buttonShape.setFillColor(sf::Color(100, 100, 100));
 	}
 	else {
-		exportButton.setFillColor(sf::Color(200, 200, 200));
+		buttonShape.setFillColor(sf::Color(200, 200, 200));
 	}
-	buildWindow.draw(exportButton);
+	buildWindow.draw(buttonShape);
 
-	sf::Text exportText;
-	exportText.setFont(font);
-	exportText.setString("Export");
-	exportText.setFillColor(sf::Color(0, 0, 0));
-	exportText.setPosition(exportButtonRect.left + 5, exportButtonRect.top);
-	buildWindow.draw(exportText);
+	sf::Text buttonText;
+	buttonText.setFont(font);
+	buttonText.setString(button.getText());
+	buttonText.setFillColor(sf::Color(0, 0, 0));
+	buttonText.setPosition(buttonRect.left + 5, buttonRect.top);
+	buildWindow.draw(buttonText);
 }
 
-void exportArea(Area& area) //export area as JSON formatted file
+void exportArea(shared_ptr<Area>& area, string fileName) //export area as JSON formatted file
 {
 	//JSON structuring
 	Json::Value areaData;
 	Json::Value objectsData(Json::arrayValue);
 	Json::Value entitiesData(Json::arrayValue);
 
-	shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
-	shared_ptr<vector<shared_ptr<Entity>>> entities = area.getEntities();
+	shared_ptr<list<shared_ptr<GameObject>>> objects = area->getObjects();
+	shared_ptr<vector<shared_ptr<Entity>>> entities = area->getEntities();
 
 	//add objects to JSON array
 	for (list<shared_ptr<GameObject>>::iterator it = objects->begin(); it != objects->end(); it++) {
@@ -1410,14 +1463,78 @@ void exportArea(Area& area) //export area as JSON formatted file
 		entitiesData.append(currentEntData);
 	}
 
-	areaData["width"] = area.getWidth();
-	areaData["height"] = area.getHeight();
-	areaData["background"] = area.getTexturePath();
+	areaData["width"] = area->getWidth();
+	areaData["height"] = area->getHeight();
+	areaData["background"] = area->getTexturePath();
 	areaData["objects"] = objectsData;
 	areaData["entities"] = entitiesData;
 
 	//save JSON object to file
-	ofstream outFile("areas/newArea.json");
+	ofstream outFile("areas/" + fileName + ".json");
 	outFile << areaData << endl;
+	outFile.close();
 
+}
+
+shared_ptr<Area> importArea(string fileName) {
+	ifstream inFile("areas/" + fileName + ".json", ifstream::binary);
+	if (inFile.fail()) {
+		return nullptr;
+	}
+	Json::Value importedArea;
+	inFile >> importedArea;
+
+	//create area from file
+	importedArea["background"];
+
+	shared_ptr<sf::Texture> newBackgroundTexture(new sf::Texture());
+	if (!newBackgroundTexture->loadFromFile(importedArea["background"].asString())) {
+		return nullptr;
+	}
+	shared_ptr<Area> area = make_shared<Area>(Area(newBackgroundTexture, importedArea["width"].asFloat(), importedArea["height"].asFloat(), importedArea["background"].asString()));
+
+	Json::Value objectsData = importedArea["objects"];
+	Json::Value entitiesData = importedArea["entities"];
+	for (int i = 0; i < objectsData.size(); i++) {
+		if (objectsData[i]["type"].asString().compare("Lamp") == 0) {
+			shared_ptr<Lamp> obj = make_shared<Lamp>(Lamp());
+			area->addObject(obj->createObject());
+		}
+		else if (objectsData[i]["type"].asString().compare("Rock") == 0) {
+			shared_ptr<Rock> obj = make_shared<Rock>(Rock());
+			area->addObject(obj->createObject());
+		}
+		else if (objectsData[i]["type"].asString().compare("Wall") == 0) {
+			shared_ptr<Wall> obj = make_shared<Wall>(Wall());
+			area->addObject(obj->createObject());
+		}
+	}
+
+	return area;
+	
+	return nullptr;
+}
+
+//check if character is a number
+bool isNumber(char chr) {
+	return (chr - 48 >= 0 and chr - 48 <= 9);
+}
+
+bool isDot(char chr) {
+	return (chr == '.');
+}
+
+//check if character is a backspace
+bool isBackSpace(char chr) {
+	return (chr == 8);
+}
+
+//check if character is a backspace
+bool isLetter(char chr) {
+	return ((chr - 65 >= 0 and chr - 65 <= 25) or (chr - 97 >= 0 and chr - 97 <= 25));
+}
+
+//check if character is an underscore
+bool isUnderScore(char chr) {
+	return (chr == 95);
 }

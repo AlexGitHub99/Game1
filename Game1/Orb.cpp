@@ -8,7 +8,7 @@ Orb::Orb(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newB
 	type = "orb";
 }
 
-void Orb::update(Area& area, Player &player, float ms)
+void Orb::update(std::shared_ptr<Area>& area, Player &player, float ms)
 {
 	float playerPos[2] = { player.getX(), player.getY() };
 	float relativePos[2] = {playerPos[0] - position[0], playerPos[1] - position[1]};
@@ -30,7 +30,7 @@ void Orb::update(Area& area, Player &player, float ms)
 	orbBox.width = boundBox[0];
 	orbBox.height = boundBox[1];
 
-	shared_ptr<list<shared_ptr<GameObject>>> objects = area.getObjects();
+	shared_ptr<list<shared_ptr<GameObject>>> objects = area->getObjects();
 
 	for (std::list<shared_ptr<GameObject>>::iterator it = objects->begin(); it != objects->end(); it++) {
 		shared_ptr<GameObject> currentObj = *it;
@@ -57,5 +57,5 @@ void Orb::update(Area& area, Player &player, float ms)
 		free(displacement);
 	}
 	
-	area.sortObject(shared_from_this());
+	area->sortObject(shared_from_this());
 }

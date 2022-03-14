@@ -26,6 +26,6 @@ bool Entity::doesPushPlayer()
 	return pushPlayer;
 }
 
-void Entity::update(Area& area, Player &player, float ms)
+void Entity::update(std::shared_ptr<Area>& area, Player &player, float ms)
 {
 }

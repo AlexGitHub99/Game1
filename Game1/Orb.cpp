@@ -1,7 +1,7 @@
 #include "Orb.h"
 #include <iostream>
 
-Orb::Orb(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath) : Creature(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight, newTexturePath) {
+Orb::Orb(std::shared_ptr<sf::Texture> newTexture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTextureName) : Creature(newTexture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight, newTextureName) {
 	speed = 700;
 	damage = 50;
 	damageRadius = 60;

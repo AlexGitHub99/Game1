@@ -24,6 +24,7 @@ private:
 	std::shared_ptr<std::list<std::shared_ptr<GameObject>>> objects;
 	std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities;
 	std::shared_ptr<sf::Sprite> background;
+	std::shared_ptr<sf::Texture> backgroundTexture;
 	float width;
 	float height;
 	std::string texturePath;

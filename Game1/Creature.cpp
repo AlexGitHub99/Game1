@@ -1,6 +1,6 @@
 #include "Creature.h"
 
-Creature::Creature(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath) : Entity(texture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight, newTexturePath) {
+Creature::Creature(std::shared_ptr<sf::Texture> newTexture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTextureName) : Entity(newTexture, newTextureWidth, newBoundBoxWidth, newBoundBoxHeight, newTextureName) {
     damage = 100;
     damageRadius = 100;
 }

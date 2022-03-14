@@ -65,7 +65,7 @@ shared_ptr<sf::Texture> playerTexture(new sf::Texture());
 shared_ptr<sf::Texture> backgroundTexture(new sf::Texture());
 shared_ptr<sf::Texture> lampTexture(new sf::Texture());
 shared_ptr<sf::Texture> orbTexture(new sf::Texture());
-map<string, string> texturePaths;
+map<string, shared_ptr<sf::Texture>> texturePaths;
 
 struct MenuObject {
 	virtual shared_ptr<GameObject> createObject() {
@@ -78,7 +78,6 @@ struct MenuObject {
 struct Lamp : public MenuObject {
 	Lamp() {
 		texture = lampTexture;
-		texturePath = texturePaths.at("lamp");
 		width = 50;
 		lightLevel = 100;
 		box[0] = 50;
@@ -88,13 +87,12 @@ struct Lamp : public MenuObject {
 	};
 
 	shared_ptr<GameObject> createObject() override {
-		shared_ptr<LightSource> obj = make_shared<LightSource>(LightSource(texture, width, box[0], box[1], lightLevel, texturePath));
+		shared_ptr<LightSource> obj = make_shared<LightSource>(LightSource(texture, width, box[0], box[1], lightLevel, "lamp"));
 		obj->setBoundBoxOffsetToBottom();
 		return obj;
 	}
 
 	shared_ptr<sf::Texture> texture;
-	string texturePath;
 	float width;
 	float lightLevel;
 	float box[2];
@@ -103,7 +101,6 @@ struct Lamp : public MenuObject {
 struct Wall : public MenuObject {
 	Wall() {
 		texture = wallTexture;
-		texturePath = texturePaths.at("wall");
 		width = 100;
 		box[0] = 100;
 		box[1] = 100;
@@ -112,13 +109,12 @@ struct Wall : public MenuObject {
 	};
 
 	shared_ptr<GameObject> createObject() override {
-		shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], texturePath));
+		shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], "wall"));
 		obj->setBoundBoxOffsetToBottom();
 		return obj;
 	}
 
 	shared_ptr<sf::Texture> texture;
-	string texturePath;
 	float width;
 	float box[2];
 };
@@ -126,7 +122,6 @@ struct Wall : public MenuObject {
 struct Rock : public MenuObject {
 	Rock() {
 		texture = rockTexture;
-		texturePath = texturePaths.at("rock");
 		width = 150;
 		box[0] = 150;
 		box[1] = 100;
@@ -135,13 +130,12 @@ struct Rock : public MenuObject {
 	};
 
 	shared_ptr<GameObject> createObject() override {
-		shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], texturePath));
+		shared_ptr<GameObject> obj = make_shared<GameObject>(GameObject(texture, width, box[0], box[1], "rock"));
 		obj->setBoundBoxOffsetToBottom();
 		return obj;
 	}
 
 	shared_ptr<sf::Texture> texture;
-	string texturePath;
 	float width;
 	float box[2];
 };
@@ -164,36 +158,36 @@ int main() {
 	}
 
 	//load textures
-	texturePaths.insert(pair<string, string>("rock", "resources/rock_1.png"));
-	texturePaths.insert(pair<string, string>("wall", "resources/wall.png"));
-	texturePaths.insert(pair<string, string>("player", "resources/player.png"));
-	texturePaths.insert(pair<string, string>("area1", "resources/area_1.png"));
-	texturePaths.insert(pair<string, string>("lamp", "resources/lamp.png"));
-	texturePaths.insert(pair<string, string>("orb", "resources/orb.png"));
 
-	if (!rockTexture->loadFromFile(texturePaths.at("rock"))) {
+	if (!rockTexture->loadFromFile("resources/rock_1.png")) {
 		return -1;
 	}
-	if (!wallTexture->loadFromFile(texturePaths.at("wall"))) {
+	if (!wallTexture->loadFromFile("resources/wall.png")) {
 		return -1;
 	}
-	if (!playerTexture->loadFromFile(texturePaths.at("player"))) {
+	if (!playerTexture->loadFromFile("resources/player.png")) {
 		return -1;
 	}
-	if (!backgroundTexture->loadFromFile(texturePaths.at("area1"))) {
+	if (!backgroundTexture->loadFromFile("resources/area_1.png")) {
 		return -1;
 	}
-	if (!lampTexture->loadFromFile(texturePaths.at("lamp"))) {
+	if (!lampTexture->loadFromFile("resources/lamp.png")) {
 		return -1;
 	}
-	if (!orbTexture->loadFromFile(texturePaths.at("orb"))) {
+	if (!orbTexture->loadFromFile("resources/orb.png")) {
 		return -1;
 	}
+
+	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("rock", rockTexture));
+	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("wall", wallTexture));
+	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("player", playerTexture));
+	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("lamp", lampTexture));
+	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("orb", orbTexture));
 
 	if (true) {
 		float BUILD_CAM_SPEED = 1500;
 		sf::RenderWindow buildWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Builder", sf::Style::Fullscreen);
-		shared_ptr<Area> area = make_shared<Area>(Area(backgroundTexture, 4000, 4000, texturePaths.at("area1")));
+		shared_ptr<Area> area = make_shared<Area>(Area(backgroundTexture, 4000, 4000, "resources/area_1.png"));
 
 		float cameraPos[2] = { 0, 0 };
 
@@ -822,23 +816,23 @@ int main() {
 	
 
 	//temporary stuff-----------------------------------------------------------
-	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 100, 100, texturePaths.at("orb")));
+	shared_ptr<Orb> orb = make_shared<Orb>(Orb(orbTexture, 100, 100, 100, "orb"));
 	orb->setPosition(0, 0);
 
-	shared_ptr<GameObject> rock1 = make_shared<GameObject> (GameObject(rockTexture, 100, 100, 60, texturePaths.at("rock")));
+	shared_ptr<GameObject> rock1 = make_shared<GameObject> (GameObject(rockTexture, 100, 100, 60, "rock"));
 	rock1->setPosition(250, 250);
 
-	shared_ptr<GameObject> rock2 = make_shared<GameObject> (GameObject(rockTexture, 300, 300, 200, texturePaths.at("rock")));
+	shared_ptr<GameObject> rock2 = make_shared<GameObject> (GameObject(rockTexture, 300, 300, 200, "rock"));
 	rock2->setPosition(1000, 400);
 
-	shared_ptr<GameObject> myWall = make_shared<GameObject> (GameObject(wallTexture, 100, 100, 100, texturePaths.at("wall")));
+	shared_ptr<GameObject> myWall = make_shared<GameObject> (GameObject(wallTexture, 100, 100, 100, "wall"));
 	myWall->setPosition(700, 900);
 	myWall->setBoundBoxOffsetToBottom();
 
-	shared_ptr<LightSource> myLamp = make_shared<LightSource> (LightSource(lampTexture, 50, 50, 30, 500, texturePaths.at("lamp")));
+	shared_ptr<LightSource> myLamp = make_shared<LightSource> (LightSource(lampTexture, 50, 50, 30, 500, "lamp"));
 	myLamp->setPosition(900, 800);
 
-	shared_ptr<Area> area = make_shared<Area>(Area(backgroundTexture, 4000, 4000, texturePaths["area1"]));
+	shared_ptr<Area> area = make_shared<Area>(Area(backgroundTexture, 4000, 4000, "resources/area"));
 	area->addObject(rock1);
 	area->addObject(rock2);
 	area->addObject(myLamp);
@@ -1444,7 +1438,11 @@ void exportArea(shared_ptr<Area>& area, string fileName) //export area as JSON f
 		currentObjData["position"].append(currentObj->getX());
 		currentObjData["position"].append(currentObj->getY());
 		currentObjData["type"] = currentObj->getType();
-		currentObjData["sprite"] = currentObj->getTexturePath();
+		currentObjData["sprite"] = currentObj->getTextureName();
+		
+		if (currentObj->getType().compare("lightSource") == 0) {
+			currentObjData["lightLevel"] = static_pointer_cast<LightSource>(currentObj)->getLightLevel();
+		}
 
 		objectsData.append(currentObjData);
 		
@@ -1487,7 +1485,7 @@ shared_ptr<Area> importArea(string fileName) {
 	//create area from file
 	importedArea["background"];
 
-	shared_ptr<sf::Texture> newBackgroundTexture(new sf::Texture());
+	shared_ptr<sf::Texture> newBackgroundTexture = make_shared<sf::Texture>(sf::Texture());
 	if (!newBackgroundTexture->loadFromFile(importedArea["background"].asString())) {
 		return nullptr;
 	}
@@ -1495,24 +1493,27 @@ shared_ptr<Area> importArea(string fileName) {
 
 	Json::Value objectsData = importedArea["objects"];
 	Json::Value entitiesData = importedArea["entities"];
+	cout << "size: " << objectsData.size() << endl;
 	for (int i = 0; i < objectsData.size(); i++) {
-		if (objectsData[i]["type"].asString().compare("Lamp") == 0) {
-			shared_ptr<Lamp> obj = make_shared<Lamp>(Lamp());
-			area->addObject(obj->createObject());
+		cout << i << endl;
+		shared_ptr<GameObject> newObj;
+		if (objectsData[i]["type"].asString().compare("object") == 0) {
+			newObj = make_shared<GameObject>(GameObject(texturePaths.at(objectsData[i]["sprite"].asString()), objectsData[i]["textureSize"][0].asFloat(), objectsData[i]["textureSize"][1].asFloat(), objectsData[i]["boundBox"][0].asFloat(), objectsData[i]["boundBox"][1].asFloat(), objectsData[i]["sprite"].asString()));
 		}
-		else if (objectsData[i]["type"].asString().compare("Rock") == 0) {
-			shared_ptr<Rock> obj = make_shared<Rock>(Rock());
-			area->addObject(obj->createObject());
+		else if (objectsData[i]["type"].asString().compare("lightSource") == 0) {
+			newObj = make_shared<GameObject>(LightSource(texturePaths.at(objectsData[i]["sprite"].asString()), objectsData[i]["textureSize"][0].asFloat(), objectsData[i]["textureSize"][1].asFloat(), objectsData[i]["boundBox"][0].asFloat(), objectsData[i]["boundBox"][1].asFloat(), objectsData[i]["lightLevel"].asFloat(), objectsData[i]["sprite"].asString()));
 		}
-		else if (objectsData[i]["type"].asString().compare("Wall") == 0) {
-			shared_ptr<Wall> obj = make_shared<Wall>(Wall());
-			area->addObject(obj->createObject());
+
+		if (newObj != nullptr) {
+			newObj->setPosition(objectsData[i]["position"][0].asFloat() , objectsData[i]["position"][1].asFloat());
+			newObj->setBoundBoxOffset(objectsData[i]["boundBoxOffset"][0].asFloat(), objectsData[i]["boundBoxOffset"][1].asFloat());
+			area->addObject(newObj);
 		}
 	}
 
+	cout << area->getObjects()->size() << endl;
 	return area;
 	
-	return nullptr;
 }
 
 //check if character is a number

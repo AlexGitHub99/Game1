@@ -1,0 +1,209 @@
+{
+	"background" : "resources/area_1.png",
+	"entities" : [],
+	"height" : 4000.0,
+	"objects" : 
+	[
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 41,
+			"position" : 
+			[
+				1010.7637939453125,
+				641.92962646484375
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 11478,
+			"position" : 
+			[
+				2207.3681640625,
+				646.05047607421875
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 15724,
+			"position" : 
+			[
+				1552.052001953125,
+				687.2587890625
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 18467,
+			"position" : 
+			[
+				1572.659423828125,
+				791.65325927734375
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 29358,
+			"position" : 
+			[
+				2221.1064453125,
+				890.55322265625
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 6334,
+			"position" : 
+			[
+				1764.995361328125,
+				931.7615966796875
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 19169,
+			"position" : 
+			[
+				1054.7261962890625,
+				945.4976806640625
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		},
+		{
+			"boundBox" : 
+			[
+				150.0,
+				100.0
+			],
+			"boundBoxOffset" : 
+			[
+				0.0,
+				0.0
+			],
+			"id" : 26500,
+			"position" : 
+			[
+				1344.60400390625,
+				1122.693603515625
+			],
+			"sprite" : "resources/rock_1.png",
+			"textureSize" : 
+			[
+				100.0,
+				150.0
+			],
+			"type" : "object"
+		}
+	],
+	"width" : 4000.0
+}

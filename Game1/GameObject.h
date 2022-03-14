@@ -4,7 +4,8 @@
 class GameObject
 {
 public:
-	GameObject(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath);
+	GameObject(std::shared_ptr<sf::Texture> newTexture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTextureName);
+	GameObject(std::shared_ptr<sf::Texture> newTexture, float newTextureWidth, float newTextureHeight, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTextureName);
 
 	int getId();
 	void setPosition(float x, float y);
@@ -27,7 +28,7 @@ public:
 	float getX();
 	float getY();
 	std::string getType();
-	std::string getTexturePath();
+	std::string getTextureName();
 
 	virtual void setLightLevel(float newLightLevel);
 	virtual float getLightLevel();
@@ -38,8 +39,9 @@ protected:
 	float boundBoxOffset[2];
 	float textureSize[2];
 	std::shared_ptr<sf::Sprite> sprite;
+	std::shared_ptr<sf::Texture> texture;
 	std::string type;
 	float position[2];
-	std::string texturePath;
+	std::string textureName;
 };
 

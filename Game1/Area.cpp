@@ -1,6 +1,7 @@
 #include "Area.h"
 
  Area::Area(std::shared_ptr<sf::Texture> newBackground, float newWidth, float newHeight, std::string newTexturePath) {
+	backgroundTexture = newBackground;
 	background = std::shared_ptr<sf::Sprite>(new sf::Sprite(*newBackground));
 	width = newWidth;
 	height = newHeight;

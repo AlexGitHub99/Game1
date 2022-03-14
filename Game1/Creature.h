@@ -6,7 +6,7 @@ class Creature :
 
 {
 public:
-    Creature(std::shared_ptr<sf::Texture> texture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTexturePath);
+    Creature(std::shared_ptr<sf::Texture> newTexture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTextureName);
     void setDamage(float newDamage);
     float getDamage();
     

@@ -3,7 +3,7 @@
 GameObject::GameObject(std::shared_ptr<sf::Texture> newTexture, float newTextureWidth, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTextureName) {
 	id = rand();
 	texture = newTexture;
-	sprite = std::shared_ptr<sf::Sprite>(new sf::Sprite(*texture));
+	sprite = std::make_shared<sf::Sprite>(sf::Sprite(*newTexture));
 	textureSize[0] = newTextureWidth;
 	textureSize[1] = newTextureWidth * sprite->getTexture()->getSize().y / sprite->getTexture()->getSize().x;
 	boundBox[0] = newBoundBoxWidth;
@@ -19,7 +19,7 @@ GameObject::GameObject(std::shared_ptr<sf::Texture> newTexture, float newTexture
 GameObject::GameObject(std::shared_ptr<sf::Texture> newTexture, float newTextureWidth, float newTextureHeight, float newBoundBoxWidth, float newBoundBoxHeight, std::string newTextureName) {
 	id = rand();
 	texture = newTexture;
-	sprite = std::shared_ptr<sf::Sprite>(new sf::Sprite(*texture));
+	sprite = std::make_shared<sf::Sprite>(sf::Sprite(*newTexture));
 	textureSize[0] = newTextureWidth;
 	textureSize[1] = newTextureHeight;
 	boundBox[0] = newBoundBoxWidth;

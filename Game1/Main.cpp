@@ -59,12 +59,12 @@ bool isLetter(char chr);
 bool isUnderScore(char chr);
 
 //load textures
-shared_ptr<sf::Texture> rockTexture(new sf::Texture());
-shared_ptr<sf::Texture> wallTexture(new sf::Texture());
-shared_ptr<sf::Texture> playerTexture(new sf::Texture());
-shared_ptr<sf::Texture> backgroundTexture(new sf::Texture());
-shared_ptr<sf::Texture> lampTexture(new sf::Texture());
-shared_ptr<sf::Texture> orbTexture(new sf::Texture());
+shared_ptr<sf::Texture> rockTexture = make_shared<sf::Texture>(sf::Texture());
+shared_ptr<sf::Texture> wallTexture = make_shared<sf::Texture>(sf::Texture());
+shared_ptr<sf::Texture> playerTexture = make_shared<sf::Texture>(sf::Texture());
+shared_ptr<sf::Texture> backgroundTexture = make_shared<sf::Texture>(sf::Texture());
+shared_ptr<sf::Texture> lampTexture = make_shared<sf::Texture>(sf::Texture());
+shared_ptr<sf::Texture> orbTexture = make_shared<sf::Texture>(sf::Texture());
 map<string, shared_ptr<sf::Texture>> texturePaths;
 
 struct MenuObject {
@@ -1432,8 +1432,8 @@ void exportArea(shared_ptr<Area>& area, string fileName) //export area as JSON f
 		currentObjData["boundBoxOffset"].append(currentObj->getBoundBoxOffsetX());
 		currentObjData["boundBoxOffset"].append(currentObj->getBoundBoxOffsetY());
 		currentObjData["textureSize"] = Json::arrayValue;
-		currentObjData["textureSize"].append(currentObj->getTextureHeight());
 		currentObjData["textureSize"].append(currentObj->getTextureWidth());
+		currentObjData["textureSize"].append(currentObj->getTextureHeight());
 		currentObjData["position"] = Json::arrayValue;
 		currentObjData["position"].append(currentObj->getX());
 		currentObjData["position"].append(currentObj->getY());
@@ -1493,15 +1493,13 @@ shared_ptr<Area> importArea(string fileName) {
 
 	Json::Value objectsData = importedArea["objects"];
 	Json::Value entitiesData = importedArea["entities"];
-	cout << "size: " << objectsData.size() << endl;
 	for (int i = 0; i < objectsData.size(); i++) {
-		cout << i << endl;
 		shared_ptr<GameObject> newObj;
 		if (objectsData[i]["type"].asString().compare("object") == 0) {
-			newObj = make_shared<GameObject>(GameObject(texturePaths.at(objectsData[i]["sprite"].asString()), objectsData[i]["textureSize"][0].asFloat(), objectsData[i]["textureSize"][1].asFloat(), objectsData[i]["boundBox"][0].asFloat(), objectsData[i]["boundBox"][1].asFloat(), objectsData[i]["sprite"].asString()));
+			newObj = make_shared<GameObject>(GameObject(texturePaths[objectsData[i]["sprite"].asString()], objectsData[i]["textureSize"][0].asFloat(), objectsData[i]["textureSize"][1].asFloat(), objectsData[i]["boundBox"][0].asFloat(), objectsData[i]["boundBox"][1].asFloat(), objectsData[i]["sprite"].asString()));
 		}
 		else if (objectsData[i]["type"].asString().compare("lightSource") == 0) {
-			newObj = make_shared<GameObject>(LightSource(texturePaths.at(objectsData[i]["sprite"].asString()), objectsData[i]["textureSize"][0].asFloat(), objectsData[i]["textureSize"][1].asFloat(), objectsData[i]["boundBox"][0].asFloat(), objectsData[i]["boundBox"][1].asFloat(), objectsData[i]["lightLevel"].asFloat(), objectsData[i]["sprite"].asString()));
+			newObj = make_shared<GameObject>(LightSource(texturePaths[objectsData[i]["sprite"].asString()], objectsData[i]["textureSize"][0].asFloat(), objectsData[i]["textureSize"][1].asFloat(), objectsData[i]["boundBox"][0].asFloat(), objectsData[i]["boundBox"][1].asFloat(), objectsData[i]["lightLevel"].asFloat(), objectsData[i]["sprite"].asString()));
 		}
 
 		if (newObj != nullptr) {
@@ -1511,7 +1509,6 @@ shared_ptr<Area> importArea(string fileName) {
 		}
 	}
 
-	cout << area->getObjects()->size() << endl;
 	return area;
 	
 }

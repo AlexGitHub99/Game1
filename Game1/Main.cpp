@@ -1496,10 +1496,21 @@ shared_ptr<Area> importArea(string fileName) {
 	for (int i = 0; i < objectsData.size(); i++) {
 		shared_ptr<GameObject> newObj;
 		if (objectsData[i]["type"].asString().compare("object") == 0) {
-			newObj = make_shared<GameObject>(GameObject(texturePaths[objectsData[i]["sprite"].asString()], objectsData[i]["textureSize"][0].asFloat(), objectsData[i]["textureSize"][1].asFloat(), objectsData[i]["boundBox"][0].asFloat(), objectsData[i]["boundBox"][1].asFloat(), objectsData[i]["sprite"].asString()));
+			newObj = make_shared<GameObject>(GameObject(texturePaths[objectsData[i]["sprite"].asString()], 
+														objectsData[i]["textureSize"][0].asFloat(), 
+														objectsData[i]["textureSize"][1].asFloat(), 
+														objectsData[i]["boundBox"][0].asFloat(), 
+														objectsData[i]["boundBox"][1].asFloat(), 
+														objectsData[i]["sprite"].asString()));
 		}
 		else if (objectsData[i]["type"].asString().compare("lightSource") == 0) {
-			newObj = make_shared<GameObject>(LightSource(texturePaths[objectsData[i]["sprite"].asString()], objectsData[i]["textureSize"][0].asFloat(), objectsData[i]["textureSize"][1].asFloat(), objectsData[i]["boundBox"][0].asFloat(), objectsData[i]["boundBox"][1].asFloat(), objectsData[i]["lightLevel"].asFloat(), objectsData[i]["sprite"].asString()));
+			newObj = make_shared<GameObject>(LightSource(texturePaths[objectsData[i]["sprite"].asString()], 
+														objectsData[i]["textureSize"][0].asFloat(), 
+														objectsData[i]["textureSize"][1].asFloat(), 
+														objectsData[i]["boundBox"][0].asFloat(), 
+														objectsData[i]["boundBox"][1].asFloat(), 
+														objectsData[i]["lightLevel"].asFloat(), 
+														objectsData[i]["sprite"].asString()));
 		}
 
 		if (newObj != nullptr) {

@@ -65,6 +65,7 @@ shared_ptr<sf::Texture> playerTexture = make_shared<sf::Texture>(sf::Texture());
 shared_ptr<sf::Texture> backgroundTexture = make_shared<sf::Texture>(sf::Texture());
 shared_ptr<sf::Texture> lampTexture = make_shared<sf::Texture>(sf::Texture());
 shared_ptr<sf::Texture> orbTexture = make_shared<sf::Texture>(sf::Texture());
+shared_ptr<sf::Texture> mainMenuBackgroundTexture = make_shared<sf::Texture>(sf::Texture());
 map<string, shared_ptr<sf::Texture>> texturePaths;
 
 struct MenuObject {
@@ -177,14 +178,123 @@ int main() {
 	if (!orbTexture->loadFromFile("resources/orb.png")) {
 		return -1;
 	}
+	if (!mainMenuBackgroundTexture->loadFromFile("resources/main_menu_background.png")) {
+		return -1;
+	}
+	
 
 	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("rock", rockTexture));
 	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("wall", wallTexture));
 	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("player", playerTexture));
 	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("lamp", lampTexture));
 	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("orb", orbTexture));
+	texturePaths.insert(pair<string, shared_ptr<sf::Texture>>("mainMenuBackground", mainMenuBackgroundTexture));
 
-	if (true) {
+	bool openBuilder = false;
+
+	//Main menu
+	sf::RenderWindow mainMenuWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Main_Menu", sf::Style::Fullscreen);
+	
+	std::shared_ptr<sf::Sprite> mainMenuBackground = std::shared_ptr<sf::Sprite>(new sf::Sprite(*mainMenuBackgroundTexture));
+	sf:sf::Vector2f backgroundSize(mainMenuBackground->getTexture()->getSize());
+
+	mainMenuBackground->setOrigin(backgroundSize.x / 2, backgroundSize.y / 2);
+	mainMenuBackground->setPosition(mainMenuWindow.getSize().x / 2, mainMenuWindow.getSize().y / 2);
+	float largerRatio = screenSize[0] / backgroundSize.x > screenSize[1] / backgroundSize.y ? screenSize[0] / backgroundSize.x : screenSize[1] / backgroundSize.y;
+	mainMenuBackground->setScale(largerRatio, largerRatio);
+
+	shared_ptr<sf::FloatRect> playButtonRect = make_shared<sf::FloatRect>(sf::FloatRect(screenSize[0] / 2 - 200, screenSize[1] / 2 - 25, 400, 50));
+	Button playButton(playButtonRect, "Play");
+	shared_ptr<sf::FloatRect> buildButtonRect = make_shared<sf::FloatRect>(sf::FloatRect(screenSize[0] / 2 - 200, screenSize[1] / 2 + 50, 400, 50));
+	Button buildButton(buildButtonRect, "Build Level");
+
+	while (mainMenuWindow.isOpen()) {
+
+		sf::Event event;
+		while (mainMenuWindow.pollEvent(event)) {
+			switch (event.type) {
+			case (sf::Event::MouseButtonReleased):
+				switch (event.mouseButton.button) {
+				case (sf::Mouse::Left):
+					if (isInside(event.mouseButton.x, event.mouseButton.y, *playButton.getRect())) { //play button pressed
+						openBuilder = false;
+						mainMenuWindow.close();
+						break;
+					}
+					if (isInside(event.mouseButton.x, event.mouseButton.y, *buildButton.getRect())) { //build button pressed
+						openBuilder = true;
+						mainMenuWindow.close();
+						break;
+					}
+
+					playButton.setPressed(false);
+					buildButton.setPressed(false);
+
+					break;
+				}
+				break;
+			
+			case (sf::Event::MouseButtonPressed):
+				switch (event.mouseButton.button) {
+					case (sf::Mouse::Left):
+						if (isInside(event.mouseButton.x, event.mouseButton.y, *playButton.getRect())) {
+							playButton.setPressed(true);
+						}
+						if (isInside(event.mouseButton.x, event.mouseButton.y, *buildButton.getRect())) {
+							buildButton.setPressed(true);
+						}
+						break;
+				}
+				break;
+
+			case (sf::Event::KeyReleased):
+				switch (event.key.code) {
+				case (sf::Keyboard::Escape):
+					mainMenuWindow.close();
+					break;
+				}
+				break;
+
+			case (sf::Event::Closed):
+				mainMenuWindow.close();
+				break;
+			
+			}
+		}
+
+
+		//DRAWING
+		mainMenuWindow.clear();
+
+		//draw background
+		mainMenuWindow.draw(*mainMenuBackground);
+
+
+		//draw menu title
+		sf::Font courier;
+		if (!courier.loadFromFile("resources/fonts/CourierPrime-Regular.ttf")) {
+			return -1;
+		}
+		sf::Text title;
+		title.setFont(courier);
+		title.setString("GAME");
+		title.setCharacterSize(200);
+		title.setFillColor(sf::Color::White);
+		title.setOutlineColor(sf::Color::Red);
+		title.setOutlineThickness(3);
+		title.setOrigin(title.getLocalBounds().width / 2, title.getLocalBounds().height / 2);
+		title.setPosition(screenSize[0] / 2, screenSize[1] * 1 / 6);
+		mainMenuWindow.draw(title);
+
+		//draw buttons
+		drawButton(mainMenuWindow, playButton, courier);
+		drawButton(mainMenuWindow, buildButton, courier);
+
+		mainMenuWindow.display();
+	}
+
+
+	if (openBuilder) {
 		float BUILD_CAM_SPEED = 1500;
 		sf::RenderWindow buildWindow(sf::VideoMode(screenSize[0], screenSize[1]), "Builder", sf::Style::Fullscreen);
 		shared_ptr<Area> area = make_shared<Area>(Area(backgroundTexture, 4000, 4000, "resources/area_1.png"));
@@ -418,6 +528,9 @@ int main() {
 				case(sf::Event::MouseButtonPressed):
 					if (isInside(event.mouseButton.x, event.mouseButton.y, *exportButton.getRect())) {
 						exportButton.setPressed(true);
+					}
+					if (isInside(event.mouseButton.x, event.mouseButton.y, *importButton.getRect())) {
+						importButton.setPressed(true);
 					}
 					break;
 				case (sf::Event::Closed):
@@ -1295,6 +1408,7 @@ void setPoints(sf::VertexArray* lightPoints, int lightMap[][lightMapHeight + 1],
 //source: https://cppkid.wordpress.com/2009/01/07/how-to-get-the-screen-resolution-in-pixels/
 void getDesktopResolution(int& horizontal, int& vertical)
 {
+	SetProcessDPIAware();
 	RECT desktop;
 	// Get a handle to the desktop window
 	const HWND hDesktop = GetDesktopWindow();
